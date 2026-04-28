@@ -26,17 +26,17 @@ namespace CDP4ServicesMessaging.Services.Messaging
 {
     using System;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Configuration;
 
     using RabbitMQ.Client;
+    using RabbitMQ.Client.Events;
 
     using CDP4ServicesMessaging.Services.Messaging.Interfaces;
 
     using Polly;
-
-    using System.Threading.Tasks;
 
     /// <summary>
     /// The <see cref="MessageClientBaseService"/> is the base RabbitMQ client
@@ -44,7 +44,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
     public abstract class MessageClientBaseService : IMessageQueueClientBaseService
     {
         /// <summary>
-        /// Gets or sets the <see cref="ILogger"/> 
+        /// Gets or sets the <see cref="ILogger"/>
         /// </summary>
         public ILogger<MessageClientBaseService> Logger { get; }
 
@@ -52,7 +52,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// The <see cref="IConnectionFactory"/> for this client
         /// </summary>
         internal IConnectionFactory ConnectionFactory { get; set; }
-        
+
         /// <summary>
         /// The number of times the connection process can be attempted
         /// </summary>
@@ -62,7 +62,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// The time span in seconds between connection attempts.
         /// </summary>
         private int timeSpanBetweenAttempts = 1;
-        
+
         /// <summary>
         /// The <see cref="IConfiguration"/>
         /// </summary>
@@ -74,9 +74,9 @@ namespace CDP4ServicesMessaging.Services.Messaging
         private IConnection connection;
 
         /// <summary>
-        /// The per thread <see cref="IModel"/>
+        /// The per thread <see cref="IChannel"/>
         /// </summary>
-        private readonly ThreadLocal<IModel> threadLocalChannel = new ();
+        private readonly ThreadLocal<IChannel> threadLocalChannel = new ();
 
         /// <summary>
         /// Initializes a new <see cref="MessageClientBaseService"/>
@@ -118,15 +118,15 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <returns>
         /// The integer configuration value associated with the specified key, or the default value if the key is not found or the value cannot be parsed as an integer.
         /// </returns>
-        private int GetIntConfig(string configKey, int defaultValue) => 
+        private int GetIntConfig(string configKey, int defaultValue) =>
             int.TryParse(this.configuration[configKey], out var configValue) ? configValue : defaultValue;
 
         /// <summary>
-        /// Establishes a connection to the RabbitMQ server and returns an asynchronous <see cref="IModel"/> Channel.
+        /// Establishes a connection to the RabbitMQ server and returns an asynchronous <see cref="IChannel"/>.
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> for task cancellation.</param>
-        /// <returns>An asynchronous task returning a <see cref="IModel"/> Channel.</returns>
-        protected async Task<IModel> GetChannelAsync(CancellationToken cancellationToken = default)
+        /// <returns>An asynchronous task returning an <see cref="IChannel"/>.</returns>
+        protected async Task<IChannel> GetChannelAsync(CancellationToken cancellationToken = default)
         {
             var currentThreadChannel = this.threadLocalChannel.Value;
 
@@ -150,8 +150,8 @@ namespace CDP4ServicesMessaging.Services.Messaging
                 })
                 .Or<Exception>(x => this.HandleConnectionFailed(ref attemptNumber, x))
                 .WaitAndRetryAsync(this.maxConnectionRetryAttempts, _ => TimeSpan.FromSeconds(this.timeSpanBetweenAttempts));
-            
-            var result = await policy.ExecuteAndCaptureAsync(x => this.GetChannel(), cancellationToken);
+
+            var result = await policy.ExecuteAndCaptureAsync(ct => this.GetChannel(ct), cancellationToken);
 
             if (result.Outcome is not OutcomeType.Successful)
             {
@@ -161,28 +161,29 @@ namespace CDP4ServicesMessaging.Services.Messaging
 
             return this.threadLocalChannel.Value;
         }
-        
+
         /// <summary>
         /// Creates a RabbitMQ connection and a channel, establishing a connection to the server.
         /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> for task cancellation.</param>
         /// <returns>An asynchronous task returning a value indicating whether the channel is open.</returns>
-        private Task<bool> GetChannel()
+        private async Task<bool> GetChannel(CancellationToken cancellationToken)
         {
-            this.connection = this.ConnectionFactory.CreateConnection();
+            this.connection = await this.ConnectionFactory.CreateConnectionAsync(cancellationToken).ConfigureAwait(false);
 
-            this.connection.ConnectionBlocked += this.OnConnectionBlocked;
-            this.connection.ConnectionShutdown += this.OnConnectionShutdown;
-            this.connection.ConnectionUnblocked += this.OnConnectionUnblocked;
+            this.connection.ConnectionBlockedAsync += this.OnConnectionBlockedAsync;
+            this.connection.ConnectionShutdownAsync += this.OnConnectionShutdownAsync;
+            this.connection.ConnectionUnblockedAsync += this.OnConnectionUnblockedAsync;
 
-            var newChannel = this.connection.CreateModel();
+            var newChannel = await this.connection.CreateChannelAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
 
-            newChannel.ModelShutdown += this.OnChannelModelShutdown;
+            newChannel.ChannelShutdownAsync += this.OnChannelShutdownAsync;
 
             this.threadLocalChannel.Value = newChannel;
 
-            this.AfterChannelCreation();
+            await this.AfterChannelCreationAsync().ConfigureAwait(false);
 
-            return Task.FromResult(newChannel is { IsOpen: true });
+            return newChannel is { IsOpen: true };
         }
 
         /// <summary>
@@ -194,14 +195,14 @@ namespace CDP4ServicesMessaging.Services.Messaging
         {
             if (this.connection != null)
             {
-                this.connection.ConnectionBlocked -= this.OnConnectionBlocked;
-                this.connection.ConnectionShutdown -= this.OnConnectionShutdown;
-                this.connection.ConnectionUnblocked -= this.OnConnectionUnblocked;
+                this.connection.ConnectionBlockedAsync -= this.OnConnectionBlockedAsync;
+                this.connection.ConnectionShutdownAsync -= this.OnConnectionShutdownAsync;
+                this.connection.ConnectionUnblockedAsync -= this.OnConnectionUnblockedAsync;
             }
 
             if (this.threadLocalChannel.Value != null)
             {
-                this.threadLocalChannel.Value.ModelShutdown -= this.OnChannelModelShutdown;
+                this.threadLocalChannel.Value.ChannelShutdownAsync -= this.OnChannelShutdownAsync;
             }
 
             var message = $"The message client failed to connect to {(this.ConnectionFactory is ConnectionFactory connectionFactory ? connectionFactory.Endpoint : "Unknown")}. {(exception?.Message ?? "")}";
@@ -218,20 +219,23 @@ namespace CDP4ServicesMessaging.Services.Messaging
         }
 
         /// <summary>
-        /// Logic to run after the <see cref="IModel"/> has been created
+        /// Logic to run after the <see cref="IChannel"/> has been created
         /// </summary>
-        protected virtual void AfterChannelCreation()
+        /// <returns>An awaitable <see cref="Task"/></returns>
+        protected virtual Task AfterChannelCreationAsync()
         {
+            return Task.CompletedTask;
         }
 
         /// <summary>
-        /// Model shutdown event handler.
+        /// Channel shutdown event handler.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The arguments.</param>
-        protected virtual void OnChannelModelShutdown(object sender, ShutdownEventArgs e)
+        protected virtual Task OnChannelShutdownAsync(object sender, ShutdownEventArgs e)
         {
-            this.Logger.LogWarning("Message broker channel model has shut down. {Cause}", e.Cause);
+            this.Logger.LogWarning("Message broker channel has shut down. {Cause}", e.Cause);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -239,9 +243,10 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The arguments.</param>
-        protected virtual void OnConnectionUnblocked(object sender, EventArgs e)
+        protected virtual Task OnConnectionUnblockedAsync(object sender, AsyncEventArgs e)
         {
-            this.Logger.LogInformation($"Message broker connection unblocked.");
+            this.Logger.LogInformation("Message broker connection unblocked.");
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -249,9 +254,10 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The arguments.</param>
-        protected virtual void OnConnectionShutdown(object sender, ShutdownEventArgs e)
+        protected virtual Task OnConnectionShutdownAsync(object sender, ShutdownEventArgs e)
         {
             this.Logger.LogWarning("Message broker connection shutdown. {Cause}", e.Cause);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -259,9 +265,10 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The arguments.</param>
-        protected virtual void OnConnectionBlocked(object sender, RabbitMQ.Client.Events.ConnectionBlockedEventArgs e)
+        protected virtual Task OnConnectionBlockedAsync(object sender, ConnectionBlockedEventArgs e)
         {
             this.Logger.LogWarning("Message broker connection blocked. {Reason}", e.Reason);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -277,15 +284,15 @@ namespace CDP4ServicesMessaging.Services.Messaging
 
             if (this.connection != null)
             {
-                this.connection.ConnectionBlocked -= this.OnConnectionBlocked;
-                this.connection.ConnectionShutdown -= this.OnConnectionShutdown;
-                this.connection.ConnectionUnblocked -= this.OnConnectionUnblocked;
+                this.connection.ConnectionBlockedAsync -= this.OnConnectionBlockedAsync;
+                this.connection.ConnectionShutdownAsync -= this.OnConnectionShutdownAsync;
+                this.connection.ConnectionUnblockedAsync -= this.OnConnectionUnblockedAsync;
                 this.connection.Dispose();
             }
 
-            if (this.threadLocalChannel.IsValueCreated)
+            if (this.threadLocalChannel.IsValueCreated && this.threadLocalChannel.Value != null)
             {
-                this.threadLocalChannel.Value.ModelShutdown -= this.OnChannelModelShutdown;
+                this.threadLocalChannel.Value.ChannelShutdownAsync -= this.OnChannelShutdownAsync;
                 this.threadLocalChannel.Value.Dispose();
             }
         }

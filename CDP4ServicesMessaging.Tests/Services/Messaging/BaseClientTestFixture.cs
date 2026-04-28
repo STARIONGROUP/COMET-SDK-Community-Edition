@@ -24,6 +24,8 @@
 
 namespace CDP4ServicesMessaging.Tests.Services.Messaging
 {
+    using System.Threading;
+
     using CDP4ServicesMessaging.Serializers.Json;
     using CDP4ServicesMessaging.Services.Messaging;
 
@@ -33,13 +35,13 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
     using Moq;
 
     using RabbitMQ.Client;
-    
+
     public class BaseClientTestFixture<T> where T : MessageClientService
     {
         protected Mock<ILogger<T>> Logger;
         protected Mock<IConfiguration> Configuration;
         protected Mock<IConnection> Connection;
-        protected Mock<IModel> Model;
+        protected Mock<IChannel> Model;
         protected Mock<IConnectionFactory> ConnectionFactory;
         protected Mock<IConfigurationSection> MessageBrokerSettings;
         protected T Service;
@@ -52,7 +54,7 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
             this.Logger = new Mock<ILogger<T>>();
 
             this.Connection = new Mock<IConnection>();
-            this.Model = new Mock<IModel>();
+            this.Model = new Mock<IChannel>();
             this.ConnectionFactory = new Mock<IConnectionFactory>();
 
             var value = new Mock<IConfigurationSection>(MockBehavior.Loose);
@@ -67,14 +69,14 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
                 .Returns(this.MessageBrokerSettings.Object);
 
             this.Serializer = new Mock<ICdp4MessageSerializer>();
-            
+
             this.ConnectionFactory
-                .Setup(x => x.CreateConnection())
-                .Returns(this.Connection.Object);
+                .Setup(x => x.CreateConnectionAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(this.Connection.Object);
 
             this.Connection
-                .Setup(x => x.CreateModel())
-                .Returns(this.Model.Object);
+                .Setup(x => x.CreateChannelAsync(It.IsAny<CreateChannelOptions>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(this.Model.Object);
         }
     }
 }

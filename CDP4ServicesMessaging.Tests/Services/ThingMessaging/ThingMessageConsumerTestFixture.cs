@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="ThingMessageConsumerTestFixture.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2023 Starion Group S.A.
 //
@@ -24,6 +24,8 @@
 
 namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
 {
+    using System.Threading;
+
     using CDP4ServicesMessaging.Messages;
     using CDP4ServicesMessaging.Services.ThingMessaging;
     using CDP4ServicesMessaging.Tests.Services.Messaging;
@@ -48,11 +50,11 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
         public async Task VerifyAddListener()
         {
             this.Model.Setup(x => x.IsOpen).Returns(true);
-            
-            this.Model.Setup(x => x.QueueDeclare(
-                It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
-                .Returns(new QueueDeclareOk("", 1, 1));
-            
+
+            this.Model.Setup(x => x.QueueDeclareAsync(
+                    It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueueDeclareOk("", 1, 1));
+
             var messageReceived = new List<ThingsChangedMessage>();
 
             Assert.Multiple(() =>
@@ -70,12 +72,12 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
             {
                 Assert.That(() => this.Service.AddListener(x => messageReceived.Add(x)), Throws.Exception.TypeOf<TimeoutException>());
                 this.Model.Verify(x => x.IsOpen, Times.Exactly(8));
-            
-                this.Model.Verify(x => x.QueueDeclare(
-                        It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()), 
+
+                this.Model.Verify(x => x.QueueDeclareAsync(
+                        It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
                     Times.Exactly(2));
 
-                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
+                this.Model.Verify(x => x.ExchangeDeclareAsync("ThingsChangedMessage", "fanout", true, false, null, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
                     Times.Exactly(2));
             });
         }
@@ -85,17 +87,17 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
         {
             this.Model.Setup(x => x.IsOpen).Returns(true);
 
-            this.Model.Setup(x => x.QueueDeclare(
-                    It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>()))
-                .Returns(new QueueDeclareOk("", 1, 1));
-            
+            this.Model.Setup(x => x.QueueDeclareAsync(
+                    It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<IDictionary<string, object>>(), It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new QueueDeclareOk("", 1, 1));
+
             var messageReceived = new List<ThingsChangedMessage>();
 
             Assert.Multiple(() =>
             {
                 Assert.That(async () => (await this.Service.Listen())
                     .Subscribe(x => messageReceived.Add(x), x => throw x), Throws.Nothing);
-            
+
                 Assert.That(messageReceived, Is.Empty);
             });
 
@@ -111,7 +113,7 @@ namespace CDP4ServicesMessaging.Tests.Services.ThingMessaging
 
                 this.Model.Verify(x => x.IsOpen, Times.AtLeast(10));
 
-                this.Model.Verify(x => x.ExchangeDeclare("ThingsChangedMessage", "fanout", true, false, null),
+                this.Model.Verify(x => x.ExchangeDeclareAsync("ThingsChangedMessage", "fanout", true, false, null, It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
                     Times.AtLeast(2));
             });
         }

@@ -1,4 +1,4 @@
-﻿// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="MessageClientServiceTestFixture.cs" company="Starion Group S.A.">
 //    Copyright (c) 2015-2023 Starion Group S.A.
 //
@@ -25,14 +25,15 @@
 namespace CDP4ServicesMessaging.Tests.Services.Messaging
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
 
     using Moq;
 
     using NUnit.Framework;
 
-    using RabbitMQ.Client.Events;
     using RabbitMQ.Client;
+    using RabbitMQ.Client.Events;
 
     [TestFixture]
     public class MessageClientServiceTestFixture : BaseClientTestFixture<TestMessageClient>
@@ -52,42 +53,42 @@ namespace CDP4ServicesMessaging.Tests.Services.Messaging
             Assert.Multiple(() =>
             {
                 Assert.That(() => this.Service.Connect(), Throws.Exception.TypeOf<TimeoutException>());
-                this.ConnectionFactory.Verify(x => x.CreateConnection(), Times.Exactly(10));
-                this.Connection.Verify(x => x.CreateModel(), Times.Exactly(10));
+                this.ConnectionFactory.Verify(x => x.CreateConnectionAsync(It.IsAny<CancellationToken>()), Times.Exactly(10));
+                this.Connection.Verify(x => x.CreateChannelAsync(It.IsAny<CreateChannelOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(10));
             });
         }
-        
+
         [Test]
         public void Verify_that_Retry_Works()
         {
-            this.Model.SetupAdd(m => m.ModelShutdown += (sender, args) => { });
-            this.Connection.SetupAdd(m => m.ConnectionBlocked += (sender, args) => { });
-            this.Connection.SetupAdd(m => m.ConnectionUnblocked += (sender, args) => { });
-            this.Connection.SetupAdd(m => m.ConnectionShutdown += (sender, args) => { });
-            
+            this.Model.SetupAdd(m => m.ChannelShutdownAsync += (sender, args) => Task.CompletedTask);
+            this.Connection.SetupAdd(m => m.ConnectionBlockedAsync += (sender, args) => Task.CompletedTask);
+            this.Connection.SetupAdd(m => m.ConnectionUnblockedAsync += (sender, args) => Task.CompletedTask);
+            this.Connection.SetupAdd(m => m.ConnectionShutdownAsync += (sender, args) => Task.CompletedTask);
+
             this.Service.ThrowErrorOnRegisterListenersAndDeclareQueues = true;
 
             Assert.Multiple(() =>
             {
                 Assert.That(() => this.Service.Connect(), Throws.Exception.TypeOf<TimeoutException>());
 
-                this.Model.VerifyAdd(m => m.ModelShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyAdd(m => m.ConnectionBlocked += It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyAdd(m => m.ConnectionUnblocked += It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(5));
-                this.Connection.VerifyAdd(m => m.ConnectionShutdown += It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
-            
+                this.Model.VerifyAdd(m => m.ChannelShutdownAsync += It.IsAny<AsyncEventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionBlockedAsync += It.IsAny<AsyncEventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionUnblockedAsync += It.IsAny<AsyncEventHandler<AsyncEventArgs>>(), Times.Exactly(5));
+                this.Connection.VerifyAdd(m => m.ConnectionShutdownAsync += It.IsAny<AsyncEventHandler<ShutdownEventArgs>>(), Times.Exactly(5));
+
                 this.Model.Verify(x => x.IsOpen, Times.Exactly(4));
 
                 this.ConnectionFactory
-                    .Verify(x => x.CreateConnection(), Times.Exactly(5));
+                    .Verify(x => x.CreateConnectionAsync(It.IsAny<CancellationToken>()), Times.Exactly(5));
 
                 this.Connection
-                    .Verify(x => x.CreateModel(), Times.Exactly(5));
+                    .Verify(x => x.CreateChannelAsync(It.IsAny<CreateChannelOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(5));
 
-                this.Model.VerifyRemove(m => m.ModelShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
-                this.Connection.VerifyRemove(m => m.ConnectionBlocked -= It.IsAny<EventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(6));
-                this.Connection.VerifyRemove(m => m.ConnectionUnblocked -= It.IsAny<EventHandler<EventArgs>>(), Times.Exactly(6));
-                this.Connection.VerifyRemove(m => m.ConnectionShutdown -= It.IsAny<EventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
+                this.Model.VerifyRemove(m => m.ChannelShutdownAsync -= It.IsAny<AsyncEventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionBlockedAsync -= It.IsAny<AsyncEventHandler<ConnectionBlockedEventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionUnblockedAsync -= It.IsAny<AsyncEventHandler<AsyncEventArgs>>(), Times.Exactly(6));
+                this.Connection.VerifyRemove(m => m.ConnectionShutdownAsync -= It.IsAny<AsyncEventHandler<ShutdownEventArgs>>(), Times.Exactly(6));
             });
         }
     }

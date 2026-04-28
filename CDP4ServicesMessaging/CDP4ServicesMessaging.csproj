@@ -57,7 +57,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.7" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.7" />
         <PackageReference Include="Polly" Version="8.6.6" />
-        <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+        <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
     </ItemGroup>
 
     <ItemGroup Label="build-only dependencies">
