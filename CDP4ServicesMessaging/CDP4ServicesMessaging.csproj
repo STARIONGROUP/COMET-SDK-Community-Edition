@@ -21,8 +21,14 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+            [Update] Migrate CDP4ServicesMessaging to async API
             [Update] to CDP4Dal version 30.0.0
             [Update] to CDP4JsonSerializer version 30.0.0
+            [Update] to Microsoft.Extensions.Configuration.Abstractions version 10.0.7
+            [Update] to Microsoft.Extensions.Configuration.Binder version 10.0.7
+            [Update] to Microsoft.Extensions.Hosting.Abstractions version 10.0.7
+            [Update] to Polly version 8.6.6
+            [Update] to RabbitMQ.Client version 7.2.1
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

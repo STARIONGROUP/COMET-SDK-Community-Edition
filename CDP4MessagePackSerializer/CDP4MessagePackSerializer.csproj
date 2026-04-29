@@ -22,6 +22,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
             [Update] to CDP4Common version 30.0.0
+            [Update] to System.IO.Pipelines version 10.0.7
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

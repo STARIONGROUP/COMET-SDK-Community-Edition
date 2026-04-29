@@ -25,6 +25,13 @@
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
         <LangVersion>latest</LangVersion>
         <PackageReleaseNotes>
+            [Update] to NLog version 6.1.2
+            [Update] to System.ValueTuple version 4.6.2
+            [Update] to System.Buffers version 4.6.1
+            [Update] to System.Memory version 4.6.3
+            [Update] to System.Numerics.Vectors version 4.6.1
+            [Update] to System.Runtime.CompilerServices.Unsafe version 6.1.2
+            [Update] to System.Threading.Tasks.Extensions version 4.6.3
         </PackageReleaseNotes>
     </PropertyGroup>
 

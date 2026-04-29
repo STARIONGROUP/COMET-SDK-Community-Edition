@@ -23,6 +23,8 @@
             [Update] to CDP4JsonSerializer version 30.0.0
             [Update] to CDP4MessagePackSerializer version 30.0.0
             [Update] to CDP4Dal version 30.0.0
+            [Update] to Polly version 8.6.6
+            [Update] to System.IdentityModel.Tokens.Jwt version 8.17.0
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

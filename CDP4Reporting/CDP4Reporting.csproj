@@ -21,6 +21,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+            [Improve] Make sure a Net48 version of CDP4Reporting is available in CDP4Reporting Nuget Package  
             [Update] to CDP4Dal version 30.0.0
             [Update] to CDP4JsonSerializer version 30.0.0
         </PackageReleaseNotes>

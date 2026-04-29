@@ -21,6 +21,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+            [Improve] dispose pattern on Assembler and Session
+            [Improve] Performance across Assembler, Session and DAL layers
             [Update] to CDP4DalCommon version 30.0.0
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
