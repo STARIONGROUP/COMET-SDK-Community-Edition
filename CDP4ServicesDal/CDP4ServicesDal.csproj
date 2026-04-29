@@ -20,6 +20,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
+            [Improve] Performance and maintainability across DAL layers
             [Update] to CDP4JsonSerializer version 30.0.0
             [Update] to CDP4MessagePackSerializer version 30.0.0
             [Update] to CDP4Dal version 30.0.0
