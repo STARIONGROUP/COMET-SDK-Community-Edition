@@ -22,3 +22,18 @@ Use syntax
 [Update] ProjectName to version ProjectVersionPrefix. 
 '''
 Remove all existing <PackageReleaseNotes> lines in all csproj files in the solution for referenced project upgrades that haven't changed since the last commit on the development branch that has a tag that does not contain the -rc* suffix.
+
+### Step 3 
+Add, or replace <PackageReleaseNotes> in all non-test-project csproj files in the solution containing all latest commit messages since the last commit on the development branch that has a tag that does not contain the -rc* suffix. Only the Commit messages that start with [anytext] should be added and only for the csproj files for projects that actually have changed code files
+
+### Step 4
+Remove all existing <PackageReleaseNotes> lines in all csproj files that do not comply to the filtered data in all previous Steps
+ 
+### Step 5
+If in the end a csproj file doesn't have any text in the <PackageReleaseNotes> and the VersionPrefix has been changed then add a single line that states
+'''
+[Bump] Version to ProjectVersionPrefix 
+'''
+
+## General
+Don't ask the user if changed are allowed to be made to csproj files. Just make the changes without notifiyng the user or asking anything.
