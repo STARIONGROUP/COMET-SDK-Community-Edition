@@ -214,19 +214,19 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    await this.ProcessWriteException(httpResponseMessage).ConfigureAwait(false);
+                    await this.ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -241,7 +241,7 @@ namespace CDP4ServicesDal
                             using (var cts = new CancellationTokenSource())
                             {
                                 Logger.Info("Deserializing MESSAGEPACK response");
-                                var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token).ConfigureAwait(false);
+                                var things = await this.MessagePackSerializer.DeserializeAsync(resultStream, cts.Token);
                                 result.AddRange(things);
                                 Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             }
@@ -271,7 +271,7 @@ namespace CDP4ServicesDal
         /// <returns>An awaitable <see cref="Task"/></returns>
         private async Task ProcessWriteException(HttpResponseMessage httpResponseMessage)
         {
-            var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
             var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
 
             if (httpResponseMessage.Headers.Contains(Headers.CDPErrorTag))
@@ -343,19 +343,19 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.PostAsync(resourcePath, requestContent))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to POST {1}", requestsw.ElapsedMilliseconds, postToken);
                 requestsw.Stop();
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    await this.ProcessWriteException(httpResponseMessage).ConfigureAwait(false);
+                    await this.ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
                     var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
@@ -451,9 +451,9 @@ namespace CDP4ServicesDal
             var modelReferenceDataLibraryDto = modelReferenceDataLibrary.ToDto();
 
             var result = new List<Thing>();
-            var referenceData = await this.Read(modelReferenceDataLibraryDto, cancellationToken).ConfigureAwait(false);
+            var referenceData = await this.Read(modelReferenceDataLibraryDto, cancellationToken);
             result.AddRange(referenceData);
-            var engineeringModelData = await this.Read((Thing)iteration, cancellationToken).ConfigureAwait(false);
+            var engineeringModelData = await this.Read((Thing)iteration, cancellationToken);
             result.AddRange(engineeringModelData);
             return result;
         }
@@ -504,7 +504,7 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -518,7 +518,7 @@ namespace CDP4ServicesDal
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -533,7 +533,7 @@ namespace CDP4ServicesDal
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             Logger.Info("Deserializing MESSAGEPACK response");
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken).ConfigureAwait(false);
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
                             Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                     }
@@ -582,7 +582,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, readToken);
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -598,11 +598,11 @@ namespace CDP4ServicesDal
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var multipartContent = await httpResponseMessage.Content.ReadAsMultipartAsync(cancellationToken).ConfigureAwait(false);
+                var multipartContent = await httpResponseMessage.Content.ReadAsMultipartAsync(cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var returned = await multipartContent.Contents[1].ReadAsByteArrayAsync().ConfigureAwait(false);
+                var returned = await multipartContent.Contents[1].ReadAsByteArrayAsync();
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -665,7 +665,7 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -679,7 +679,7 @@ namespace CDP4ServicesDal
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -694,7 +694,7 @@ namespace CDP4ServicesDal
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             Logger.Info("Deserializing MESSAGEPACK response");
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken).ConfigureAwait(false);
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
                             Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                     }
@@ -732,7 +732,7 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -746,7 +746,7 @@ namespace CDP4ServicesDal
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -793,7 +793,7 @@ namespace CDP4ServicesDal
 
             var requestsw = Stopwatch.StartNew();
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
                 requestsw.Stop();
@@ -807,7 +807,7 @@ namespace CDP4ServicesDal
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -941,7 +941,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, openToken);
 
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken).ConfigureAwait(false))
+            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
             {
                 Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
                 requestsw.Stop();
@@ -958,7 +958,7 @@ namespace CDP4ServicesDal
 
                 this.ProcessHeaders(httpResponseMessage);
 
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
@@ -973,7 +973,7 @@ namespace CDP4ServicesDal
                             break;
                         case ContentTypeKind.MESSAGEPACK:
                             Logger.Info("Deserializing MESSAGEPACK response");
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken).ConfigureAwait(false);
+                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
                             Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             break;
                     }
@@ -982,7 +982,7 @@ namespace CDP4ServicesDal
 
                     if (string.IsNullOrEmpty(credentials.UserName))
                     {
-                        credentials.UserName = await this.QueryAuthenticatedUserName(cancellationToken).ConfigureAwait(false);
+                        credentials.UserName = await this.QueryAuthenticatedUserName(cancellationToken);
                     }
 
                     var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
@@ -1074,7 +1074,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, resourcePath);
             requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(loginUser), System.Text.Encoding.UTF8, "application/json");
             requestMessage.Headers.Add(Headers.CDPToken, loginToken);
-            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken).ConfigureAwait(false);
+            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
 
             Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
             requestsw.Stop();
@@ -1089,7 +1089,7 @@ namespace CDP4ServicesDal
             watch.Stop();
             Logger.Info("CDP4Services Login {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
 
-            var resultString = await httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultString = await httpResponseMessage.Content.ReadAsStringAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
             AuthenticationToken returnedToken = null;
@@ -1161,7 +1161,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, resourcePath);
             requestMessage.Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(this.Credentials.Token.RefreshToken), System.Text.Encoding.UTF8, "application/json");
             requestMessage.Headers.Add(Headers.CDPToken, refreshQueryToken);
-            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken).ConfigureAwait(false);
+            using var httpResponseMessage = await temporaryClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
 
             Logger.Info("CDP4 Services responded in {0} [ms] to Refresh {1}", requestsw.ElapsedMilliseconds, refreshQueryToken);
             requestsw.Stop();
@@ -1176,7 +1176,7 @@ namespace CDP4ServicesDal
             watch.Stop();
             Logger.Info("CDP4Services Refresh {0}: {1} completed in {2} [ms]", refreshQueryToken, uriBuilder, watch.ElapsedMilliseconds);
 
-            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
             AuthenticationToken returnedToken = null;
@@ -1185,7 +1185,7 @@ namespace CDP4ServicesDal
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
-                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<AuthenticationToken>(resultStream, options:this.tokenOption, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    returnedToken = await System.Text.Json.JsonSerializer.DeserializeAsync<AuthenticationToken>(resultStream, options:this.tokenOption, cancellationToken: cancellationToken);
                     Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                     break;
                 case ContentTypeKind.MESSAGEPACK:
@@ -1218,7 +1218,7 @@ namespace CDP4ServicesDal
 
             Thing iteration = new Iteration() { Iid = iterationId };
             iteration.AddContainer(ClassKind.EngineeringModel, engineeringModelId);
-            return await this.Read(iteration, cancellationToken, attributes).ConfigureAwait(false);
+            return await this.Read(iteration, cancellationToken, attributes);
         }
 
         /// <summary>
@@ -1602,7 +1602,7 @@ namespace CDP4ServicesDal
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, readToken);
 
-            using var httpResponseMessage = await temporaryHttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            using var httpResponseMessage = await temporaryHttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
             Logger.Info("CDP4 Services responded in {0} [ms] to GET {1}", requestsw.ElapsedMilliseconds, readToken);
             requestsw.Stop();
@@ -1625,7 +1625,7 @@ namespace CDP4ServicesDal
             }
 
             cancellationToken.ThrowIfCancellationRequested();
-            var response = this.Cdp4DalJsonSerializer.Deserialize<AuthenticationSchemeResponse>(await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false));
+            var response = this.Cdp4DalJsonSerializer.Deserialize<AuthenticationSchemeResponse>(await httpResponseMessage.Content.ReadAsStreamAsync());
 
             watch.Stop();
             Logger.Info("JSON Deserializer completed in {0} [ms]", watch.ElapsedMilliseconds);
@@ -1660,7 +1660,7 @@ namespace CDP4ServicesDal
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
             requestMessage.Headers.Add(Headers.CDPToken, loginToken);
-            using var httpResponseMessage = await httpClientToUse.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken).ConfigureAwait(false);
+            using var httpResponseMessage = await httpClientToUse.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken);
 
             Logger.Info("CDP4 Services responded in {0} [ms] to Login {1}", requestsw.ElapsedMilliseconds, loginToken);
             requestsw.Stop();
@@ -1675,7 +1675,7 @@ namespace CDP4ServicesDal
             watch.Stop();
             Logger.Info("CDP4Services UserName {0}: {1} completed in {2} [ms]", loginToken, uriBuilder, watch.ElapsedMilliseconds);
 
-            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            using var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync();
 
             var deserializationWatch = Stopwatch.StartNew();
             deserializationWatch.Stop();
@@ -1684,7 +1684,7 @@ namespace CDP4ServicesDal
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
-                    return await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken).ConfigureAwait(false);
+                    return await System.Text.Json.JsonSerializer.DeserializeAsync<string>(resultStream, cancellationToken: cancellationToken);
                 case ContentTypeKind.MESSAGEPACK:
                     throw new InvalidOperationException("No support of UserName via MessagePack available");
             }

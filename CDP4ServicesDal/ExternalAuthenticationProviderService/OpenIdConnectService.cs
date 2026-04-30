@@ -103,13 +103,13 @@ namespace CDP4ServicesDal.ExternalAuthenticationProviderService
 
             var httpMessage = new HttpRequestMessage(HttpMethod.Post, new Uri($"{authenticationSchemeResponse.Authority.TrimEnd('/')}/protocol/openid-connect/token"));
             httpMessage.Content = new FormUrlEncodedContent(parameters);
-            using var httpResponse = await SharedHttpClient.SendAsync(httpMessage).ConfigureAwait(false);
+            using var httpResponse = await SharedHttpClient.SendAsync(httpMessage);
 
             var statusCodeValue = (int)httpResponse.StatusCode;
 
             if (statusCodeValue is >= 200 and < 300)
             {
-                var content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var content = await httpResponse.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<AuthenticationToken>(content, JsonSerializerOptions);
             }
 

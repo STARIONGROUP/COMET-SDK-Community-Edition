@@ -508,7 +508,7 @@ namespace CDP4Dal
         {
             this.ThrowIfDisposed();
 
-            await this.threadLock.WaitAsync().ConfigureAwait(false);
+            await this.threadLock.WaitAsync().ConfigureAwait(false);;
             try
             {
                 var startwatch = Stopwatch.StartNew();
@@ -609,7 +609,7 @@ namespace CDP4Dal
         {
             this.ThrowIfDisposed();
 
-            await this.threadLock.WaitAsync().ConfigureAwait(false);
+            await this.threadLock.WaitAsync().ConfigureAwait(false);;
             try
             {
                 var cacheKey = new CacheKey(iterationSetup.IterationIid, null);
@@ -625,7 +625,7 @@ namespace CDP4Dal
                 }
 
                 // Delete from the cache all things contained by the iteration without blocking the UI
-                await this.ClearFromCacheThingsContainedByIteration(iteration).ConfigureAwait(false);
+                await this.ClearFromCacheThingsContainedByIteration(iteration);
             }
             catch (Exception e)
             {
