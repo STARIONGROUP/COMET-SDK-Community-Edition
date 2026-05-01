@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4MessagePackSerializer Community Edition</Title>
-        <VersionPrefix>30.0.0</VersionPrefix>
+        <VersionPrefix>30.0.1</VersionPrefix>
         <Description>CDP4 MessagePack Serialization Library</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageId>CDP4MessagePackSerializer-CE</PackageId>
@@ -21,8 +21,7 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] to CDP4Common version 30.0.0
-            [Update] to System.IO.Pipelines version 10.0.7
+            [Update] CDP4Common to version 30.0.1.
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

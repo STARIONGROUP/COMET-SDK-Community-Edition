@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4ServicesDal Community Edition</Title>
-        <VersionPrefix>30.0.0</VersionPrefix>
+        <VersionPrefix>30.0.1</VersionPrefix>
         <Description>CDP4ServicesDal Dal Plugin</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageId>CDP4ServicesDal-CE</PackageId>
@@ -20,12 +20,10 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Improve] Performance and maintainability across DAL layers
-            [Update] to CDP4JsonSerializer version 30.0.0
-            [Update] to CDP4MessagePackSerializer version 30.0.0
-            [Update] to CDP4Dal version 30.0.0
-            [Update] to Polly version 8.6.6
-            [Update] to System.IdentityModel.Tokens.Jwt version 8.17.0
+            [Revert] Breaking changes (ConfigureAwait(false))
+            [Update] CDP4JsonSerializer to version 30.0.1.
+            [Update] CDP4MessagePackSerializer to version 30.0.1.
+            [Update] CDP4Dal to version 30.0.1.
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

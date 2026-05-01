@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Dal Community Edition</Title>
-        <VersionPrefix>30.0.0</VersionPrefix>
+        <VersionPrefix>30.0.1</VersionPrefix>
         <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageId>CDP4Dal-CE</PackageId>
@@ -21,9 +21,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Improve] dispose pattern on Assembler and Session
-            [Improve] Performance across Assembler, Session and DAL layers
-            [Update] to CDP4DalCommon version 30.0.0
+            [Revert] Breaking changes (ConfigureAwait(false))
+            [Update] CDP4DalCommon to version 30.0.1.
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>

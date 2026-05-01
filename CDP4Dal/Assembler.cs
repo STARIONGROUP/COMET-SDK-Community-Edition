@@ -625,7 +625,7 @@ namespace CDP4Dal
                 }
 
                 // Delete from the cache all things contained by the iteration without blocking the UI
-                await this.ClearFromCacheThingsContainedByIteration(iteration).ConfigureAwait(false);
+                await this.ClearFromCacheThingsContainedByIteration(iteration);
             }
             catch (Exception e)
             {

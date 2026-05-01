@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
-        <VersionPrefix>30.0.0</VersionPrefix>
+        <VersionPrefix>30.0.1</VersionPrefix>
         <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageId>CDP4ServicesMessaging-CE</PackageId>
@@ -21,14 +21,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] Migrate CDP4ServicesMessaging to async API
-            [Update] to CDP4Dal version 30.0.0
-            [Update] to CDP4JsonSerializer version 30.0.0
-            [Update] to Microsoft.Extensions.Configuration.Abstractions version 10.0.7
-            [Update] to Microsoft.Extensions.Configuration.Binder version 10.0.7
-            [Update] to Microsoft.Extensions.Hosting.Abstractions version 10.0.7
-            [Update] to Polly version 8.6.6
-            [Update] to RabbitMQ.Client version 7.2.1
+            [Update] CDP4Dal to version 30.0.1.
+            [Update] CDP4JsonSerializer to version 30.0.1.
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <LangVersion>latest</LangVersion>
