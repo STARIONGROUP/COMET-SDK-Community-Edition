@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net48;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net48;netstandard2.0;net10.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Common Community Edition</Title>
         <VersionPrefix>30.0.1</VersionPrefix>
@@ -25,7 +25,7 @@
         <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
         <LangVersion>latest</LangVersion>
         <PackageReleaseNotes>
-            [Bump] Version to 30.0.1
+            [Add] net10.0 as a Target Framework
         </PackageReleaseNotes>
     </PropertyGroup>
 
