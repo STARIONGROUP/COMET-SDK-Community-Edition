@@ -30,6 +30,7 @@ namespace CDP4ServicesDal
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -1601,6 +1602,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
         /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        [ExcludeFromCodeCoverage] //HttpClient unmockable
         public override async Task<AuthenticationSchemeResponse> RequestAvailableAuthenticationScheme(CancellationToken cancellationToken)
         {
             if (this.Credentials == null || this.Credentials.Uri == null)
