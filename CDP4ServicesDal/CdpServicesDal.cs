@@ -30,6 +30,7 @@ namespace CDP4ServicesDal
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -926,76 +927,98 @@ namespace CDP4ServicesDal
 
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-            this.httpClient = this.CreateHttpClient(credentials, this.httpClient);
-            this.ApplyAuthenticationCredentials(credentials);
-        
-            var watch = Stopwatch.StartNew();
+            var originalHttpClient = this.httpClient; //Store the current httpClient in a variable for later checks
+            var createdOrReusedHttpClient= this.CreateHttpClient(credentials, this.httpClient);
 
-            var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
+            this.httpClient = createdOrReusedHttpClient; // Make sure every piece of code can use the current httpClient
 
-            Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
-            Logger.Debug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
-
-            var requestsw = Stopwatch.StartNew();
-
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
-            requestMessage.Headers.Add(Headers.CDPToken, openToken);
-
-            using (var httpResponseMessage = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
+            try
             {
-                Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
-                requestsw.Stop();
+                this.ApplyAuthenticationCredentials(credentials);
 
-                if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                var watch = Stopwatch.StartNew();
+
+                var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
+
+                Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
+                Logger.Debug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
+
+                var requestsw = Stopwatch.StartNew();
+
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, resourcePath);
+                requestMessage.Headers.Add(Headers.CDPToken, openToken);
+
+                using (var httpResponseMessage = await createdOrReusedHttpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken: cancellationToken))
                 {
-                    var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
-                    Logger.Error(msg);
-                    throw new DalReadException(msg);
+                    Logger.Info("CDP4 Services responded in {0} [ms] to Open {1}", requestsw.ElapsedMilliseconds, openToken);
+                    requestsw.Stop();
+
+                    if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                    {
+                        var msg = $"The data-source replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}";
+                        Logger.Error(msg);
+                        throw new DalReadException(msg);
+                    }
+
+                    watch.Stop();
+                    Logger.Info("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
+
+                    this.ProcessHeaders(httpResponseMessage);
+
+                    using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                    {
+                        var deserializationWatch = Stopwatch.StartNew();
+
+                        IEnumerable<Thing> returned = new List<Thing>();
+
+                        switch (this.QueryContentTypeKind(httpResponseMessage))
+                        {
+                            case ContentTypeKind.JSON:
+                                Logger.Info("Deserializing JSON response");
+                                returned = this.Cdp4DalJsonSerializer.Deserialize(resultStream);
+                                Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                                break;
+                            case ContentTypeKind.MESSAGEPACK:
+                                Logger.Info("Deserializing MESSAGEPACK response");
+                                returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
+                                Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
+                                break;
+                        }
+
+                        deserializationWatch.Stop();
+
+                        if (string.IsNullOrEmpty(credentials.UserName))
+                        {
+                            credentials.UserName = await this.QueryAuthenticatedUserName(cancellationToken);
+                        }
+
+                        var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
+
+                        if (returnedPerson == null)
+                        {
+                            throw new InvalidOperationException("User not found.");
+                        }
+
+                        this.Credentials = credentials;
+
+                        return returned;
+                    }
+                }
+            }
+            catch
+            {
+                // Make sure the new httpClient is disposed correctly after failed initial login
+                if (createdOrReusedHttpClient != this.httpClient)
+                {
+                    createdOrReusedHttpClient?.Dispose();
                 }
 
-                watch.Stop();
-                Logger.Info("CDP4Services Open {0}: {1} completed in {2} [ms]", openToken, uriBuilder, watch.ElapsedMilliseconds);
-
-                this.ProcessHeaders(httpResponseMessage);
-
-                using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
+                if (originalHttpClient == null) // reset only when initial call fails
                 {
-                    var deserializationWatch = Stopwatch.StartNew();
-
-                    IEnumerable<Thing> returned = new List<Thing>();
-
-                    switch (this.QueryContentTypeKind(httpResponseMessage))
-                    {
-                        case ContentTypeKind.JSON:
-                            Logger.Info("Deserializing JSON response");
-                            returned = this.Cdp4DalJsonSerializer.Deserialize(resultStream);
-                            Logger.Info("JSON Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-                            break;
-                        case ContentTypeKind.MESSAGEPACK:
-                            Logger.Info("Deserializing MESSAGEPACK response");
-                            returned = await this.MessagePackSerializer.DeserializeAsync(resultStream, cancellationToken);
-                            Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
-                            break;
-                    }
-
-                    deserializationWatch.Stop();
-
-                    if (string.IsNullOrEmpty(credentials.UserName))
-                    {
-                        credentials.UserName = await this.QueryAuthenticatedUserName(cancellationToken);
-                    }
-
-                    var returnedPerson = returned.OfType<CDP4Common.DTO.Person>().SingleOrDefault(x => x.ShortName == credentials.UserName);
-
-                    if (returnedPerson == null)
-                    {
-                        throw new InvalidOperationException("User not found.");
-                    }
-
-                    this.Credentials = credentials;
-
-                    return returned;
+                    this.httpClient = null;
                 }
+                
+                throw;
             }
         }
 
@@ -1579,6 +1602,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="cancellationToken">The <see cref="CancellationToken" /></param>
         /// <returns>An awaitable <see cref="Task{TResult}"/> that contains the value of the queried <see cref="AuthenticationSchemeResponse" /></returns>
+        [ExcludeFromCodeCoverage] //HttpClient unmockable
         public override async Task<AuthenticationSchemeResponse> RequestAvailableAuthenticationScheme(CancellationToken cancellationToken)
         {
             if (this.Credentials == null || this.Credentials.Uri == null)
@@ -1609,12 +1633,23 @@ namespace CDP4ServicesDal
 
             if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
-                Logger.Warn("The data-source does not support multiple authentication schemes, Basic Authentication returned");
+                var requestHeadMessage = new HttpRequestMessage(HttpMethod.Head, "SiteDirectory");
 
-                return new AuthenticationSchemeResponse()
+                using var headResponseMessage = await temporaryHttpClient.SendAsync(requestHeadMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+                if (headResponseMessage.StatusCode == HttpStatusCode.OK)
                 {
-                    Schemes = [AuthenticationSchemeKind.Basic]
-                };
+                    Logger.Warn("The data-source does not support multiple authentication schemes, Basic Authentication returned");
+
+                    return new AuthenticationSchemeResponse()
+                    {
+                        Schemes = [AuthenticationSchemeKind.Basic]
+                    };
+                }
+
+                Logger.Warn("Not a supported data-source");
+                
+                return new AuthenticationSchemeResponse();
             }
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)

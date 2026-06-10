@@ -32,6 +32,7 @@ namespace CDP4ServicesDal.Tests
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Reflection;
     using System.Text;
     using System.Text.Json;
     using System.Text.Json.Serialization;
@@ -1002,6 +1003,155 @@ namespace CDP4ServicesDal.Tests
             await authenticationSession.AuthenticateAndOpen(availableScheme, authenticationInformation);
             Assert.That(authenticationSession.RetrieveSiteDirectory(), Is.Not.Null);
             Console.WriteLine($"Test passed wih {availableScheme}");
+        }
+
+        [Test]
+        public void Verify_that_a_failed_initial_Open_does_not_dispose_or_reset_an_injected_HttpClient()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("*").Respond(HttpStatusCode.InternalServerError);
+
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            // the initial Open fails because the data-source replies with a non-OK status code
+            Assert.That(async () => await dal.Open(this.credentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
+
+            // because the HttpClient was injected, it must not be reset to null on failure
+            Assert.That(GetHttpClient(dal), Is.SameAs(httpClient));
+
+            // and it must not be disposed either, so it remains usable after the failed Open
+            Assert.That(async () => await httpClient.GetAsync("SiteDirectory"), Throws.Nothing);
+        }
+
+        [Test]
+        public void Verify_that_a_failed_initial_Open_resets_an_internally_created_HttpClient()
+        {
+            // no HttpClient is injected, so the DAL creates one internally
+            var dal = new CdpServicesDal(this.authenticationService.Object);
+
+            // there is no server listening on this endpoint, so the request fails
+            var unreachableCredentials = new Credentials("admin", "pass", new Uri("http://127.0.0.1:1/"));
+
+            Assert.That(async () => await dal.Open(unreachableCredentials, new CancellationToken()), Throws.Exception);
+
+            // because the HttpClient was created internally and the initial call failed, the field must be reset to null
+            // so the next Open creates a fresh client instead of re-using the disposed one
+            Assert.That(GetHttpClient(dal), Is.Null);
+        }
+
+        [Test]
+        public async Task Verify_that_Open_with_injected_HttpClient_returns_DTOs_and_sets_Credentials()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            mockHttp.When(HttpMethod.Get, "*SiteDirectory*")
+                .Respond(_ => CreateSiteDirectoryResponse(dal, this.credentials.UserName));
+
+            var result = (await dal.Open(this.credentials, new CancellationToken())).ToList();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Empty);
+                Assert.That(result.OfType<CDP4Common.DTO.Person>().Single().ShortName, Is.EqualTo(this.credentials.UserName));
+
+                // a successful Open stores the credentials and keeps the injected client in place
+                Assert.That(dal.Credentials, Is.SameAs(this.credentials));
+                Assert.That(GetHttpClient(dal), Is.SameAs(httpClient));
+            });
+        }
+
+        [Test]
+        public void Verify_that_Open_with_injected_HttpClient_throws_when_authenticated_user_is_not_returned()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            // the data-source does not return a Person matching the credentials' username
+            mockHttp.When(HttpMethod.Get, "*SiteDirectory*")
+                .Respond(_ => CreateSiteDirectoryResponse(dal, "another-user"));
+
+            Assert.That(async () => await dal.Open(this.credentials, new CancellationToken()), Throws.TypeOf<InvalidOperationException>());
+
+            // the failed Open must not store the credentials
+            Assert.That(dal.Credentials, Is.Null);
+        }
+
+        [Test]
+        public void Verify_that_Open_throws_for_a_non_http_or_https_uri()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            var fileCredentials = new Credentials("admin", "pass", new Uri("file://some-file"));
+
+            Assert.That(async () => await dal.Open(fileCredentials, new CancellationToken()), Throws.TypeOf<ArgumentException>());
+        }
+
+        [Test]
+        public void Verify_that_Open_throws_when_credentials_are_not_fully_initialized()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            var httpClient = mockHttp.ToHttpClient();
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            // credentials with only a Uri are not fully initialized (no authentication scheme / user)
+            var uninitializedCredentials = new Credentials(this.uri);
+
+            Assert.That(async () => await dal.Open(uninitializedCredentials, new CancellationToken()), Throws.TypeOf<ArgumentException>());
+        }
+
+        /// <summary>
+        /// Creates a successful <see cref="HttpResponseMessage"/> for a SiteDirectory query, containing a
+        /// <see cref="CDP4Common.DTO.SiteDirectory"/> and a <see cref="CDP4Common.DTO.Person"/> with the provided shortname.
+        /// </summary>
+        /// <param name="dal">The <see cref="CdpServicesDal"/> whose serializer is used to produce the response body</param>
+        /// <param name="personShortName">The shortname of the <see cref="CDP4Common.DTO.Person"/> returned in the response</param>
+        /// <returns>A <see cref="HttpResponseMessage"/> with a JSON body and the CDP4 headers set</returns>
+        private static HttpResponseMessage CreateSiteDirectoryResponse(CdpServicesDal dal, string personShortName)
+        {
+            var siteDirectoryIid = Guid.NewGuid();
+            var personIid = Guid.NewGuid();
+
+            var personDto = new CDP4Common.DTO.Person(personIid, 1) { ShortName = personShortName };
+            personDto.AddContainer(ClassKind.SiteDirectory, siteDirectoryIid);
+
+            var siteDirectoryDto = new CDP4Common.DTO.SiteDirectory(siteDirectoryIid, 1) { Name = "test", ShortName = "test" };
+            siteDirectoryDto.Person.Add(personIid);
+
+            var dtos = new List<CDP4Common.DTO.Thing> { siteDirectoryDto, personDto };
+
+            var stream = new MemoryStream();
+            dal.Cdp4DalJsonSerializer.SerializeToStream(dtos, stream);
+            stream.Position = 0;
+
+            var response = new HttpResponseMessage { Content = new StreamContent(stream) };
+            SetHttpHeader(response, "application/json");
+
+            return response;
+        }
+
+        /// <summary>
+        /// Reads the value of the private <c>httpClient</c> field of a <see cref="CdpServicesDal"/> instance.
+        /// </summary>
+        /// <param name="dal">The <see cref="CdpServicesDal"/> instance to inspect</param>
+        /// <returns>The <see cref="HttpClient"/> held by the <paramref name="dal"/>, or null when none is set</returns>
+        private static HttpClient GetHttpClient(CdpServicesDal dal)
+        {
+            var field = typeof(CdpServicesDal).GetField("httpClient", BindingFlags.NonPublic | BindingFlags.Instance);
+            return (HttpClient)field.GetValue(dal);
         }
 
         /// <summary>
