@@ -1635,7 +1635,7 @@ namespace CDP4ServicesDal
 
                 using var headResponseMessage = await temporaryHttpClient.SendAsync(requestHeadMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-                if (httpResponseMessage.StatusCode == HttpStatusCode.OK)
+                if (headResponseMessage.StatusCode == HttpStatusCode.OK)
                 {
                     Logger.Warn("The data-source does not support multiple authentication schemes, Basic Authentication returned");
 

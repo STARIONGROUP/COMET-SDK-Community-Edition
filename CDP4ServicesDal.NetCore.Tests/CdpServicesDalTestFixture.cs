@@ -32,6 +32,7 @@ namespace CDP4ServicesDal.Tests
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
+    using System.Reflection;
     using System.Text;
     using System.Text.Json;
     using System.Text.Json.Serialization;
@@ -1002,6 +1003,54 @@ namespace CDP4ServicesDal.Tests
             await authenticationSession.AuthenticateAndOpen(availableScheme, authenticationInformation);
             Assert.That(authenticationSession.RetrieveSiteDirectory(), Is.Not.Null);
             Console.WriteLine($"Test passed wih {availableScheme}");
+        }
+
+        [Test]
+        public void Verify_that_a_failed_initial_Open_does_not_dispose_or_reset_an_injected_HttpClient()
+        {
+            var mockHttp = new MockHttpMessageHandler();
+            mockHttp.When("*").Respond(HttpStatusCode.InternalServerError);
+
+            var httpClient = mockHttp.ToHttpClient();
+            httpClient.BaseAddress = this.uri;
+
+            var dal = new CdpServicesDal(httpClient, this.authenticationService.Object);
+
+            // the initial Open fails because the data-source replies with a non-OK status code
+            Assert.That(async () => await dal.Open(this.credentials, new CancellationToken()), Throws.TypeOf<DalReadException>());
+
+            // because the HttpClient was injected, it must not be reset to null on failure
+            Assert.That(GetHttpClient(dal), Is.SameAs(httpClient));
+
+            // and it must not be disposed either, so it remains usable after the failed Open
+            Assert.That(async () => await httpClient.GetAsync("SiteDirectory"), Throws.Nothing);
+        }
+
+        [Test]
+        public void Verify_that_a_failed_initial_Open_resets_an_internally_created_HttpClient()
+        {
+            // no HttpClient is injected, so the DAL creates one internally
+            var dal = new CdpServicesDal(this.authenticationService.Object);
+
+            // there is no server listening on this endpoint, so the request fails
+            var unreachableCredentials = new Credentials("admin", "pass", new Uri("http://127.0.0.1:1/"));
+
+            Assert.That(async () => await dal.Open(unreachableCredentials, new CancellationToken()), Throws.Exception);
+
+            // because the HttpClient was created internally and the initial call failed, the field must be reset to null
+            // so the next Open creates a fresh client instead of re-using the disposed one
+            Assert.That(GetHttpClient(dal), Is.Null);
+        }
+
+        /// <summary>
+        /// Reads the value of the private <c>httpClient</c> field of a <see cref="CdpServicesDal"/> instance.
+        /// </summary>
+        /// <param name="dal">The <see cref="CdpServicesDal"/> instance to inspect</param>
+        /// <returns>The <see cref="HttpClient"/> held by the <paramref name="dal"/>, or null when none is set</returns>
+        private static HttpClient GetHttpClient(CdpServicesDal dal)
+        {
+            var field = typeof(CdpServicesDal).GetField("httpClient", BindingFlags.NonPublic | BindingFlags.Instance);
+            return (HttpClient)field.GetValue(dal);
         }
 
         /// <summary>
