@@ -1637,7 +1637,17 @@ namespace CDP4ServicesDal
 
                 using var headResponseMessage = await temporaryHttpClient.SendAsync(requestHeadMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
 
-                if (headResponseMessage.StatusCode == HttpStatusCode.OK)
+                var statusCode = headResponseMessage.StatusCode;
+                
+                if (headResponseMessage.StatusCode == HttpStatusCode.MethodNotAllowed)
+                {
+                    var requestGetMessage = new HttpRequestMessage(HttpMethod.Get, "SiteDirectory");
+                    using var getResponseMessage = await temporaryHttpClient.SendAsync(requestGetMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+                    statusCode = getResponseMessage.StatusCode;
+                }
+                
+                if (new [] { HttpStatusCode.OK, HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden}.Contains(statusCode))
                 {
                     Logger.Warn("The data-source does not support multiple authentication schemes, Basic Authentication returned");
 
