@@ -49,7 +49,7 @@
 
     <ItemGroup>
         <PackageReference Include="MessagePack" Version="3.1.7" />
-        <PackageReference Include="System.IO.Pipelines" Version="10.0.7" />
+        <PackageReference Include="System.IO.Pipelines" Version="10.0.9" />
     </ItemGroup>
 
     <ItemGroup Label="build-only dependencies">

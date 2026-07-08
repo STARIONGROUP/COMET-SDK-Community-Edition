@@ -52,8 +52,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
-        <PackageReference Include="Polly" Version="8.6.6" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.17.0" />
+        <PackageReference Include="Polly" Version="8.7.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.19.1" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
