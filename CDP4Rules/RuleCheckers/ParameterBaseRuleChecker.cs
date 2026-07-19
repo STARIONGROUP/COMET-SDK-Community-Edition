@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0520")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedCompoundParameterTypeIsFinalizedOrNot(Thing thing)
         {
-            var parameter = this.VerifyThingArgument(thing);
+            var parameter = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -93,7 +93,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var parameterBase = this.VerifyThingArgument(thing);
+            var parameterBase = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -136,7 +136,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0220")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedParameterTypeIsInChainOfRdls(Thing thing)
         {
-            var parameterBase = this.VerifyThingArgument(thing);
+            var parameterBase = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -173,7 +173,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var parameterBase = this.VerifyThingArgument(thing);
+            var parameterBase = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -207,7 +207,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ParameterBase"/>
         /// </exception>
-        private ParameterBase VerifyThingArgument(Thing thing)
+        private static ParameterBase VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -145,7 +145,7 @@ namespace CDP4Reporting.Parameters
         /// </summary>
         /// <typeparam name="T">Generic type</typeparam>
         /// <returns>The default value</returns>
-        private T GetDefaultGeneric<T>()
+        private static T GetDefaultGeneric<T>()
         {
             return default;
         }

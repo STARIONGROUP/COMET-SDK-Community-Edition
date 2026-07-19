@@ -57,7 +57,7 @@ namespace CDP4Rules
             this.ruleCheckers = new Dictionary<Type, RuleChecker>();
             this.typesAndInterfacesMap = new Dictionary<Type, IEnumerable<Type>>();
 
-            foreach (var ruleCheckerType in this.QueryRuleCheckerTypes())
+            foreach (var ruleCheckerType in QueryRuleCheckerTypes())
             {
                 var ruleCheckerAttribute = ruleCheckerType.QueryGetCustomAttribute<RuleCheckerAttribute>() as RuleCheckerAttribute;
 
@@ -77,7 +77,7 @@ namespace CDP4Rules
         /// <returns>
         /// An <see cref="IEnumerable{Type}"/>
         /// </returns>
-        private IEnumerable<Type> QueryRuleCheckerTypes()
+        private static IEnumerable<Type> QueryRuleCheckerTypes()
         {
             var assembly = Assembly.GetAssembly(typeof(RuleChecker));
 

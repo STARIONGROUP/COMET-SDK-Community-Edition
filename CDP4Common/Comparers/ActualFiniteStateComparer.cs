@@ -59,8 +59,8 @@ namespace CDP4Common.Comparers
                 return 0;
             }
 
-            var xKey = this.GetComputedSortKey(x, xContainer);
-            var yKey = this.GetComputedSortKey(y, yContainer);
+            var xKey = GetComputedSortKey(x, xContainer);
+            var yKey = GetComputedSortKey(y, yContainer);
 
             return xKey - yKey;
         }
@@ -71,7 +71,7 @@ namespace CDP4Common.Comparers
         /// <param name="actualState">The <see cref="ActualFiniteState"/></param>
         /// <param name="actualList">The <see cref="ActualFiniteStateList"/> container</param>
         /// <returns>The sort-key</returns>
-        private int GetComputedSortKey(ActualFiniteState actualState, ActualFiniteStateList actualList)
+        private static int GetComputedSortKey(ActualFiniteState actualState, ActualFiniteStateList actualList)
         {
             // The OCDT WSP may return a broken model where the actualState.PossibleState is empty.
             if (actualState.PossibleState.Count == 0)

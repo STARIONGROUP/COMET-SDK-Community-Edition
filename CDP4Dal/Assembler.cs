@@ -694,7 +694,7 @@ namespace CDP4Dal
                 return;
             }
 
-            var dtoContainedGuid = this.ComputeContainedGuid(dtoThing);
+            var dtoContainedGuid = ComputeContainedGuid(dtoThing);
             var pocoContainedThing = this.ComputeContainedThing(cachedLazyThing.Value);
 
             var thingsToRemove = pocoContainedThing.Where(poco => !dtoContainedGuid.Contains(poco.Iid)).ToList();
@@ -710,7 +710,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/></param>
         /// <returns>An <see cref="List{Type}"/> containing the type of <see cref="Thing"/>s that are not persistent in the <paramref name="thing"/></returns>
-        private List<Type> ComputeNonPersistentPropertyType(Thing thing)
+        private static List<Type> ComputeNonPersistentPropertyType(Thing thing)
         {
             return NonPersistentPropertyTypeCache.GetOrAdd(thing.GetType(), type =>
             {
@@ -740,7 +740,7 @@ namespace CDP4Dal
         /// </summary>
         /// <param name="dto">The <see cref="Dto"/> to compute</param>
         /// <returns>A <see cref="HashSet{Guid}"/> containing all the contained <see cref="Guid"/></returns>
-        private HashSet<Guid> ComputeContainedGuid(Dto dto)
+        private static HashSet<Guid> ComputeContainedGuid(Dto dto)
         {
             var containedGuid = new HashSet<Guid>();
             foreach (var container in dto.ContainerLists)
@@ -770,7 +770,7 @@ namespace CDP4Dal
         private List<Thing> ComputeContainedThing(Thing thing)
         {
             var containedGuid = new List<Thing>();
-            var nonPersistentType = this.ComputeNonPersistentPropertyType(thing);
+            var nonPersistentType = ComputeNonPersistentPropertyType(thing);
 
             foreach (var container in thing.ContainerLists)
             {

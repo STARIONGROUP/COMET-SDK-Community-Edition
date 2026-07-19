@@ -130,7 +130,7 @@ namespace CDP4Common.EngineeringModelData
                         foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                         {
                             var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option && vs.ActualState == actualState).ToList();
-                            errorList.AddRange(this.ValidateValueSets(valueSets, option, actualState));
+                            errorList.AddRange(ValidateValueSets(valueSets, option, actualState));
                         }
                     }
                 }
@@ -139,7 +139,7 @@ namespace CDP4Common.EngineeringModelData
                     foreach (Option option in iteration.Option)
                     {
                         var valueSets = this.ValueSet.Where(vs => vs.ActualOption == option).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valueSets, option, null));
+                        errorList.AddRange(ValidateValueSets(valueSets, option, null));
                     }
                 }
             }
@@ -150,13 +150,13 @@ namespace CDP4Common.EngineeringModelData
                     foreach (var actualState in this.StateDependence.ActualState.Where(x => x.Kind == ActualFiniteStateKind.MANDATORY))
                     {
                         var valueSets = this.ValueSet.Where(vs => vs.ActualState == actualState).ToList();
-                        errorList.AddRange(this.ValidateValueSets(valueSets, null, actualState));
+                        errorList.AddRange(ValidateValueSets(valueSets, null, actualState));
                     }
                 }
                 else
                 {
                     var valuesets = this.ValueSet.ToList();
-                    errorList.AddRange(this.ValidateValueSets(valuesets, null, null));
+                    errorList.AddRange(ValidateValueSets(valuesets, null, null));
                 }
             }
 
@@ -170,7 +170,7 @@ namespace CDP4Common.EngineeringModelData
         /// <param name="option">The <see cref="Option"/></param>
         /// <param name="state">The <see cref="ActualFiniteState"/></param>
         /// <returns>a list of error messages</returns>
-        private IEnumerable<string> ValidateValueSets(IEnumerable<ParameterSubscriptionValueSet> valueSets, Option option, ActualFiniteState state)
+        private static IEnumerable<string> ValidateValueSets(IEnumerable<ParameterSubscriptionValueSet> valueSets, Option option, ActualFiniteState state)
         {
             var errorList = new List<string>();
             var valuesets = valueSets.ToList();

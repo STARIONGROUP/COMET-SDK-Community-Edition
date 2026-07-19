@@ -554,7 +554,7 @@ namespace CDP4Reporting.DataCollection
                     }
                 }
 
-                if (this.GetCollectParentValuesAttribute(publicGetter) != null)
+                if (GetCollectParentValuesAttribute(publicGetter) != null)
                 {
                     var newFieldname = $"{publicGetter.Name}_{this.FieldName}";
 
@@ -584,7 +584,7 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// The <see cref="CollectParentValuesAttribute"/> decorating the current parameter class.
         /// </returns>
-        private CollectParentValuesAttribute GetCollectParentValuesAttribute(PropertyInfo propertyType)
+        private static CollectParentValuesAttribute GetCollectParentValuesAttribute(PropertyInfo propertyType)
         {
             var attr = Attribute
                 .GetCustomAttributes(propertyType)

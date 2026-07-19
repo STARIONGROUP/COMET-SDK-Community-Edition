@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var conversionBasedUnit = this.VerifyThingArgument(thing);
+            var conversionBasedUnit = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -97,7 +97,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0240")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementUnitIsInChainOfRdls(Thing thing)
         {
-            var conversionBasedUnit = this.VerifyThingArgument(thing);
+            var conversionBasedUnit = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -129,7 +129,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ConversionBasedUnit"/>
         /// </exception>
-        private ConversionBasedUnit VerifyThingArgument(Thing thing)
+        private static ConversionBasedUnit VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

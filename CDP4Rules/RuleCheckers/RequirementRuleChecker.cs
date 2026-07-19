@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0800")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheRequirementShortNameIsUniqueInContainerRequirementsSpecification(Thing thing)
         {
-            var requirement = this.VerifyThingArgument(thing);
+            var requirement = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -94,7 +94,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="Requirement"/>
         /// </exception>
-        private Requirement VerifyThingArgument(Thing thing)
+        private static Requirement VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

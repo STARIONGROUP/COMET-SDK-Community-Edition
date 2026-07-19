@@ -53,7 +53,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0400")]
         public IEnumerable<RuleCheckResult> CheckWhetherADefinedThingHasAtMostOneDefinitionPerNaturalLanguage(Thing thing)
         {
-            var definedThing = this.VerifyThingArgument(thing);
+            var definedThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -89,7 +89,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="DefinedThing"/>
         /// </exception>
-        private DefinedThing VerifyThingArgument(Thing thing)
+        private static DefinedThing VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

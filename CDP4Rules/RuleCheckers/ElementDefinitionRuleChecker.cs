@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0610")]
         public IEnumerable<RuleCheckResult> CheckWhetherContainerParametersHaveUniqueNames(Thing thing)
         {
-            var elementDefinition = this.VerifyThingArgument(thing);
+            var elementDefinition = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -95,7 +95,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0620")]
         public IEnumerable<RuleCheckResult> CheckWhetherContainerParametersHaveUniqueShortNames(Thing thing)
         {
-            var elementDefinition = this.VerifyThingArgument(thing);
+            var elementDefinition = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -130,7 +130,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ElementDefinition"/>
         /// </exception>
-        private ElementDefinition VerifyThingArgument(Thing thing)
+        private static ElementDefinition VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -49,7 +49,7 @@ namespace CDP4Common.NetCore.Tests.Extensions
         /// In the Testcases, the <see cref="ExpressionNumber"/> enum is used and runtime the matching <see cref="BooleanExpression"/>
         /// can be found in this <see cref="Dictionary{ExpressionNumber,BooleanExpression}"/> 
         /// </summary>
-        private IDictionary<ExpressionNumber, BooleanExpression> testCaseList;
+        private Dictionary<ExpressionNumber, BooleanExpression> testCaseList;
 
         private AndExpression andExpression;
 

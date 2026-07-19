@@ -61,7 +61,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0510")]
         public IEnumerable<RuleCheckResult> CheckWhetherSourceAndTargetAreContainedByTheSameIteration(Thing thing)
         {
-            var binaryRelationship = this.VerifyThingArgument(thing);
+            var binaryRelationship = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -125,7 +125,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="BinaryRelationship"/>
         /// </exception>
-        private BinaryRelationship VerifyThingArgument(Thing thing)
+        private static BinaryRelationship VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

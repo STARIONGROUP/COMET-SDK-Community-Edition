@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var constant = this.VerifyThingArgument(thing);
+            var constant = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -105,7 +105,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0220")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedParameterTypeIsInChainOfRdls(Thing thing)
         {
-            var constant = this.VerifyThingArgument(thing);
+            var constant = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -140,7 +140,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var constant = this.VerifyThingArgument(thing);
+            var constant = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -172,7 +172,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="Constant"/>
         /// </exception>
-        private Constant VerifyThingArgument(Thing thing)
+        private static Constant VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

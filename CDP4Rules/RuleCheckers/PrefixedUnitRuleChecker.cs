@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0270")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedUnitPrefixIsInChainOfRdls(Thing thing)
         {
-            var prefixedUnit = this.VerifyThingArgument(thing);
+            var prefixedUnit = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -92,7 +92,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var prefixedUnit = this.VerifyThingArgument(thing);
+            var prefixedUnit = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -122,7 +122,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="PrefixedUnit"/>
         /// </exception>
-        private PrefixedUnit VerifyThingArgument(Thing thing)
+        private static PrefixedUnit VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

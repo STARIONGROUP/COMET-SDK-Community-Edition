@@ -57,7 +57,7 @@ namespace CDP4Rules
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var publication = this.VerifyThingArgument(thing);
+            var publication = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -92,7 +92,7 @@ namespace CDP4Rules
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="Publication"/>
         /// </exception>
-        private Publication VerifyThingArgument(Thing thing)
+        private static Publication VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

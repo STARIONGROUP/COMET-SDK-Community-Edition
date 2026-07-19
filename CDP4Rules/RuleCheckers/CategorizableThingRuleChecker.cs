@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var categorizableThing = this.VerifyThingArgument(thing);
+            var categorizableThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -114,7 +114,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0300")]
         public IEnumerable<RuleCheckResult> CheckWhetherThereAreNoDuplicateCategoriesAreDefined(Thing thing)
         {
-            var categorizableThing = this.VerifyThingArgument(thing);
+            var categorizableThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -175,7 +175,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0310")]
         public IEnumerable<RuleCheckResult> ChecksWheterACategorizableThingIsNotAMemberOfAnAbstractCategory(Thing thing)
         {
-            var categorizableThing = this.VerifyThingArgument(thing);
+            var categorizableThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -210,7 +210,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0200")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoryIsInChainOfRdls(Thing thing)
         {
-            var categorizableThing = this.VerifyThingArgument(thing);
+            var categorizableThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -219,7 +219,7 @@ namespace CDP4Rules.RuleCheckers
             var referenceDataLibrary = (ReferenceDataLibrary)thing.GetContainerOfType(typeof(ReferenceDataLibrary));
             if (referenceDataLibrary != null)
             {
-                var result = this.CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, referenceDataLibrary, rule);
+                var result = CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, referenceDataLibrary, rule);
 
                 if (result != null)
                 {
@@ -232,7 +232,7 @@ namespace CDP4Rules.RuleCheckers
             {
                 var modelReferenceDataLibrary = engineeringModel.EngineeringModelSetup.RequiredRdl.First();
 
-                var result = this.CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, modelReferenceDataLibrary, rule);
+                var result = CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(categorizableThing, modelReferenceDataLibrary, rule);
 
                 if (result != null)
                 {
@@ -258,7 +258,7 @@ namespace CDP4Rules.RuleCheckers
         /// <returns>
         /// an instance of <see cref="RuleCheckResult"/> if a rule is violated, null if no rule is violated.
         /// </returns>
-        private RuleCheckResult CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(ICategorizableThing categorizableThing, ReferenceDataLibrary referenceDataLibrary, IRule rule)
+        private static RuleCheckResult CheckWhetherCategoriesOfCategorizableThingAreInTheChainOfRdls(ICategorizableThing categorizableThing, ReferenceDataLibrary referenceDataLibrary, IRule rule)
         {
             var thing = categorizableThing as Thing;
             var outOfChainOfRdlCategories = new List<Category>();
@@ -298,7 +298,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ICategorizableThing"/>
         /// </exception>
-        private ICategorizableThing VerifyThingArgument(Thing thing)
+        private static ICategorizableThing VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

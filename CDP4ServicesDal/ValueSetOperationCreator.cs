@@ -102,7 +102,7 @@ namespace CDP4ServicesDal
 
                 // value sets to update
                 var copyValueSets = valueSetsClones.Where(x => copyDto.ValueSets.Contains(x.Iid)).ToList();
-                var defaultValueSet = this.GetDefaultValueSet(originalParameter);
+                var defaultValueSet = GetDefaultValueSet(originalParameter);
 
                 if (defaultValueSet == null)
                 {
@@ -142,7 +142,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="parameterBase">The <see cref="ParameterBase"/> which <see cref="IValueSet"/> shall be copied</param>
         /// <returns>The default <see cref="IValueSet"/> to copy or null</returns>
-        private IValueSet GetDefaultValueSet(ParameterBase parameterBase)
+        private static IValueSet GetDefaultValueSet(ParameterBase parameterBase)
         {
             // single value set in original
             if (parameterBase.ValueSets.Count() == 1)
@@ -176,10 +176,10 @@ namespace CDP4ServicesDal
                 {
                     case ClassKind.ParameterValueSet:
                     case ClassKind.ParameterOverrideValueSet:
-                        this.SetValueSetValues((Dto.ParameterValueSetBase)thing, (ParameterValueSetBase)originalValueSet);
+                        SetValueSetValues((Dto.ParameterValueSetBase)thing, (ParameterValueSetBase)originalValueSet);
                         break;
                     case ClassKind.ParameterSubscriptionValueSet:
-                        this.SetValueSetValues((Dto.ParameterSubscriptionValueSet)thing, (ParameterSubscriptionValueSet)originalValueSet);
+                        SetValueSetValues((Dto.ParameterSubscriptionValueSet)thing, (ParameterSubscriptionValueSet)originalValueSet);
                         break;
                 }
             }
@@ -190,7 +190,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="valueSet">The <see cref="Dto.ParameterValueSetBase"/></param>
         /// <param name="originalValueSet">The <see cref="ParameterValueSetBase"/></param>
-        private void SetValueSetValues(Dto.ParameterValueSetBase valueSet, ParameterValueSetBase originalValueSet)
+        private static void SetValueSetValues(Dto.ParameterValueSetBase valueSet, ParameterValueSetBase originalValueSet)
         {
             valueSet.Manual = originalValueSet.Manual;
             valueSet.Reference = originalValueSet.Reference;
@@ -204,7 +204,7 @@ namespace CDP4ServicesDal
         /// </summary>
         /// <param name="valueSet">The <see cref="Dto.ParameterSubscriptionValueSet"/></param>
         /// <param name="originalValueSet">The <see cref="ParameterSubscriptionValueSet"/></param>
-        private void SetValueSetValues(Dto.ParameterSubscriptionValueSet valueSet, ParameterSubscriptionValueSet originalValueSet)
+        private static void SetValueSetValues(Dto.ParameterSubscriptionValueSet valueSet, ParameterSubscriptionValueSet originalValueSet)
         {
             valueSet.Manual = originalValueSet.Manual;
             valueSet.ValueSwitch = originalValueSet.ValueSwitch;

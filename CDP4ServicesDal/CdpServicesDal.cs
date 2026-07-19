@@ -35,7 +35,6 @@ namespace CDP4ServicesDal
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
-    using System.Text;
     using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
@@ -193,7 +192,7 @@ namespace CDP4ServicesDal
 
             if (files != null && files.Any())
             {
-                this.OperationContainerFileVerification(operationContainer, files);
+                OperationContainerFileVerification(operationContainer, files);
             }
 
             var attribute = new QueryAttributes
@@ -204,7 +203,7 @@ namespace CDP4ServicesDal
             var postToken = operationContainer.Token;
             var resourcePath = $"{operationContainer.Context}{attribute}";
 
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
             Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
@@ -220,7 +219,7 @@ namespace CDP4ServicesDal
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    await this.ProcessWriteException(httpResponseMessage);
+                    await ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
@@ -229,7 +228,7 @@ namespace CDP4ServicesDal
                 {
                     var deserializationWatch = Stopwatch.StartNew();
 
-                    switch (this.QueryContentTypeKind(httpResponseMessage))
+                    switch (QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
@@ -244,12 +243,13 @@ namespace CDP4ServicesDal
                                 result.AddRange(things);
                                 Logger.Info("MESSAGEPACK Deserializer completed in {0} [ms]", deserializationWatch.ElapsedMilliseconds);
                             }
+
                             break;
                     }
 
                     deserializationWatch.Stop();
 
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+                    if (TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(result, iterationId);
                     }
@@ -268,7 +268,7 @@ namespace CDP4ServicesDal
         /// <param name="httpResponseMessage">The <see cref="HttpResponseMessage"/></param>
         /// <exception cref="DalWriteException">Always throws a <see cref="DalWriteException"/></exception>
         /// <returns>An awaitable <see cref="Task"/></returns>
-        private async Task ProcessWriteException(HttpResponseMessage httpResponseMessage)
+        private static async Task ProcessWriteException(HttpResponseMessage httpResponseMessage)
         {
             var errorResponse = await httpResponseMessage.Content.ReadAsStringAsync();
             var msg = $"The CDP4 Services replied with code {httpResponseMessage.StatusCode}: {httpResponseMessage.ReasonPhrase}: {errorResponse}";
@@ -321,7 +321,7 @@ namespace CDP4ServicesDal
 
             if (files != null && files.Any())
             {
-                this.OperationContainerFileVerification(operationContainer, files);
+                OperationContainerFileVerification(operationContainer, files);
             }
 
             var attribute = new QueryAttributes
@@ -333,7 +333,7 @@ namespace CDP4ServicesDal
             var postToken = operationContainer.Token;
             var resourcePath = $"{operationContainer.Context}{attribute}";
 
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", postToken, resourcePath);
             Logger.Debug("CDP4 Services POST: {0} - {1}", postToken, uriBuilder);
@@ -349,7 +349,7 @@ namespace CDP4ServicesDal
 
                 if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
                 {
-                    await this.ProcessWriteException(httpResponseMessage);
+                    await ProcessWriteException(httpResponseMessage);
                 }
 
                 this.ProcessHeaders(httpResponseMessage);
@@ -357,7 +357,7 @@ namespace CDP4ServicesDal
                 using (var resultStream = await httpResponseMessage.Content.ReadAsStreamAsync())
                 {
                     var deserializationWatch = Stopwatch.StartNew();
-                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+                    var contentTypeKind = QueryContentTypeKind(httpResponseMessage);
 
                     switch (contentTypeKind)
                     {
@@ -374,7 +374,7 @@ namespace CDP4ServicesDal
 
                     deserializationWatch.Stop();
 
-                    if (!result.IsWaitTimeReached && this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+                    if (!result.IsWaitTimeReached && TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(result.Things, iterationId);
                     }
@@ -493,7 +493,7 @@ namespace CDP4ServicesDal
             var resourcePath = !engineeringModels.Any() ? "EngineeringModel/*" : $"EngineeringModel/{engineeringModels.Select(x => x.Iid).ToList().ToShortGuidArray()}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -523,7 +523,7 @@ namespace CDP4ServicesDal
 
                     IEnumerable<Thing> returned = new List<Thing>();
 
-                    switch (this.QueryContentTypeKind(httpResponseMessage))
+                    switch (QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
@@ -566,12 +566,12 @@ namespace CDP4ServicesDal
 
             var watch = Stopwatch.StartNew();
 
-            var thingRoute = this.CleanUriFinalSlash(thing.Route);
+            var thingRoute = CleanUriFinalSlash(thing.Route);
 
             var resourcePath = $"{thingRoute}?includeFileData=true";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -649,12 +649,12 @@ namespace CDP4ServicesDal
                 attributes = GetIUriQueryAttribute(includeReferenData);
             }
 
-            var thingRoute = this.CleanUriFinalSlash(thing.Route);
+            var thingRoute = CleanUriFinalSlash(thing.Route);
 
             var resourcePath = $"{thingRoute}{attributes?.ToString()}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -684,7 +684,7 @@ namespace CDP4ServicesDal
 
                     IEnumerable<Thing> returned = new List<Thing>();
 
-                    switch (this.QueryContentTypeKind(httpResponseMessage))
+                    switch (QueryContentTypeKind(httpResponseMessage))
                     {
                         case ContentTypeKind.JSON:
                             Logger.Info("Deserializing JSON response");
@@ -700,7 +700,7 @@ namespace CDP4ServicesDal
 
                     deserializationWatch.Stop();
 
-                    if (this.TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
+                    if (TryExtractIterationIdfromUri(httpResponseMessage.RequestMessage.RequestUri, out var iterationId))
                     {
                         this.SetIterationContainer(returned, iterationId);
                     }
@@ -721,7 +721,7 @@ namespace CDP4ServicesDal
             var resourcePath = $"{CometTaskRoute}/{id}";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -750,7 +750,7 @@ namespace CDP4ServicesDal
                     var deserializationWatch = Stopwatch.StartNew();
 
                     CometTask returned;
-                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+                    var contentTypeKind = QueryContentTypeKind(httpResponseMessage);
 
                     switch (contentTypeKind)
                     {
@@ -782,7 +782,7 @@ namespace CDP4ServicesDal
             var resourcePath = CometTaskRoute;
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -811,7 +811,7 @@ namespace CDP4ServicesDal
                     var deserializationWatch = Stopwatch.StartNew();
 
                     IEnumerable<CometTask> returned;
-                    var contentTypeKind = this.QueryContentTypeKind(httpResponseMessage);
+                    var contentTypeKind = QueryContentTypeKind(httpResponseMessage);
 
                     switch (contentTypeKind)
                     {
@@ -926,7 +926,7 @@ namespace CDP4ServicesDal
             var openToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
             var originalHttpClient = this.httpClient; //Store the current httpClient in a variable for later checks
-            var createdOrReusedHttpClient= this.CreateHttpClient(credentials, this.httpClient);
+            var createdOrReusedHttpClient= CreateHttpClient(credentials, this.httpClient);
 
             this.httpClient = createdOrReusedHttpClient; // Make sure every piece of code can use the current httpClient
 
@@ -936,7 +936,7 @@ namespace CDP4ServicesDal
 
                 var watch = Stopwatch.StartNew();
 
-                var uriBuilder = this.GetUriBuilder(credentials.Uri, ref resourcePath);
+                var uriBuilder = GetUriBuilder(credentials.Uri, ref resourcePath);
 
                 Logger.Debug("Resource Path {0}: {1}", openToken, resourcePath);
                 Logger.Debug("CDP4Services Open {0}: {1}", openToken, uriBuilder);
@@ -969,7 +969,7 @@ namespace CDP4ServicesDal
 
                         IEnumerable<Thing> returned = new List<Thing>();
 
-                        switch (this.QueryContentTypeKind(httpResponseMessage))
+                        switch (QueryContentTypeKind(httpResponseMessage))
                         {
                             case ContentTypeKind.JSON:
                                 Logger.Info("Deserializing JSON response");
@@ -1073,13 +1073,13 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The Credentials may not be null, this service should have been initialized before");
             }
 
-            var temporaryClient = this.CreateHttpClient(this.Credentials, null);
+            var temporaryClient = CreateHttpClient(this.Credentials, null);
 
             var resourcePath = "login";
             var watch = Stopwatch.StartNew();
             var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
             Logger.Debug("CDP4Services Open {0}: {1}", loginToken, uriBuilder);
@@ -1115,7 +1115,7 @@ namespace CDP4ServicesDal
             var deserializationWatch = Stopwatch.StartNew();
             AuthenticationToken returnedToken = null;
 
-            switch (this.QueryContentTypeKind(httpResponseMessage))
+            switch (QueryContentTypeKind(httpResponseMessage))
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
@@ -1166,13 +1166,13 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The refresh token must be set");
             }
             
-            var temporaryClient = this.CreateHttpClient(this.Credentials, null);
+            var temporaryClient = CreateHttpClient(this.Credentials, null);
 
             var resourcePath = "refresh";
             var watch = Stopwatch.StartNew();
             var refreshQueryToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", refreshQueryToken, resourcePath);
             Logger.Debug("CDP4Services Open {0}: {1}", refreshQueryToken, uriBuilder);
@@ -1202,7 +1202,7 @@ namespace CDP4ServicesDal
             var deserializationWatch = Stopwatch.StartNew();
             AuthenticationToken returnedToken = null;
 
-            switch (this.QueryContentTypeKind(httpResponseMessage))
+            switch (QueryContentTypeKind(httpResponseMessage))
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");
@@ -1254,7 +1254,7 @@ namespace CDP4ServicesDal
         /// <returns>
         /// An instance of <see cref="HttpClient"/> with the DefaultRequestHeaders set
         /// </returns>
-        private HttpClient CreateHttpClient(Credentials credentials, HttpClient injectedClient)
+        private static HttpClient CreateHttpClient(Credentials credentials, HttpClient injectedClient)
         {
             if (injectedClient != null && credentials.FullTrust)
             {
@@ -1460,7 +1460,7 @@ namespace CDP4ServicesDal
 
             var headerString = Convert.ToString(mediaTypeHeader.Value.FirstOrDefault()).ToLower(CultureInfo.InvariantCulture);
 
-            if (!this.IsCDP4ContentType(headerString, allowMultiPart))
+            if (!IsCdp4ContentType(headerString, allowMultiPart))
             {
                 throw new HeaderException($"Header Media-Type has incompatible value: {mediaTypeHeader.Value} ");
             }
@@ -1472,7 +1472,7 @@ namespace CDP4ServicesDal
         /// <param name="headerString">The header <see cref="string"/></param>
         /// <param name="allowMultiPart">Indication if multipart Content-Type is allowed</param>
         /// <returns>true if a CDP4 content type is found, otherwise false</returns>
-        private bool IsCDP4ContentType(string headerString, bool allowMultiPart)
+        private static bool IsCdp4ContentType(string headerString, bool allowMultiPart)
         {
             var headerArray = headerString
                 .Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries)
@@ -1513,7 +1513,7 @@ namespace CDP4ServicesDal
         /// <exception cref="HeaderException">
         /// thrown when the Content-Type is not supported
         /// </exception>
-        private ContentTypeKind QueryContentTypeKind(HttpResponseMessage httpResponseMessage)
+        private static ContentTypeKind QueryContentTypeKind(HttpResponseMessage httpResponseMessage)
         {
             var contentHeaders = httpResponseMessage.Content.Headers;
 
@@ -1608,13 +1608,13 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("The CDP4 DAL URI not specified.");
             }
 
-            var temporaryHttpClient = this.CreateHttpClient(this.Credentials, null);
+            var temporaryHttpClient = CreateHttpClient(this.Credentials, null);
             var watch = Stopwatch.StartNew();
 
             var resourcePath = "auth/schemes";
 
             var readToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", readToken, resourcePath);
             Logger.Debug("CDP4Services GET {0}: {1}", readToken, uriBuilder);
@@ -1687,14 +1687,14 @@ namespace CDP4ServicesDal
                 throw new InvalidOperationException("Credentials are not fully initialized");
             }
             
-            var httpClientToUse = this.CreateHttpClient(this.Credentials, null);
+            var httpClientToUse = CreateHttpClient(this.Credentials, null);
             httpClientToUse.SetAuthorizationHeader(this.Credentials);
             
             var resourcePath = "username";
             var watch = Stopwatch.StartNew();
             var loginToken = CDP4Common.Helpers.TokenGenerator.GenerateRandomToken();
 
-            var uriBuilder = this.GetUriBuilder(this.Credentials.Uri, ref resourcePath);
+            var uriBuilder = GetUriBuilder(this.Credentials.Uri, ref resourcePath);
 
             Logger.Debug("Resource Path {0}: {1}", loginToken, resourcePath);
             Logger.Debug("CDP4Services UserName {0}: {1}", loginToken, uriBuilder);
@@ -1723,7 +1723,7 @@ namespace CDP4ServicesDal
             var deserializationWatch = Stopwatch.StartNew();
             deserializationWatch.Stop();
 
-            switch (this.QueryContentTypeKind(httpResponseMessage))
+            switch (QueryContentTypeKind(httpResponseMessage))
             {
                 case ContentTypeKind.JSON:
                     Logger.Info("Deserializing JSON response");

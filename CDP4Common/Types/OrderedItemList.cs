@@ -134,7 +134,7 @@ namespace CDP4Common.Types
         /// <returns>The index of the item if there is a match, else -1</returns>
         public int FindIndex(Predicate<T> match)
         {
-            this.ValidateValueForNull(match, "A match cannot be null");
+            ValidateValueForNull(match, "A match cannot be null");
 
             foreach (T item in this)
             {
@@ -192,7 +192,7 @@ namespace CDP4Common.Types
             set
             {
                 this.ValidateIndex(index);
-                this.ValidateValueForNull(value);
+                ValidateValueForNull(value);
 
                 if (value as Thing != null && this.IsComposite)
                 {
@@ -242,7 +242,7 @@ namespace CDP4Common.Types
         /// </exception>
         public void Add(T item)
         {
-            this.ValidateValueForNull(item);
+            ValidateValueForNull(item);
 
             if (item is Thing)
             {
@@ -319,7 +319,7 @@ namespace CDP4Common.Types
         /// </param>
         public void Insert(int index, T item)
         {
-            this.ValidateValueForNull(item);
+            ValidateValueForNull(item);
 
             if (index < this.Count)
             {
@@ -574,7 +574,7 @@ namespace CDP4Common.Types
         /// <exception cref="ArgumentNullException">
         /// Thrown when <see paramref="value"/> is null.
         /// </exception>
-        private void ValidateValueForNull(object value, string message = "An item cannot be null")
+        private static void ValidateValueForNull(object value, string message = "An item cannot be null")
         {
             if (value == null)
             {

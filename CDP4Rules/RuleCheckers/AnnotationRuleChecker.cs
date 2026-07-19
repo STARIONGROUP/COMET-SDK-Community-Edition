@@ -56,7 +56,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0100")]
         public IEnumerable<RuleCheckResult> CheckWheterTheLanguageCodeExistsInTheSiteDirectory(Thing thing)
         {
-            var annotation = this.VerifyThingArgument(thing);
+            var annotation = VerifyThingArgument(thing);
 
             var topContainer = thing.TopContainer;
 
@@ -104,7 +104,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0020")]
         public IEnumerable<RuleCheckResult> CheckWeatherTheLanguageCodeIsValid(Thing thing)
         {
-            var annotation = this.VerifyThingArgument(thing);
+            var annotation = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -134,7 +134,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="IAnnotation"/>
         /// </exception>
-        private IAnnotation VerifyThingArgument(Thing thing)
+        private static IAnnotation VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

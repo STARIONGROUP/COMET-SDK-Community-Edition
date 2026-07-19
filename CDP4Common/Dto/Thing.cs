@@ -339,7 +339,7 @@ namespace CDP4Common.DTO
                     throw new InvalidOperationException("Cannot add another container, EngineeringModel is a top container");
                 default:
                     {
-                        if (this.IsAuthorizedRoute(lastRouteClassKind, classKind))
+                        if (IsAuthorizedRoute(lastRouteClassKind, classKind))
                         {
                             var containerPropertyName = ContainerPropertyHelper.ContainerPropertyName(classKind);
                             var partialRoute = $"{containerPropertyName}/{iid}";
@@ -400,7 +400,7 @@ namespace CDP4Common.DTO
         /// <param name="lastRoute">container previously added</param>
         /// <param name="newRoute">new container</param>
         /// <returns>true if the new route is consistent with the existing one</returns>
-        private bool IsAuthorizedRoute(ClassKind lastRoute, ClassKind newRoute)
+        private static bool IsAuthorizedRoute(ClassKind lastRoute, ClassKind newRoute)
         {
             var lastRouteContainerClass = ContainerPropertyHelper.ContainerClassName(lastRoute);
             if (newRoute.ToString() == lastRouteContainerClass)

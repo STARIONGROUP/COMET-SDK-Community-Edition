@@ -60,7 +60,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0010")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheShortNameIsAValidShortName(Thing thing)
         {
-            var shortNamedThing = this.VerifyThingArgument(thing);
+            var shortNamedThing = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -186,7 +186,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="IShortNamedThing"/>
         /// </exception>
-        private IShortNamedThing VerifyThingArgument(Thing thing)
+        private static IShortNamedThing VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

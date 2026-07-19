@@ -46,7 +46,7 @@ namespace CDP4RequirementsVerification.Calculations
         /// <returns><see cref="RequirementStateOfCompliance"/> based on the calculations</returns>
         public RequirementStateOfCompliance Calculate(ParameterValueSetBase valueSet, RelationalExpression relationalExpression)
         {
-            var comparer = this.GetValueSetComparer(relationalExpression);
+            var comparer = GetValueSetComparer(relationalExpression);
 
             switch (relationalExpression.RelationalOperator)
             {
@@ -89,7 +89,7 @@ namespace CDP4RequirementsVerification.Calculations
         /// </summary>
         /// <param name="relationalExpression">The <see cref="RelationalExpression"/></param>
         /// <returns>The <see cref="IComparer{ValueArray{String}}"/></returns>
-        private IComparer<ValueArray<string>> GetValueSetComparer(RelationalExpression relationalExpression)
+        private static IComparer<ValueArray<string>> GetValueSetComparer(RelationalExpression relationalExpression)
         {
             IComparer<ValueArray<string>> comparer;
 

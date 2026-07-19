@@ -206,7 +206,7 @@ namespace CDP4Dal.Operations
         /// <summary>
         /// Gets the copied <see cref="Thing"/>s
         /// </summary>
-        public IReadOnlyDictionary<Tuple<Thing, Thing>, OperationKind> CopiedThing => copiedThing;
+        public IReadOnlyDictionary<Tuple<Thing, Thing>, OperationKind> CopiedThing => this.copiedThing;
 
         /// <summary>
         /// Registers the provided <see cref="Thing"/> to be created in the current transaction
@@ -557,7 +557,7 @@ namespace CDP4Dal.Operations
 
             // update the reference of possible other clones of the same type which were added when a contained item 
             // of the current AssociatedClone was updated to another one
-            var rootClone = GetOperationRootClone();
+            var rootClone = this.GetOperationRootClone();
             var cloneTypeToUpdate = this.AssociatedClone.GetContainerInformation().Item1;
 
             foreach (
@@ -725,7 +725,7 @@ namespace CDP4Dal.Operations
 
             if (this.ParentTransaction != null)
             {
-                this.PopulateAllAddedThingsList(this.ParentTransaction, allAddedThing);
+                PopulateAllAddedThingsList(this.ParentTransaction, allAddedThing);
             }
 
             return allAddedThing;
@@ -736,14 +736,14 @@ namespace CDP4Dal.Operations
         /// </summary>
         /// <param name="transaction">The <see cref="ThingTransaction"/></param>
         /// <param name="allAddedThing">The list containing all the added things</param>
-        private void PopulateAllAddedThingsList(IThingTransaction transaction, List<Thing> allAddedThing)
+        private static void PopulateAllAddedThingsList(IThingTransaction transaction, List<Thing> allAddedThing)
         {
             var thingsToAdd = transaction.AddedThing.Where(x => allAddedThing.All(y => y.Iid != x.Iid));
             allAddedThing.AddRange(thingsToAdd);
 
             if (transaction.ParentTransaction != null)
             {
-                this.PopulateAllAddedThingsList(transaction.ParentTransaction, allAddedThing);
+                PopulateAllAddedThingsList(transaction.ParentTransaction, allAddedThing);
             }
         }
 
@@ -757,7 +757,7 @@ namespace CDP4Dal.Operations
 
             if (this.ParentTransaction != null)
             {
-                this.PopulateAllUpdatedThingsList(this.ParentTransaction, allUpdatedThings);
+                PopulateAllUpdatedThingsList(this.ParentTransaction, allUpdatedThings);
             }
 
             return allUpdatedThings;
@@ -768,14 +768,14 @@ namespace CDP4Dal.Operations
         /// </summary>
         /// <param name="transaction">The specified <see cref="IThingTransaction"/></param>
         /// <param name="allUpdatedThing">The list of all the updated things to populate</param>
-        private void PopulateAllUpdatedThingsList(IThingTransaction transaction, List<Thing> allUpdatedThing)
+        private static void PopulateAllUpdatedThingsList(IThingTransaction transaction, List<Thing> allUpdatedThing)
         {
             var thingsToAdd = transaction.UpdatedThing.Values.Where(x => allUpdatedThing.All(y => y.Iid != x.Iid));
             allUpdatedThing.AddRange(thingsToAdd);
 
             if (transaction.ParentTransaction != null)
             {
-                this.PopulateAllUpdatedThingsList(transaction.ParentTransaction, allUpdatedThing);
+                PopulateAllUpdatedThingsList(transaction.ParentTransaction, allUpdatedThing);
             }
         }
 
