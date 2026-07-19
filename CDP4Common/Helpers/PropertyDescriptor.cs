@@ -43,6 +43,11 @@ namespace CDP4Common.PropertyAccesor
     public class PropertyDescriptor
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// Gets or sets the name of the property
         /// </summary>
         public string Name { get; set; }
@@ -113,7 +118,7 @@ namespace CDP4Common.PropertyAccesor
 
             const string pattern = @"^(\w+)(?:\[(\d+)(?:\.\.(\d+|\*))?\])?";
 
-            var match = Regex.Match(input, pattern);
+            var match = Regex.Match(input, pattern, RegexOptions.None, RegexTimeout);
 
             if (!match.Success)
             {

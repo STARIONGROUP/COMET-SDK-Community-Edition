@@ -40,6 +40,11 @@ namespace CDP4JsonSerializer
     public static class SerializerHelper
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// Gets the format of the <see cref="DateTime"/> to use
         /// </summary>
         public const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
@@ -65,8 +70,8 @@ namespace CDP4JsonSerializer
         static SerializerHelper()
         {
             JsonSerializerOptions = JsonSerializerOptionsCreator.CreateNew();
-            JsonToValueArrayRegex = new(@"^\[(.*)\]$", RegexOptions.Singleline);
-            HstoreToValueArrayRegex = new(@"^\{(.*)\}$", RegexOptions.Singleline);
+            JsonToValueArrayRegex = new(@"^\[(.*)\]$", RegexOptions.Singleline, RegexTimeout);
+            HstoreToValueArrayRegex = new(@"^\{(.*)\}$", RegexOptions.Singleline, RegexTimeout);
         }
 
         /// <summary>
@@ -207,7 +212,7 @@ namespace CDP4JsonSerializer
             // match within 2 unescape double-quote the following content:
             // 1) (no special char \ or ") 0..* times
             // 2) (a pattern that starts with \ followed by any character (special included) and 0..* "non special" characters) 0..* times
-            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""", RegexOptions.Singleline);
+            var valueExtractionRegex = new Regex(@"""([^""\\]*(\\.[^""\\]*)*)""", RegexOptions.Singleline, RegexTimeout);
             var test = valueExtractionRegex.Matches(extractedArrayString);
 
             var stringValues = new List<string>();

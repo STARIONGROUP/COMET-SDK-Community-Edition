@@ -41,6 +41,11 @@ namespace CDP4Rules.RuleCheckers
     public class ShortNamedThingChecker : RuleChecker
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// Checks whether the ShortName of a <see cref="IShortNamedThing"/> is valid
         /// </summary>
         /// <param name="thing">
@@ -114,7 +119,7 @@ namespace CDP4Rules.RuleCheckers
         /// </returns>
         private RuleCheckResult CheckShortNameValidityOfElementBase(ElementBase elementBase, IRule rule)
         {
-            if (!Regex.IsMatch(elementBase.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$"))
+            if (!Regex.IsMatch(elementBase.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$", RegexOptions.None, RegexTimeout))
             {
                 return new RuleCheckResult(elementBase, rule.Id, $"The ShortName: {elementBase.ShortName} is invalid. The ShortName must start with a letter and not contain any spaces or non alphanumeric characters.", rule.Severity);
             }
@@ -136,7 +141,7 @@ namespace CDP4Rules.RuleCheckers
         /// </returns>
         private RuleCheckResult CheckShortNameValidityOfRequirementsContainer(RequirementsContainer requirementsContainer, IRule rule)
         {
-            if (!Regex.IsMatch(requirementsContainer.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$"))
+            if (!Regex.IsMatch(requirementsContainer.ShortName, "^[a-zA-Z][a-zA-Z0-9_]*$", RegexOptions.None, RegexTimeout))
             {
                 return new RuleCheckResult(requirementsContainer, rule.Id, $"The ShortName: {requirementsContainer.ShortName} is invalid. The ShortName must start with a letter and not contain any spaces or non alphanumeric characters.", rule.Severity);
             }
@@ -157,7 +162,7 @@ namespace CDP4Rules.RuleCheckers
         /// </returns>
         private RuleCheckResult CheckShortNameValidityOfShortNamedThing(IShortNamedThing shortNamedThing, IRule rule)
         {
-            if (Regex.IsMatch(shortNamedThing.ShortName, @"\w\s"))
+            if (Regex.IsMatch(shortNamedThing.ShortName, @"\w\s", RegexOptions.None, RegexTimeout))
             {
                 var thing = shortNamedThing as Thing;
                 return new RuleCheckResult(thing, rule.Id, $"The ShortName: {shortNamedThing.ShortName} is invalid. A shortName should not contain any whitespace", rule.Severity);
