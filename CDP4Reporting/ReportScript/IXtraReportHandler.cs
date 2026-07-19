@@ -40,19 +40,19 @@ namespace CDP4Reporting.ReportScript
     public interface IXtraReportHandler<out TReport, TParameter> where TReport : class where TParameter : class
     {
         /// <summary>
-        /// Gets the <see cref="TReport"/>, which typically is a DevExpress XtraReport class for a specific platform
+        /// Gets the <typeparamref name="TReport"/>, which typically is a DevExpress XtraReport class for a specific platform
         /// </summary>
         TReport Report { get; }
 
         /// <summary>
-        /// Sets the <see cref="TReport"/>'s DataSource
+        /// Sets the <typeparamref name="TReport"/>'s DataSource
         /// </summary>
         /// <param name="dataSourceName">The name of the DataSource</param>
         /// <param name="dataSource">The datasource as an <see cref="object"/></param>
         void SetReportDataSource(string dataSourceName, object dataSource);
 
         /// <summary>
-        /// Sets the <see cref="TReport"/>'s filterstring property
+        /// Sets the <typeparamref name="TReport"/>'s filterstring property
         /// </summary>
         /// <param name="filterString"></param>
         void SetReportFilterString(string filterString);
@@ -60,7 +60,7 @@ namespace CDP4Reporting.ReportScript
         /// <summary>
         /// Gets the currently available report parameters
         /// </summary>
-        /// <returns>An <see cref="IEnumerable{T}"/> of type <see cref="TParameter"/></returns>
+        /// <returns>An <see cref="IEnumerable{T}"/> of type <typeparamref name="TParameter"/></returns>
         IEnumerable<TParameter> GetCurrentParameters();
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace CDP4Reporting.ReportScript
         /// <summary>
         /// Removes a report parameter from the report if it already exists.
         /// </summary>
-        /// <param name="reportParameter">The <see cref="TParameter"/></param>
+        /// <param name="reportParameter">The <typeparamref name="TParameter"/></param>
         void RemoveParameterIfExists(TParameter reportParameter);
 
         /// <summary>
@@ -89,38 +89,38 @@ namespace CDP4Reporting.ReportScript
         void SetParameterDefaultValues(IReportingParameter reportingParameter);
 
         /// <summary>
-        /// Sets the default value for a specific report parameter <see cref="TParameter"/>
+        /// Sets the default value for a specific report parameter <typeparamref name="TParameter"/>
         /// </summary>
-        /// <param name="parameter">The <see cref="TParameter"/></param>
+        /// <param name="parameter">The <typeparamref name="TParameter"/></param>
         /// <param name="value">The new value for the report parameter</param>
         void SetParameterDefaultValue(TParameter parameter, object value);
 
         /// <summary>
         /// Adds a new report parameter to the report
         /// </summary>
-        /// <param name="newReportParameter">The <see cref="TParameter"/></param>
+        /// <param name="newReportParameter">The <typeparamref name="TParameter"/></param>
         void AddParameter(TParameter newReportParameter);
 
         /// <summary>
-        /// Gets a new <see cref="TParameter"/> based on an <see cref="IReportingParameter"/>
+        /// Gets a new <typeparamref name="TParameter"/> based on an <see cref="IReportingParameter"/>
         /// </summary>
         /// <param name="reportingParameter">The <see cref="IReportingParameter"/></param>
         /// <param name="parameterIsVisible">Boolean indicating if the report parameter is visible and edittable for the user in the report</param>
-        /// <returns>The <see cref="TParameter"/></returns>
+        /// <returns>The <typeparamref name="TParameter"/></returns>
         TParameter GetNewParameter(IReportingParameter reportingParameter, bool parameterIsVisible);
 
         /// <summary>
-        /// Sets all data for a lookup <see cref="TParameter"/> based on an <see cref="IReportingParameter"/>
+        /// Sets all data for a lookup <typeparamref name="TParameter"/> based on an <see cref="IReportingParameter"/>
         /// </summary>
-        /// <param name="newReportParameter">The <see cref="TParameter"/></param>
+        /// <param name="newReportParameter">The <typeparamref name="TParameter"/></param>
         /// <param name="reportingParameter">The <see cref="IReportingParameter"/></param>
         void SetParameterStaticLookUpList(TParameter newReportParameter, IReportingParameter reportingParameter);
 
         /// <summary>
-        /// Sets a <see cref="TParameter"/>'s visibility property
+        /// Sets a <typeparamref name="TParameter"/>'s visibility property
         /// </summary>
-        /// <param name="newReportParameter">The <see cref="TParameter"/></param>
-        /// <param name="reportingParameterVisible">A boolean indicating that the <see cref="TParameter"/> is visible and edittable to the user</param>
+        /// <param name="newReportParameter">The <typeparamref name="TParameter"/></param>
+        /// <param name="reportingParameterVisible">A boolean indicating that the <typeparamref name="TParameter"/> is visible and edittable to the user</param>
         void SetParameterVisibility(TParameter newReportParameter, bool reportingParameterVisible);
     }
 }
