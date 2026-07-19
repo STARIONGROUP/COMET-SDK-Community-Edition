@@ -45,7 +45,7 @@ namespace CDP4Common.EngineeringModelData
         {
             if (person == null)
             {
-                throw new ArgumentNullException("person");
+                throw new ArgumentNullException(nameof(person));
             }
 
             return this.EngineeringModelSetup.Participant.Single(x => x.Person == person);

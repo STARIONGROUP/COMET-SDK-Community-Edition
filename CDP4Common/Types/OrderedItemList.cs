@@ -547,7 +547,7 @@ namespace CDP4Common.Types
 
             if (this.sortedItems.ContainsKey(sortKey))
             {
-                throw new ArgumentException("The key already exists", "sortKey");
+                throw new ArgumentException("The key already exists", nameof(sortKey));
             }
 
             if (item is Thing)
@@ -596,8 +596,8 @@ namespace CDP4Common.Types
             if (index < 0 || index >= this.sortedItems.Count)
             {
                 var rangeMessage = this.sortedItems.Count == 0 ? "the list is empty" : $"valid range is 0 to { this.sortedItems.Count - 1}";
-                throw new ArgumentOutOfRangeException(
-                    "index",$"The index {index} does not exist in the OrderedItemList, {rangeMessage}");
+                
+                throw new ArgumentOutOfRangeException(nameof(index),$"The index {index} does not exist in the OrderedItemList, {rangeMessage}");
             }
         }
 

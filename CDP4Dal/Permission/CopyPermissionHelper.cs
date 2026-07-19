@@ -109,7 +109,7 @@ namespace CDP4Dal.Permission
         {
             if (session == null)
             {
-                throw new ArgumentNullException("session");
+                throw new ArgumentNullException(nameof(session));
             }
 
             this.ownerIsChanged = ownerIsChanged;
@@ -141,12 +141,12 @@ namespace CDP4Dal.Permission
         {
             if (thingToCopy == null)
             {
-                throw new ArgumentNullException("thingToCopy");
+                throw new ArgumentNullException(nameof(thingToCopy));
             }
 
             if (targetContainer == null)
             {
-                throw new ArgumentNullException("targetContainer", "The destination of the thing to copy cannot be null.");
+                throw new ArgumentNullException(nameof(targetContainer), "The destination of the thing to copy cannot be null.");
             }
 
             if (!this.CheckContainement(thingToCopy, targetContainer))

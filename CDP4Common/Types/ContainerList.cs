@@ -113,8 +113,7 @@ namespace CDP4Common.Types
             {
                 if (index < 0 || index >= base.Count)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
+                    throw new ArgumentOutOfRangeException(nameof(index), $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 return base[index];
@@ -124,13 +123,12 @@ namespace CDP4Common.Types
             {
                 if (index < 0 || index >= base.Count)
                 {
-                    throw new ArgumentOutOfRangeException(
-                        "index", $"index is {index}, valid range is 0 to {this.Count - 1}");
+                    throw new ArgumentOutOfRangeException(nameof(index), $"index is {index}, valid range is 0 to {this.Count - 1}");
                 }
 
                 if (value == null)
                 {
-                    throw new ArgumentNullException("value");
+                    throw new ArgumentNullException(nameof(value));
                 }
                 
                 if (this.Contains(value) && base[index] != value)
