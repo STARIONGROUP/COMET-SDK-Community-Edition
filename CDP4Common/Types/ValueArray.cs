@@ -145,14 +145,14 @@ namespace CDP4Common.Types
             }
 
             var sb = new StringBuilder();
-            sb.Append("{");
+            sb.Append('{');
             for (var i = 0; i < this.items.Count ; i++)
             {
                 if (typeof(T).QueryIsAssignableFrom(typeof(string)))
                 {
-                    sb.Append("\"");
+                    sb.Append('"');
                     sb.AppendFormat(CultureInfo.InvariantCulture, "{0}", this.items[i]);
-                    sb.Append("\"");
+                    sb.Append('"');
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace CDP4Common.Types
                 }
             }
 
-            sb.Append("}");
+            sb.Append('}');
             return sb.ToString();
         }
 
