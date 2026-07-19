@@ -392,7 +392,7 @@ namespace CDP4ServicesDal
         /// <summary>
         /// Write all the <see cref="Operation"/>s from all the <see cref="OperationContainer"/>s.
         /// </summary>
-        /// <param name="operationContainer">
+        /// <param name="operationContainers">
         /// The provided list of <see cref="OperationContainer"/>s to write
         /// </param>
         /// <param name="files">
@@ -401,7 +401,7 @@ namespace CDP4ServicesDal
         /// <returns>
         /// A list of <see cref="Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainer, IEnumerable<string> files = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
         {
             throw new NotSupportedException("Writing multiple OperationContainers to the data-source is not supported");
         }

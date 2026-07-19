@@ -183,13 +183,13 @@ namespace CDP4JsonFileDal
         /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
-        /// <param name="extensionFiles">
-        /// The path to the files that need to be uploaded. If <paramref name="extensionFiles"/> is null, then no files are to be uploaded
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
         /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> extensionFiles = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
         {
             this.ValidateOperationContainers(operationContainers);
 
@@ -329,7 +329,7 @@ namespace CDP4JsonFileDal
                         this.WriteIterationsToZipFile(iterationData, zipArchive);
 
                         //ToDo: GH283: Remove extensionsFiles that are referenced by removed instances
-                        this.WriteExtensionFilesToZipFile(extensionFiles, zipArchive);
+                        this.WriteExtensionFilesToZipFile(files, zipArchive);
 
                         zipArchive.Finish();
                     }
