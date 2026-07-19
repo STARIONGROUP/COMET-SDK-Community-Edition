@@ -4,7 +4,7 @@
         <TargetFrameworks>net48;netstandard2.0;net10.0</TargetFrameworks>
         <Company>Starion Group S.A.</Company>
         <Title>CDP4Reporting Community Edition</Title>
-        <VersionPrefix>30.1.2</VersionPrefix>
+        <VersionPrefix>30.1.3</VersionPrefix>
         <Description>CDP4 Reporting</Description>
         <Copyright>Copyright © Starion Group S.A.</Copyright>
         <PackageId>CDP4Reporting-CE</PackageId>
@@ -21,8 +21,8 @@
         <GenerateSBOM>true</GenerateSBOM>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageReleaseNotes>
-            [Update] CDP4Dal to version 30.1.2.
-            [Update] CDP4JsonSerializer to version 30.1.2.
+            [Update] CDP4Dal to version 30.1.3
+            [Update] CDP4JsonSerializer to version 30.1.3
         </PackageReleaseNotes>
         <LangVersion>latest</LangVersion>
         <PackageReadmeFile>README.md</PackageReadmeFile>
