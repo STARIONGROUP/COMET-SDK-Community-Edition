@@ -1,8 +1,6 @@
 // -------------------------------------------------------------------------------------------------------------------------------
 // <copyright file="CdpServicesDal.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
-// 
-//    Authors: Sam Gerené, Alex Vorobiev, Alexander van Delft, Nathanael Smiechowski, Antoine Théate, Omar Elebiary, Jaime Bernar
+//    Copyright (c) 2015-2026 Starion Group S.A.
 // 
 //    This file is part of CDP4-COMET SDK Community Edition
 // 
@@ -467,7 +465,7 @@ namespace CDP4ServicesDal
         /// all the <see cref="EngineeringModel"/>s will be read
         /// </param>
         /// <param name="cancellationToken">
-        /// The <see cref="CancellationToken"/>
+        /// The <see cref="CancellationToken"/> used to cancel the Read operation
         /// </param>
         /// <returns>
         /// A list of <see cref="EngineeringModel"/>s

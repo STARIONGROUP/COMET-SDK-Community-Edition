@@ -29,7 +29,7 @@ namespace CDP4Reporting.Parameters
     using CDP4Reporting.DataCollection;
 
     /// <summary>
-    /// Interface to be used in the Code editor of <see cref="Views.ReportDesigner"/>.
+    /// Interface to be used in the Code editor of the Report Designer.
     /// </summary>
     public interface IReportingParameters
     {

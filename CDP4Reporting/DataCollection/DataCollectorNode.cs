@@ -368,13 +368,13 @@ namespace CDP4Reporting.DataCollection
         }
 
         /// <summary>
-        /// Gets the columns of type <see cref="TP"/> associated with this node.
+        /// Gets the columns of type <typeparamref name="TP"/> associated with this node.
         /// </summary>
         /// <typeparam name="TP">
         /// The desired column type.
         /// </typeparam>
         /// <returns>
-        /// The <see cref="IEnumerable{TP}"/> of <see cref="DataCollectorColumn{T}"/>s of type <see cref="TP"/>.
+        /// The <see cref="IEnumerable{TP}"/> of <see cref="DataCollectorColumn{T}"/>s of type <typeparamref name="TP"/>.
         /// </returns>
         public IEnumerable<TP> GetColumns<TP>() where TP : DataCollectorColumn<T>
         {

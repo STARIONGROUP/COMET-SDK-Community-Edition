@@ -29,7 +29,7 @@ namespace CDP4Reporting.Parameters
     using System.Reflection;
 
     /// <summary>
-    /// class to be used to define dynamic report parameters in the Code editor of <see cref="Views.ReportDesigner"/>.
+    /// class to be used to define dynamic report parameters in the Code editor of the Report Designer.
     /// </summary>
     public class ReportingParameter : IReportingParameter
     {
@@ -44,7 +44,7 @@ namespace CDP4Reporting.Parameters
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets the "calculated" parameter name to be used in the <see cref="Views.ReportDesigner"/>.
+        /// Gets the "calculated" parameter name to be used in the Report Designer.
         /// </summary>
         public string ParameterName => $"{NamePrefix}{this.Name.Replace(" ", "_")}";
 
