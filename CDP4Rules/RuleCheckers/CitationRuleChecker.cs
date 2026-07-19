@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var citation = this.VerifyThingArgument(thing);
+            var citation = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -90,7 +90,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0260")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedReferenceSourceIsInChainOfRdls(Thing thing)
         {
-            var citation = this.VerifyThingArgument(thing);
+            var citation = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -138,7 +138,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="Citation"/>
         /// </exception>
-        private Citation VerifyThingArgument(Thing thing)
+        private static Citation VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

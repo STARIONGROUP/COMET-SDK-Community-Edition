@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var scaleReferenceQuantityValue = this.VerifyThingArgument(thing);
+            var scaleReferenceQuantityValue = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -92,7 +92,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var scaleReferenceQuantityValue = this.VerifyThingArgument(thing);
+            var scaleReferenceQuantityValue = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -124,7 +124,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ScaleReferenceQuantityValue"/>
         /// </exception>
-        private ScaleReferenceQuantityValue VerifyThingArgument(Thing thing)
+        private static ScaleReferenceQuantityValue VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

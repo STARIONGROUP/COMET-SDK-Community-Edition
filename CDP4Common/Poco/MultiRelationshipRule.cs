@@ -49,7 +49,7 @@ namespace CDP4Common.SiteDirectoryData
         {
             if (iteration == null)
             {
-                throw new ArgumentNullException("iteration", "The iteration may not be null");
+                throw new ArgumentNullException(nameof(iteration), "The iteration may not be null");
             }
 
             var multiRelationships = iteration.Relationship.OfType<MultiRelationship>().ToList();

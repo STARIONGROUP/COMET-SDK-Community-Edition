@@ -108,7 +108,7 @@ namespace CDP4MessagePackSerializer
         /// </remarks>
         private async Task SerializeToStreamInternalAsync(IEnumerable<Thing> things, Stream outputStream, CancellationToken cancellationToken)
         {
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = things.ToPayload();
 
@@ -145,7 +145,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(outputStream), "outputstream may not be null");
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = things.ToPayload();
 
@@ -185,7 +185,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(writer), "IBufferWriter may not be null");
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var payload = things.ToPayload();
 
@@ -238,7 +238,7 @@ namespace CDP4MessagePackSerializer
         /// </remarks>
         private async Task<IEnumerable<Thing>> DeserializeInternalAsync(Stream contentStream, CancellationToken cancellationToken)
         {
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
 
@@ -269,7 +269,7 @@ namespace CDP4MessagePackSerializer
                 throw new ArgumentNullException(nameof(contentStream), "Stream may not be null");
             }
 
-            var options = this.CreateSerializerOptions();
+            var options = CreateSerializerOptions();
 
             var sw = Stopwatch.StartNew();
 
@@ -290,7 +290,7 @@ namespace CDP4MessagePackSerializer
         /// <returns>
         /// An instance of <see cref="MessagePackSerializerOptions"/>
         /// </returns>
-        private MessagePackSerializerOptions CreateSerializerOptions()
+        private static MessagePackSerializerOptions CreateSerializerOptions()
         {
             var formatterResolver = CompositeResolver.Create(
                 ThingFormatterResolver.Instance,

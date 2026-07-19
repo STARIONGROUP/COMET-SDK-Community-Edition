@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0750")]
         public IEnumerable<RuleCheckResult> ChecksWhetherReferencedDefaultScaleIsInTheCollectionOfPossibleScales(Thing thing)
         {
-            var quantityKind = this.VerifyThingArgument(thing);
+            var quantityKind = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -92,7 +92,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var quantityKind = this.VerifyThingArgument(thing);
+            var quantityKind = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -143,7 +143,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var quantityKind = this.VerifyThingArgument(thing);
+            var quantityKind = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -184,7 +184,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="QuantityKind"/>
         /// </exception>
-        private QuantityKind VerifyThingArgument(Thing thing)
+        private static QuantityKind VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

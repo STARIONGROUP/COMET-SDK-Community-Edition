@@ -123,7 +123,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
                 consumer.ReceivedAsync += ConsumerOnReceivedAsync;
                 consumer.ShutdownAsync += ConsumerOnShutdownAsync;
 
-                var resolvedQueueName = await this.EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
+                var resolvedQueueName = await EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
                 await channel.BasicConsumeAsync(resolvedQueueName, true, consumer, cancellationToken);
             }
             catch (Exception exception)
@@ -162,7 +162,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
             {
                 channel = await this.GetChannelAsync(cancellationToken);
 
-                await this.EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
+                await EnsureQueueAndExchangeAreDeclaredAsync(queueName, channel, exchangeType, cancellationToken: cancellationToken);
 
                 consumer = new AsyncEventingBasicConsumer(channel);
                 consumer.ReceivedAsync += onReceive;
@@ -260,12 +260,12 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
         public async Task Push<TMessage>(string messageQueue, TMessage message, ExchangeType exchangeType = ExchangeType.Default, CancellationToken cancellationToken = default)
         {
-            this.VerifyMessageIsNotNull(message);
+            VerifyMessageIsNotNull(message);
 
             try
             {
                 var channel = await this.GetChannelAsync(cancellationToken);
-                await this.EnsureQueueAndExchangeAreDeclaredAsync(messageQueue, channel, exchangeType, isPush: true, cancellationToken: cancellationToken);
+                await EnsureQueueAndExchangeAreDeclaredAsync(messageQueue, channel, exchangeType, isPush: true, cancellationToken: cancellationToken);
 
                 var properties = new BasicProperties
                 {
@@ -296,7 +296,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <typeparam name="TMessage">The type of the message.</typeparam>
         /// <param name="message">The message to verify.</param>
         /// <exception cref="ArgumentNullException">When the provided <typeparamref name="TMessage"/> is null</exception>
-        private void VerifyMessageIsNotNull<TMessage>(TMessage message)
+        private static void VerifyMessageIsNotNull<TMessage>(TMessage message)
         {
             if (message == null)
             {
@@ -313,7 +313,7 @@ namespace CDP4ServicesMessaging.Services.Messaging
         /// <param name="isPush">A value indicating whether the queue and exchange will be used for pushing messages</param>
         /// <param name="cancellationToken">A possible <see cref="CancellationToken"/></param>
         /// <returns>The queue name</returns>
-        private async Task<string> EnsureQueueAndExchangeAreDeclaredAsync(string messageQueue, IChannel channel, ExchangeType exchangeType, bool isPush = false, CancellationToken cancellationToken = default)
+        private static async Task<string> EnsureQueueAndExchangeAreDeclaredAsync(string messageQueue, IChannel channel, ExchangeType exchangeType, bool isPush = false, CancellationToken cancellationToken = default)
         {
             if (exchangeType is ExchangeType.Fanout)
             {

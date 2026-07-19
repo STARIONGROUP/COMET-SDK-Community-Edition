@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0200")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoryIsInChainOfRdls(Thing thing)
         {
-            var decompositionRule = this.VerifyThingArgument(thing);
+            var decompositionRule = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -98,7 +98,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="DecompositionRule"/>
         /// </exception>
-        private DecompositionRule VerifyThingArgument(Thing thing)
+        private static DecompositionRule VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -24,6 +24,7 @@
 
 namespace CDP4Dal.Operations
 {
+    using System;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -45,6 +46,11 @@ namespace CDP4Dal.Operations
     /// </remarks>
     public static class TransactionContextResolver
     {
+        /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
         /// <summary>
         /// Resolves either the <see cref="SiteDirectory"/> or the <see cref="Iteration"/> that is in the containment chain of any <see cref="Thing"/>.
         /// </summary>
@@ -125,14 +131,14 @@ namespace CDP4Dal.Operations
         public static bool ValidateRouteContext(string route)
         {
             var siteDirectoryPattern = @"^/SiteDirectory" + Constants.UriPathSeparator + Constants.UriGuidPattern + "$";
-            var siteDirectoryPatternMatch = Regex.Match(route, siteDirectoryPattern);
+            var siteDirectoryPatternMatch = Regex.Match(route, siteDirectoryPattern, RegexOptions.None, RegexTimeout);
             if (siteDirectoryPatternMatch.Success)
             {
                 return true;
             }
 
             var iterationPattern = @"^/EngineeringModel" + Constants.UriPathSeparator + Constants.UriGuidPattern + Constants.UriPathSeparator + "iteration" + Constants.UriPathSeparator + Constants.UriGuidPattern + "$";
-            var iterationPatternMatch = Regex.Match(route, iterationPattern);
+            var iterationPatternMatch = Regex.Match(route, iterationPattern, RegexOptions.None, RegexTimeout);
             if (iterationPatternMatch.Success)
             {
                 return true;

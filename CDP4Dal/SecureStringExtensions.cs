@@ -74,7 +74,7 @@ namespace CDP4Dal
         {
             if (secureString == null)
             {
-                throw new ArgumentNullException("secureString");
+                throw new ArgumentNullException(nameof(secureString));
             }
 
             IntPtr unmanagedString = IntPtr.Zero;

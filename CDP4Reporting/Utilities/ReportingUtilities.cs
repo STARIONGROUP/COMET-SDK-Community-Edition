@@ -137,7 +137,7 @@ namespace CDP4Reporting.Utilities
                 // Load the table from the scalar sequence if T is a primitive type.
                 if (typeof(T).IsPrimitive)
                 {
-                    return this.ShredPrimitive(source, table, options);
+                    return ShredPrimitive(source, table, options);
                 }
 
                 // Create a new table if the input table is null.
@@ -171,13 +171,13 @@ namespace CDP4Reporting.Utilities
             }
 
             /// <summary>
-            /// Loads data from an <see cref="IEnumerable{T}"/> to a <see cref="DataTable"/> where <see cref="T"/> is a primitive type
+            /// Loads data from an <see cref="IEnumerable{T}"/> to a <see cref="DataTable"/> where <typeparamref name="T"/> is a primitive type
             /// </summary>
             /// <param name="source">The <see cref="IEnumerable{T}"/></param>
             /// <param name="table">An existing <see cref="DataTable"/> to copy data to</param>
             /// <param name="options"><see cref="LoadOption"/> to be used when loading data to <paramref name="table"/></param>
             /// <returns>The <see cref="DataTable"/></returns>
-            private DataTable ShredPrimitive(IEnumerable<T> source, DataTable table, LoadOption? options)
+            private static DataTable ShredPrimitive(IEnumerable<T> source, DataTable table, LoadOption? options)
             {
                 // Create a new table if the input table is null.
                 table ??= new DataTable(typeof(T).Name);
@@ -216,10 +216,10 @@ namespace CDP4Reporting.Utilities
             }
 
             /// <summary>
-            /// Gets the property and field values of an instance of <see cref="T"/>
+        /// Gets the property and field values of an instance of <typeparamref name="T"/>
             /// </summary>
             /// <param name="table">The <see cref="DataTable"/></param>
-            /// <param name="instance">The instance of <see cref="T"/></param>
+        /// <param name="instance">The instance of <typeparamref name="T"/></param>
             /// <returns>An array of objects</returns>
             private object[] ShredObject(DataTable table, T instance)
             {

@@ -43,16 +43,16 @@ namespace CDP4Common.EngineeringModelData
             if (this.ContainingFolder != null)
             {
                 path.Append(this.ContainingFolder.Path);
-                path.Append("/");
+                path.Append('/');
                 path.Append(this.ContainingFolder.Name);
-                path.Append("/");
+                path.Append('/');
             }
 
             path.Append(this.Name);
 
             foreach (var fileType in this.FileType.Where(x => !string.IsNullOrWhiteSpace(x.Extension)))
             {
-                path.Append(".");
+                path.Append('.');
                 path.Append(fileType.Extension);
             }
 

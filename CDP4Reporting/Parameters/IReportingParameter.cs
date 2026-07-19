@@ -28,7 +28,7 @@ namespace CDP4Reporting.Parameters
     using System.Collections.Generic;
 
     /// <summary>
-    /// Interface to be used in the Code editor of <see cref="Views.ReportDesigner"/>.
+    /// Interface to be used in the Code editor of the Report Designer.
     /// </summary>
     public interface IReportingParameter
     {
@@ -38,7 +38,7 @@ namespace CDP4Reporting.Parameters
         string Name { get; set; }
 
         /// <summary>
-        /// Gets the "calculated" parameter name to be used in the <see cref="Views.ReportDesigner"/>.
+        /// Gets the "calculated" parameter name to be used in the Report Designer.
         /// </summary>
         string ParameterName { get; }
 

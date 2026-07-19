@@ -33,7 +33,7 @@ namespace CDP4ServicesMessaging.Services.Messaging.Interfaces
     {
         /// <summary>
         /// Initializes the <see cref="MessageClientBaseService.ConnectionFactory"/> based on the specified <paramref name="configurationSectionName"></paramref>
-        /// This overrides the connection factory initialized in <see cref="MessageClientBaseService(IConfiguration)"/> or in <see cref="MessageClientBaseService(IApplicationSettingsBase)"/>
+        /// This overrides the connection factory initialized by <see cref="MessageClientBaseService"/>.
         /// </summary>
         /// <param name="configurationSectionName">The configuration section name, default value is "MessageBroker"</param>
         void InitializeConnectionFactory(string configurationSectionName = "MessageBroker");

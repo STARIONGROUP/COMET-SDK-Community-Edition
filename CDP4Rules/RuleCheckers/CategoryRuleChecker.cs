@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0720")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheCategoryShortNameIsUniqueInTheContainerRdl(Thing thing)
         {
-            var category = this.VerifyThingArgument(thing);
+            var category = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -97,7 +97,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0730")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheCategoryNameIsUniqueInTheContainerRdl(Thing thing)
         {
-            var category = this.VerifyThingArgument(thing);
+            var category = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -137,7 +137,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0200")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoryIsInChainOfRdls(Thing thing)
         {
-            var category = this.VerifyThingArgument(thing);
+            var category = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -172,7 +172,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="BinaryRelationshipRule"/>
         /// </exception>
-        private Category VerifyThingArgument(Thing thing)
+        private static Category VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -106,15 +106,15 @@ namespace CDP4Common.Extensions
         {
             if (expression.ClassKind == ClassKind.RelationalExpression)
             {
-                stringBuilder.Append("(");
+                stringBuilder.Append('(');
                 stringBuilder.Append(expression.StringValue.Trim());
-                stringBuilder.Append(")");
+                stringBuilder.Append(')');
             }
             else
             {
                 if (!isTopLevel)
                 {
-                    stringBuilder.Append("(");
+                    stringBuilder.Append('(');
                 }
 
                 var expressions = expression.GetMyExpressions();
@@ -140,7 +140,7 @@ namespace CDP4Common.Extensions
 
                 if (!isTopLevel)
                 {
-                    stringBuilder.Append(")");
+                    stringBuilder.Append(')');
                 }
             }
         }

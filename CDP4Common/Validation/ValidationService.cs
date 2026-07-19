@@ -24,6 +24,7 @@
 
 namespace CDP4Common.Validation
 {
+    using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
@@ -34,6 +35,11 @@ namespace CDP4Common.Validation
     /// </summary>
     public class ValidationService : IValidationService
     {
+        /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
         /// <summary>
         /// Gets the RFC 5321 REGEX to validate Email address.
         /// <remarks>This regex is not 100% compliant with RFC 5321 but covers most cases</remarks>
@@ -115,7 +121,7 @@ namespace CDP4Common.Validation
             var newValue = value == null ? string.Empty : value.ToString() ?? string.Empty;
 
             // get the value, if the value is null set to empty string (assume user entered no value to begin with) and check against that
-            var validationPass = Regex.IsMatch(newValue, rule.Rule);
+            var validationPass = Regex.IsMatch(newValue, rule.Rule, RegexOptions.None, RegexTimeout);
 
             return validationPass ? null : $"{rule.ErrorText}";
         }

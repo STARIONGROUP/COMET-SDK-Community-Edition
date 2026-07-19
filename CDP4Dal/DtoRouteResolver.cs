@@ -54,12 +54,12 @@ namespace CDP4Dal
         {
             if (dtolist == null)
             {
-                throw new ArgumentNullException("dtolist");
+                throw new ArgumentNullException(nameof(dtolist));
             }
 
             if (session == null)
             {
-                throw new ArgumentNullException("session");
+                throw new ArgumentNullException(nameof(session));
             }
 
             if (thing is TopContainer)

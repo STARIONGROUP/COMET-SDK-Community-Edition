@@ -56,6 +56,11 @@ namespace CDP4Dal.DAL
     public abstract class Dal : IDal
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// The current logger
         /// </summary>
         private static Logger Logger = LogManager.GetCurrentClassLogger();
@@ -474,7 +479,7 @@ namespace CDP4Dal.DAL
                 var iterationUriName = ContainerPropertyHelper.ContainerPropertyName(ClassKind.Iteration);
                 var regexPatter = iterationUriName + Constants.UriPathSeparator + Constants.UriGuidPattern;
 
-                var match = Regex.Match(uriString, regexPatter);
+                var match = Regex.Match(uriString, regexPatter, RegexOptions.None, RegexTimeout);
 
                 if (!match.Success)
                 {
@@ -508,7 +513,7 @@ namespace CDP4Dal.DAL
         public string QueryRequestContext(Uri uri)
         {
             var siteDirectoryPattern = @"(/SiteDirectory" + Constants.UriPathSeparator + Constants.UriGuidPattern + ")";
-            var match = Regex.Match(uri.AbsolutePath, siteDirectoryPattern);
+            var match = Regex.Match(uri.AbsolutePath, siteDirectoryPattern, RegexOptions.None, RegexTimeout);
 
             if (match.Success)
             {
@@ -516,7 +521,7 @@ namespace CDP4Dal.DAL
             }
 
             var iterationPattern = @"(/EngineeringModel" + Constants.UriPathSeparator + Constants.UriGuidPattern + Constants.UriPathSeparator + "iteration" + Constants.UriPathSeparator + Constants.UriGuidPattern + ")";
-            match = Regex.Match(uri.AbsolutePath, iterationPattern);
+            match = Regex.Match(uri.AbsolutePath, iterationPattern, RegexOptions.None, RegexTimeout);
 
             if (match.Success)
             {

@@ -801,7 +801,7 @@ namespace CDP4MessagePackSerializer.Tests
 
             Assert.That(deserializedThings.Count(), Is.EqualTo(this.things.Count));
 
-            this.ThingAssertions(deserializedThings);
+            ThingAssertions(deserializedThings);
         }
 
         [Test]
@@ -817,7 +817,7 @@ namespace CDP4MessagePackSerializer.Tests
 
             Assert.That(deserializedThings.Count(), Is.EqualTo(this.things.Count));
 
-            this.ThingAssertions(deserializedThings);
+            ThingAssertions(deserializedThings);
         }
 
         [Test]
@@ -836,10 +836,10 @@ namespace CDP4MessagePackSerializer.Tests
 
             Assert.That(deserializedThings.Count() , Is.EqualTo(this.things.Count));
 
-            this.ThingAssertions(deserializedThings);
+            ThingAssertions(deserializedThings);
         }
 
-        private void ThingAssertions(IEnumerable<Thing> deserializedThings)
+        private static void ThingAssertions(IEnumerable<Thing> deserializedThings)
         {
             var actionItem = deserializedThings.OfType<ActionItem>().Single(x => x.Iid == Guid.Parse("830e37e4-80da-4a19-839c-8e92a86ef652"));
             Assert.That(actionItem.Classification, Is.EqualTo(CDP4Common.ReportingData.AnnotationClassificationKind.MAJOR));

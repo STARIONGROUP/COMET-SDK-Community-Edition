@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0200")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoryIsInChainOfRdls(Thing thing)
         {
-            var multiRelationshipRule = this.VerifyThingArgument(thing);
+            var multiRelationshipRule = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -101,7 +101,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var multiRelationshipRule = this.VerifyThingArgument(thing);
+            var multiRelationshipRule = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -148,7 +148,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="BinaryRelationshipRule"/>
         /// </exception>
-        private MultiRelationshipRule VerifyThingArgument(Thing thing)
+        private static MultiRelationshipRule VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -36,7 +36,7 @@ namespace CDP4Reporting.DynamicTableChecker
         /// Check dynamic tables in a report
         /// </summary>
         /// <param name="report">
-        /// The <see cref="T"/>
+        /// The <typeparamref name="T"/>
         /// </param>
         /// <param name="dataCollector">
         /// The <see cref="IDataCollector"/>

@@ -183,13 +183,13 @@ namespace CDP4JsonFileDal
         /// <param name="operationContainers">
         /// The provided <see cref="OperationContainer"/> to write
         /// </param>
-        /// <param name="extensionFiles">
-        /// The path to the files that need to be uploaded. If <paramref name="extensionFiles"/> is null, then no files are to be uploaded
+        /// <param name="files">
+        /// The path to the files that need to be uploaded. If <paramref name="files"/> is null, then no files are to be uploaded
         /// </param>
         /// <returns>
         /// A list of <see cref="CDP4Common.DTO.Thing"/>s that has been created or updated since the last Read or Write operation.
         /// </returns>
-        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> extensionFiles = null)
+        public override Task<IEnumerable<Thing>> Write(IEnumerable<OperationContainer> operationContainers, IEnumerable<string> files = null)
         {
             this.ValidateOperationContainers(operationContainers);
 
@@ -273,11 +273,11 @@ namespace CDP4JsonFileDal
 
             // Remove all Unlinked mandatory data. This is kind of a recursive method that checks for objects that should be removed because of unfound references. 
             // As long as objects are being removed we need to check the whole list of all DTO's if that leads to other removals.
-            allDtos = this.RemoveUnlinkedMandatoryReferences(allDtos).ToList();
+            allDtos = RemoveUnlinkedMandatoryReferences(allDtos).ToList();
 
             // Remove all unlinked references from DTO's. This does not lead to DTO's being removed from the export.
             // Only references are checked.
-            this.TryRemoveUnlinkedReferences(allDtos);
+            TryRemoveUnlinkedReferences(allDtos);
 
             // Check if prunedSiteDirectory objects are still present in allDtos, otherwise remove then
             prunedSiteDirectoryDtos = prunedSiteDirectoryDtos.Intersect(allDtos).ToList();
@@ -329,7 +329,7 @@ namespace CDP4JsonFileDal
                         this.WriteIterationsToZipFile(iterationData, zipArchive);
 
                         //ToDo: GH283: Remove extensionsFiles that are referenced by removed instances
-                        this.WriteExtensionFilesToZipFile(extensionFiles, zipArchive);
+                        WriteExtensionFilesToZipFile(files, zipArchive);
 
                         zipArchive.Finish();
                     }
@@ -416,7 +416,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="allDtos">A list of <see cref="Thing"/>s where to find incompatible objects in</param>
         /// <returns>A collection of not supported things based on their model version</returns>
-        private IEnumerable<Thing> RemoveUnlinkedMandatoryReferences(IEnumerable<Thing> allDtos)
+        private static IEnumerable<Thing> RemoveUnlinkedMandatoryReferences(IEnumerable<Thing> allDtos)
         {
             var dtosToCheck = allDtos.ToList();
             var iidsToCheck = new HashSet<Guid>(allDtos.Select(x => x.Iid));
@@ -455,7 +455,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="allDtos">A collection of <see cref="Thing"/>s that are involved in the Annex.C3 export.</param>
         /// <exception cref="ModelErrorException">If a property cannot be removed because that would lead to model errors, this exception is thrown</exception>
-        private void TryRemoveUnlinkedReferences(IEnumerable<Thing> allDtos)
+        private static void TryRemoveUnlinkedReferences(IEnumerable<Thing> allDtos)
         {
             var dtos = allDtos.ToList();
             var dtoIids = dtos.Select(x => x.Iid).ToList();
@@ -515,7 +515,7 @@ namespace CDP4JsonFileDal
 
             try
             {
-                var preReadEntries = this.GetAllZipEntries(filePath);
+                var preReadEntries = GetAllZipEntries(filePath);
 
                 using (var zipFile = new ZipFile(File.OpenRead(filePath)))
                 {
@@ -539,7 +539,7 @@ namespace CDP4JsonFileDal
                             returned = this.RetrieveSRDLThings(thing as CDP4Common.DTO.SiteReferenceDataLibrary, siteDirectoryData, zipFile, preReadEntries, siteDir);
                             break;
                         case ClassKind.DomainOfExpertise:
-                            returned = this.RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData);
+                            returned = RetrieveDomainOfExpertiseThings(thing as CDP4Common.DTO.DomainOfExpertise, siteDirectoryData);
                             break;
                     }
 
@@ -565,7 +565,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="zipFilePath">The location of the zip file</param>
         /// <returns>A collection of full names</returns>
-        private List<string> GetAllZipEntries(string zipFilePath)
+        private static List<string> GetAllZipEntries(string zipFilePath)
         {
             var result = new List<string>();
 
@@ -651,7 +651,7 @@ namespace CDP4JsonFileDal
         /// <param name="domain">The <see cref="CDP4Common.SiteDirectoryData.DomainOfExpertise"/></param>
         /// <param name="siteDirectoryData">All SiteDirectory DTOs</param>
         /// <returns>List of things contained by the particular srdl</returns>
-        private List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData)
+        private static List<Thing> RetrieveDomainOfExpertiseThings(CDP4Common.DTO.DomainOfExpertise domain, List<Thing> siteDirectoryData)
         {
             var returned = new List<Thing>();
 
@@ -913,7 +913,7 @@ namespace CDP4JsonFileDal
 
             try
             {
-                var preReadEntries = this.GetAllZipEntries(filePath);
+                var preReadEntries = GetAllZipEntries(filePath);
 
                 using (var zipFile = new ZipFile(File.OpenRead(filePath)))
                 {
@@ -1128,6 +1128,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="siteReferenceDataLibraries">
         /// The <see cref="SiteReferenceDataLibrary"/>s
+        /// </param>
         private Dictionary<SiteReferenceDataLibrary, IEnumerable<Thing>> GetSiteReferenceDataLibraryDtos(IEnumerable<SiteReferenceDataLibrary> siteReferenceDataLibraries)
         {
             var result = new Dictionary<SiteReferenceDataLibrary, IEnumerable<Thing>>();
@@ -1305,7 +1306,7 @@ namespace CDP4JsonFileDal
         /// </summary>
         /// <param name="extraFilesPath">The list of files that will be written to the <see cref="ZipOutputStream"/></param>
         /// <param name="zipOutputStream">The target <see cref="ZipOutputStream"/></param>
-        private void WriteExtensionFilesToZipFile(IEnumerable<string> extraFilesPath, ZipOutputStream zipOutputStream)
+        private static void WriteExtensionFilesToZipFile(IEnumerable<string> extraFilesPath, ZipOutputStream zipOutputStream)
         {
             if (extraFilesPath is null)
             {

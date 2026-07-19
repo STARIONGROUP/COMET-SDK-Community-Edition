@@ -116,7 +116,7 @@ namespace CDP4Common.EngineeringModelData
             var compoundParameterType = this.GetDerivedParameterType() as CompoundParameterType;
             if (compoundParameterType == null && componentIndex > 0)
             {
-                throw new ArgumentException("The value must be 0 if the ParameterType is not a CompoundParameterType", "componentIndex");
+                throw new ArgumentException("The value must be 0 if the ParameterType is not a CompoundParameterType", nameof(componentIndex));
             }
 
             if (compoundParameterType != null && componentIndex.HasValue)

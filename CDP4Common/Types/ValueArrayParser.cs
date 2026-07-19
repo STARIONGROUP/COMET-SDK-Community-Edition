@@ -35,6 +35,11 @@ namespace CDP4Common.Types
     public static class ValueArrayParser
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// The string pattern to retrieve the content of an array
         /// </summary>
         private const string valueArrayPattern = @"\{([^)]*)\}";
@@ -65,7 +70,7 @@ namespace CDP4Common.Types
                 return false;
             }
 
-            var matches = Regex.Matches(stringArray, valueArrayPattern);
+            var matches = Regex.Matches(stringArray, valueArrayPattern, RegexOptions.None, RegexTimeout);
             if (matches.Count != 1)
             {
                 error = nonStringArgumentExceptionMessage;

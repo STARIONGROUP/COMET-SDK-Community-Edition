@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var participantRole = this.VerifyThingArgument(thing);
+            var participantRole = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -97,7 +97,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ParticipantRole"/>
         /// </exception>
-        private ParticipantRole VerifyThingArgument(Thing thing)
+        private static ParticipantRole VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

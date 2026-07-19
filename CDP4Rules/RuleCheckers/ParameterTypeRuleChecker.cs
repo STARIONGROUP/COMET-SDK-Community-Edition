@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0700")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheParameterTypeShortNameIsUniqueInTheContainerRdl(Thing thing)
         {
-            var parameterType = this.VerifyThingArgument(thing);
+            var parameterType = VerifyThingArgument(thing);
             
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -97,7 +97,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0710")]
         public IEnumerable<RuleCheckResult> CheckWhetherTheParameterTypeSymbolIsUniqueInTheContainerRdl(Thing thing)
         {
-            var parameterType = this.VerifyThingArgument(thing);
+            var parameterType = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -134,7 +134,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ParameterType"/>
         /// </exception>
-        private ParameterType VerifyThingArgument(Thing thing)
+        private static ParameterType VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

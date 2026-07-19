@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0740")]
         public IEnumerable<RuleCheckResult> ChecksWhetherTheParameterTypeComponentHasAValidScale(Thing thing)
         {
-            var parameterTypeComponent = this.VerifyThingArgument(thing);
+            var parameterTypeComponent = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -110,7 +110,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var parameterTypeComponent = this.VerifyThingArgument(thing);
+            var parameterTypeComponent = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -160,7 +160,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0220")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedParameterTypeIsInChainOfRdls(Thing thing)
         {
-            var parameterTypeComponent = this.VerifyThingArgument(thing);
+            var parameterTypeComponent = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -195,7 +195,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0230")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedMeasurementScaleInChainOfRdls(Thing thing)
         {
-            var parameterTypeComponent = this.VerifyThingArgument(thing);
+            var parameterTypeComponent = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -227,7 +227,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ParameterTypeComponent"/>
         /// </exception>
-        private ParameterTypeComponent VerifyThingArgument(Thing thing)
+        private static ParameterTypeComponent VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

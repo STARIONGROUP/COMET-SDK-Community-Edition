@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0900")]
         public IEnumerable<RuleCheckResult> CheckWhetherACatalogueContainsNoMoreThanOneOptionPerIteration(Thing thing)
         {
-            var iteration = this.VerifyThingArgument(thing);
+            var iteration = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -90,7 +90,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ElementDefinition"/>
         /// </exception>
-        private Iteration VerifyThingArgument(Thing thing)
+        private static Iteration VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

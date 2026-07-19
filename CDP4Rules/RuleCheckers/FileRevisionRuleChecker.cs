@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var fileRevision = this.VerifyThingArgument(thing);
+            var fileRevision = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -96,7 +96,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0210")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedFileTypeIsInChainOfRlds(Thing thing)
         {
-            var fileRevision = this.VerifyThingArgument(thing);
+            var fileRevision = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -133,7 +133,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="FileRevision"/>
         /// </exception>
-        private FileRevision VerifyThingArgument(Thing thing)
+        private static FileRevision VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

@@ -54,7 +54,7 @@ namespace CDP4Reporting.DataCollection
         {
             var topElement = nestedElements.First(ne => ne.IsRootElement);
 
-            return this.GetDataCollectorNodes(topElement, categoryDecompositionHierarchy, nestedElements, null);
+            return GetDataCollectorNodes(topElement, categoryDecompositionHierarchy, nestedElements, null);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// An <see cref="IEnumerable{T}"/> of <see cref="DataCollectorNode{T}"/>
         /// </returns>
-        private IEnumerable<DataCollectorNode<T>> GetDataCollectorNodes(NestedElement nestedElement, CategoryDecompositionHierarchy categoryDecompositionHierarchy, List<NestedElement> nestedElements, DataCollectorNode<T> parentNode)
+        private static IEnumerable<DataCollectorNode<T>> GetDataCollectorNodes(NestedElement nestedElement, CategoryDecompositionHierarchy categoryDecompositionHierarchy, List<NestedElement> nestedElements, DataCollectorNode<T> parentNode)
         {
             var resultNodes = new List<DataCollectorNode<T>>();
             DataCollectorNode<T> newNode = null;
@@ -150,7 +150,7 @@ namespace CDP4Reporting.DataCollection
 
             foreach (var child in children)
             {
-                var nodes = this.GetDataCollectorNodes(child, searchCategory, nestedElements, newNode ?? parentNode).ToArray();
+                var nodes = GetDataCollectorNodes(child, searchCategory, nestedElements, newNode ?? parentNode).ToArray();
 
                 if (newNode == null && nodes.Any())
                 {

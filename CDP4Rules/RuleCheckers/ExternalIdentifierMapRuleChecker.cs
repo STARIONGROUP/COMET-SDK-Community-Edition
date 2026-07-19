@@ -58,7 +58,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0500")]
         public IEnumerable<RuleCheckResult> ChecksWhetherAReferencedDeprecatableThingIsDeprecated(Thing thing)
         {
-            var externalIdentifierMap = this.VerifyThingArgument(thing);
+            var externalIdentifierMap = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -93,7 +93,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0260")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedReferenceSourceIsInChainOfRdls(Thing thing)
         {
-            var externalIdentifierMap = this.VerifyThingArgument(thing);
+            var externalIdentifierMap = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -130,7 +130,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="ExternalIdentifierMap"/>
         /// </exception>
-        private ExternalIdentifierMap VerifyThingArgument(Thing thing)
+        private static ExternalIdentifierMap VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

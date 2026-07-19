@@ -49,8 +49,8 @@ namespace CDP4Common.Comparers
         /// <paramref name="x" /> is greater than <paramref name="y" />.</returns>
         public int Compare(ValueArray<string> x, ValueArray<string> y)
         {
-            var valueX = this.GetValue(x);
-            var valueY = this.GetValue(y);
+            var valueX = GetValue(x);
+            var valueY = GetValue(y);
 
             return valueX.CompareTo(valueY);
         }
@@ -60,7 +60,7 @@ namespace CDP4Common.Comparers
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private double GetValue(ValueArray<string> value)
+        private static double GetValue(ValueArray<string> value)
         {
             try
             {

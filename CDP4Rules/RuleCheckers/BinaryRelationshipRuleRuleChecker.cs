@@ -57,7 +57,7 @@ namespace CDP4Rules.RuleCheckers
         [Rule("MA-0200")]
         public IEnumerable<RuleCheckResult> CheckWhetherReferencedCategoriesAreInChainOfRdls(Thing thing)
         {
-            var binaryRelationshipRule = this.VerifyThingArgument(thing);
+            var binaryRelationshipRule = VerifyThingArgument(thing);
 
             var results = new List<RuleCheckResult>();
             var ruleAttribute = System.Reflection.MethodBase.GetCurrentMethod().GetCustomAttribute<RuleAttribute>();
@@ -101,7 +101,7 @@ namespace CDP4Rules.RuleCheckers
         /// <exception cref="ArgumentException">
         /// thrown when <paramref name="thing"/> is not an <see cref="BinaryRelationshipRule"/>
         /// </exception>
-        private BinaryRelationshipRule VerifyThingArgument(Thing thing)
+        private static BinaryRelationshipRule VerifyThingArgument(Thing thing)
         {
             if (thing == null)
             {

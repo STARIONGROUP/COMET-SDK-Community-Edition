@@ -103,7 +103,7 @@ namespace CDP4RequirementsVerification.Verifiers
 
             if (this.Container is RequirementsSpecification requirementsSpecification)
             {
-                foreach (var requirement in this.GetAllowedRequirements(requirementsSpecification.Requirement))
+                foreach (var requirement in GetAllowedRequirements(requirementsSpecification.Requirement))
                 {
                     var requirementsVerifier = new RequirementVerifier(requirement, this.Configuration, this.MessageBus);
                     verifiers.Add(requirementsVerifier);
@@ -117,7 +117,7 @@ namespace CDP4RequirementsVerification.Verifiers
                 var allRelatedGroups = requirementsGroup.ContainedGroup().ToList();
                 allRelatedGroups.Add(requirementsGroup);
 
-                foreach (var requirement in this.GetAllowedRequirements(parentRequirementsSpecification.Requirement))
+                foreach (var requirement in GetAllowedRequirements(parentRequirementsSpecification.Requirement))
                 {
                     if (allRelatedGroups.Contains(requirement.Group))
                     {
@@ -145,7 +145,7 @@ namespace CDP4RequirementsVerification.Verifiers
         /// </summary>
         /// <param name="requirements">Unfiltered list of <see cref="Requirement"/>s</param>
         /// <returns></returns>
-        private IReadOnlyList<Requirement> GetAllowedRequirements(IEnumerable<Requirement> requirements)
+        private static IReadOnlyList<Requirement> GetAllowedRequirements(IEnumerable<Requirement> requirements)
         {
             var allowedRequirements = requirements.AsQueryable();
 

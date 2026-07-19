@@ -110,7 +110,7 @@ namespace CDP4Common.EngineeringModelData
         {
             if (elementDefinition == null)
             {
-                throw new ArgumentNullException("elementDefinition");
+                throw new ArgumentNullException(nameof(elementDefinition));
             }
 
             if (this == elementDefinition)
@@ -171,7 +171,7 @@ namespace CDP4Common.EngineeringModelData
         {
             if (componentIndex != null)
             {
-                throw new ArgumentException("The component index must be null", "componentIndex");
+                throw new ArgumentException("The component index must be null", nameof(componentIndex));
             }
 
             return this.ShortName;

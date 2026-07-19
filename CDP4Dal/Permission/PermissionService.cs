@@ -86,7 +86,7 @@ namespace CDP4Dal.Permission
             logger.Trace("CanRead invoked on Thing {0} of type {1}", thing, thingType);
             var topContainerClassKind = thing.TopContainer.ClassKind;
 
-            this.CheckOwnedThing(thing);
+            CheckOwnedThing(thing);
 
             switch (topContainerClassKind)
             {
@@ -103,7 +103,7 @@ namespace CDP4Dal.Permission
         /// Checks if thing is an OwnedThing without an actual Wwner
         /// </summary>
         /// <param name="thing">The <see cref="Thing"/> to check.</param>
-        private void CheckOwnedThing(Thing thing)
+        private static void CheckOwnedThing(Thing thing)
         {
             if (thing is IOwnedThing ownedThing && ownedThing.Owner == null)
             {
@@ -257,7 +257,7 @@ namespace CDP4Dal.Permission
         /// <returns>True if Write operation can be performed.</returns>
         private bool CanWrite(Thing thing, Type thingType)
         {
-            this.CheckOwnedThing(thing);
+            CheckOwnedThing(thing);
 
             var topContainerClassKind = thing.TopContainer.ClassKind;
 
@@ -290,7 +290,7 @@ namespace CDP4Dal.Permission
                 return false;
             }
 
-            this.CheckOwnedThing(containerThing);
+            CheckOwnedThing(containerThing);
 
             var topContainerClassKind = containerThing.TopContainer.ClassKind;
 

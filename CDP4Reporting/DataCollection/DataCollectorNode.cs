@@ -259,7 +259,7 @@ namespace CDP4Reporting.DataCollection
         }
 
         /// <summary>
-        /// Create <see cref="DataColumn"/>s for properties of <see cref="T"/> whose <see cref="System.Type"/> implements <see cref="IDataCollectorStateDependentPerRowParameter"/>.
+        /// Create <see cref="DataColumn"/>s for properties of <typeparamref name="T"/> whose <see cref="System.Type"/> implements <see cref="IDataCollectorStateDependentPerRowParameter"/>.
         /// </summary>
         /// <param name="table">
         /// The <see cref="DataTable"/> where to add the columns to.
@@ -274,7 +274,7 @@ namespace CDP4Reporting.DataCollection
         }
 
         /// <summary>
-        /// Create <see cref="DataColumn"/>s for properties of <see cref="T"/> that have public getters.
+        /// Create <see cref="DataColumn"/>s for properties of <typeparamref name="T"/> that have public getters.
         /// </summary>
         /// <param name="table">
         /// The <see cref="DataTable"/> where to add the columns to.
@@ -326,7 +326,7 @@ namespace CDP4Reporting.DataCollection
         /// Gets the row representation of this node.
         /// </summary>
         /// <param name="forceNew">
-        /// If set to true, a new <see cref="T"/> will be created and the cached field <see cref="rowRepresentation"/> will not be set.
+        /// If set to true, a new <typeparamref name="T"/> will be created and the cached field <see cref="rowRepresentation"/> will not be set.
         /// </param>
         /// <returns>
         /// A <see cref="DataCollectorRow"/>.
@@ -368,13 +368,13 @@ namespace CDP4Reporting.DataCollection
         }
 
         /// <summary>
-        /// Gets the columns of type <see cref="TP"/> associated with this node.
+        /// Gets the columns of type <typeparamref name="TP"/> associated with this node.
         /// </summary>
         /// <typeparam name="TP">
         /// The desired column type.
         /// </typeparam>
         /// <returns>
-        /// The <see cref="IEnumerable{TP}"/> of <see cref="DataCollectorColumn{T}"/>s of type <see cref="TP"/>.
+        /// The <see cref="IEnumerable{TP}"/> of <see cref="DataCollectorColumn{T}"/>s of type <typeparamref name="TP"/>.
         /// </returns>
         public IEnumerable<TP> GetColumns<TP>() where TP : DataCollectorColumn<T>
         {
@@ -454,7 +454,7 @@ namespace CDP4Reporting.DataCollection
 
         /// <summary>
         /// Fills the <see cref="DataColumn"/>s with with values from the current node for properties of an instance of
-        /// <see cref="T"/> whose <see cref="Type"/> implement <see cref="IDataCollectorStateDependentPerRowParameter"/>
+        /// <typeparamref name="T"/> whose <see cref="Type"/> implement <see cref="IDataCollectorStateDependentPerRowParameter"/>
         /// </summary>
         /// <param name="table">
         /// The <see cref="DataTable"/> to fill.
@@ -528,10 +528,10 @@ namespace CDP4Reporting.DataCollection
 
         /// <summary>
         /// Fill the related <see cref="DataColumn"/>s with values from the current node for properties of an instance of
-        /// <see cref="T"/> that have public getters for the given <paramref name="row"/>
+        /// <typeparamref name="T"/> that have public getters for the given <paramref name="row"/>
         /// </summary>
         /// <param name="rowPresentation">
-        /// The instance of <see cref="T"/>
+        /// The instance of <typeparamref name="T"/>
         /// </param>
         /// <param name="row">
         /// The <see cref="DataRow"/> to fill.
@@ -554,7 +554,7 @@ namespace CDP4Reporting.DataCollection
                     }
                 }
 
-                if (this.GetCollectParentValuesAttribute(publicGetter) != null)
+                if (GetCollectParentValuesAttribute(publicGetter) != null)
                 {
                     var newFieldname = $"{publicGetter.Name}_{this.FieldName}";
 
@@ -584,7 +584,7 @@ namespace CDP4Reporting.DataCollection
         /// <returns>
         /// The <see cref="CollectParentValuesAttribute"/> decorating the current parameter class.
         /// </returns>
-        private CollectParentValuesAttribute GetCollectParentValuesAttribute(PropertyInfo propertyType)
+        private static CollectParentValuesAttribute GetCollectParentValuesAttribute(PropertyInfo propertyType)
         {
             var attr = Attribute
                 .GetCustomAttributes(propertyType)
@@ -594,11 +594,11 @@ namespace CDP4Reporting.DataCollection
         }
 
         /// <summary>
-        /// Fills the <see cref="DataColumn"/>s with with values from the current node for properties of an instance of <see cref="T"/>
+        /// Fills the <see cref="DataColumn"/>s with with values from the current node for properties of an instance of <typeparamref name="T"/>
         /// whose <see cref="Type"/> inherits from <see cref="DataCollectorColumn{T}"/>.
         /// </summary>
         /// <param name="rowPresentation">
-        /// The instance of <see cref="T"/>
+        /// The instance of <typeparamref name="T"/>
         /// </param>
         /// <param name="row">
         /// The <see cref="DataRow"/> to fill.

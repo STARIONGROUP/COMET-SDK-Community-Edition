@@ -37,6 +37,11 @@ namespace CDP4Common.Helpers
     public static class Utils
     {
         /// <summary>
+        /// The maximum duration allowed for regular expression execution.
+        /// </summary>
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(1);
+
+        /// <summary>
         /// Extension method that extract the ordered Ids as a list of GUID from the passed in IEnumerable of <see cref="OrderedItem"/>.
         /// </summary>
         /// <param name="orderedList">
@@ -65,13 +70,13 @@ namespace CDP4Common.Helpers
                 return string.Empty;
             }
 
-            var regex = new Regex("[^a-zA-Z0-9]+");
+            var regex = new Regex("[^a-zA-Z0-9]+", RegexOptions.None, RegexTimeout);
 
             // Replace all non alpha-numerical character by underscore
             var formatString = regex.Replace(shortName, "_");
 
             // remove the formatted string from its potential leading and trailing underscore
-            return Regex.Replace(formatString, "^_+|_+$", string.Empty);
+            return Regex.Replace(formatString, "^_+|_+$", string.Empty, RegexOptions.None, RegexTimeout);
         }
     }
 }

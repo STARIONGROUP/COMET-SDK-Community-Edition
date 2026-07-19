@@ -62,7 +62,7 @@ namespace CDP4Common.EngineeringModelData
         {
             if (componentIndex != null)
             {
-                throw new ArgumentException("The component index must be null", "componentIndex");
+                throw new ArgumentException("The component index must be null", nameof(componentIndex));
             }
 
             var elementDefinition = (ElementDefinition)this.Container;
