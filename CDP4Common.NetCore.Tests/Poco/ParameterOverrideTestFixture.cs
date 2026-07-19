@@ -148,6 +148,28 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
+        public void VerifyThatModelCodeDoesNotThrowAndReturnsFallbackForBrokenCompoundParameterType()
+        {
+            var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null) { ShortName = "l" };
+
+            var compoundParameterType = new CompoundParameterType(Guid.NewGuid(), null, null);
+            compoundParameterType.ShortName = "coord";
+            var component = new ParameterTypeComponent(Guid.NewGuid(), null, null) { ParameterType = simpleQuantityKind };
+            component.ShortName = "x";
+            compoundParameterType.Component.Add(component);
+
+            this.parameter.ParameterType = compoundParameterType;
+
+            var parameterOverride = new ParameterOverride { Parameter = this.parameter };
+
+            this.elementUsage.ParameterOverride.Add(parameterOverride);
+
+            // the CompoundParameterType only has a single component, so index 1 is out of range
+            Assert.That(() => parameterOverride.ModelCode(1), Throws.Nothing);
+            Assert.That(parameterOverride.ModelCode(1), Is.EqualTo("Sat.battery_1.coord._1"));
+        }
+
+        [Test]
         public void VerifyThatCompoundParameterOverrideReturnsExpectedModelCodeNoComponent()
         {
             var simpleQuantityKind = new SimpleQuantityKind(Guid.NewGuid(), null, null) { ShortName = "l" };

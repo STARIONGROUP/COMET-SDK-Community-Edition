@@ -32,11 +32,18 @@ namespace CDP4Common.EngineeringModelData
     using CDP4Common.Helpers;
     using CDP4Common.SiteDirectoryData;
 
+    using NLog;
+
     /// <summary>
     /// Extension for the <see cref="Parameter"/> class
     /// </summary>
     public partial class Parameter : IModelCode
     {
+        /// <summary>
+        /// The <see cref="Logger"/> used to log messages
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Computes the model code of the current <see cref="Parameter"/>
         /// </summary>
@@ -67,9 +74,20 @@ namespace CDP4Common.EngineeringModelData
                 throw new ArgumentException("The value must be 0 if the ParameterType is not a CompoundParameterType", nameof(componentIndex));
             }
 
-            if (compoundParameterType != null && componentIndex != null)
+            if (compoundParameterType != null && componentIndex.HasValue)
             {
-                var component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
+                string component;
+
+                try
+                {
+                    component = Utils.FormatComponentShortName(compoundParameterType.Component[componentIndex.Value].ShortName);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "The CompoundParameterType {0} ({1}) is broken and does not contain a component at index {2}. The model code cannot be fully computed.", compoundParameterType.ShortName, compoundParameterType.Iid, componentIndex.Value);
+                    component = $"_{componentIndex.Value}";
+                }
+
                 return $"{elementDefinition.ShortName}.{compoundParameterType.ShortName}.{component}";
             }
 

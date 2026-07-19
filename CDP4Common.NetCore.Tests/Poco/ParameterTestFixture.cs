@@ -169,6 +169,14 @@ namespace CDP4Common.Tests.Poco
         }
 
         [Test]
+        public void VerifyThatModelCodeDoesNotThrowAndReturnsFallbackForBrokenCompoundParameterType()
+        {
+            // the CompoundParameterType only has a single component, so index 1 is out of range
+            Assert.That(() => this.compoundParameter.ModelCode(1), Throws.Nothing);
+            Assert.That(this.compoundParameter.ModelCode(1), Is.EqualTo("Sat.coord._1"));
+        }
+
+        [Test]
         public void VerifyThatExpectedExceptionIsThrownWhenComponentIndexIsSuppliedForScalarParameterType()
         {
             Assert.That(() => this.scalarParameter.ModelCode(1), Throws.TypeOf<ArgumentException>());
