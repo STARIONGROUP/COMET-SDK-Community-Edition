@@ -23,17 +23,23 @@ dotnet test --no-build CDP4-SDK.sln --filter="FullyQualifiedName~MyTestClass.MyT
 # Pack for release
 dotnet pack -c Release -o ReleaseBuilds
 
-# Version bump (all library csproj files)
+# Version bump (VersionPrefix in Directory.Build.props)
 bash versionBump.sh <new-version>
 ```
 
 ## Target Frameworks
 
-- **Library projects**: `net48;netstandard2.0` (multi-targeted)
-- **Test projects (`.Tests`)**: `net48` only
+- **Library projects**: `net48;netstandard2.0;net10.0` (multi-targeted), except `CDP4ServicesMessaging` and `CDP4Web`, which target `netstandard2.0;net10.0`
+- **Test projects (`.Tests`)**: `net48`, except `CDP4RequirementsVerification.Tests`, `CDP4ServicesMessaging.Tests` and `CDP4Web.Tests`, which target `net10.0`
 - **Test projects (`.NetCore.Tests`)**: `net10.0`
 
 Both test variants exist to verify behavior on .NET Framework and modern .NET.
+
+## Build Configuration
+
+- `Directory.Build.props` holds the settings shared by all projects. For library projects it sets the NuGet package metadata and `VersionPrefix`; for test projects (project name ends in `Tests`) it sets `IsPackable=false` and adds the common test packages (NUnit, Moq, coverlet, ...).
+- `Directory.Packages.props` sets the version of every NuGet package (Central Package Management). Add or update versions there; `PackageReference` items in `.csproj` files have no `Version` attribute.
+- A library `.csproj` only sets what is specific to it: `TargetFrameworks`, `Title`, `Description`, `PackageId`, `PackageReleaseNotes`, `PackageTags` when it differs from the default in `Directory.Build.props`, and its references.
 
 ## Architecture
 

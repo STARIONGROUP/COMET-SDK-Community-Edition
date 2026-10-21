@@ -1,9 +1,14 @@
 ---
 name: update-package-release-notes
-description: Updates the PackageReleaseNotes Xml Element in csproj files of all projects in the solution except the test projects. Use when user changes PackageReference, or when VersionPrefix Xml Element changes in a non-test-project csproj file in the solution , or when user ask for update-package-releasenotes, or update-releasenotes.  
+description: Updates the PackageReleaseNotes Xml Element in csproj files of all projects in the solution except the test projects. Use when user changes a PackageReference or a PackageVersion in Directory.Packages.props, or when the VersionPrefix Xml Element changes in Directory.Build.props, or when user ask for update-package-releasenotes, or update-releasenotes.  
 ---
 
 # Update Package Release Notes
+
+## Where versions are set
+- Package versions are set centrally in `Directory.Packages.props` (`<PackageVersion Include="..." Version="..." />`). A `<PackageReference>` in a csproj file has no Version attribute. A changed `PackageVersion` affects every non-test project that has a `<PackageReference>` to that package in its csproj file.
+- The `VersionPrefix` of all non-test projects (ProjectVersionPrefix below) is set once in `Directory.Build.props`.
+- `<PackageReleaseNotes>` stays in each non-test-project csproj file.
 
 ## Instructions
 
