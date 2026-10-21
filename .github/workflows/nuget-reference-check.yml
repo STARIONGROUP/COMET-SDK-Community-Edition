@@ -2,9 +2,17 @@ name: "nuget package reference check"
 
 on:
   push:
+    branches:
+      - master
+      - development
   pull_request:
   schedule:
     - cron: '0 8 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
