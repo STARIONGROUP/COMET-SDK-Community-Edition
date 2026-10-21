@@ -1,20 +1,23 @@
 #!/bin/bash
 
+set -euo pipefail
+
 if [[ "$#" -ne 1 ]]; then
     echo "Usage: $0 <NewVersionPrefix>"
     exit 1
 fi
 
-rootFolder=$(pwd)
-
 newVersionPrefix=$1
 
-# Get all .csproj files recursively within the root folder and discard tests project
-projectFiles=$(find "$rootFolder" -type f -name '*.csproj' | grep -v 'Tests.csproj')
+# The version of all library projects is set in Directory.Build.props, next to this script
+propsFile="$(dirname "$0")/Directory.Build.props"
 
-for file in $projectFiles; do
-    sed "s|\(<VersionPrefix>\)[^<]*\(<\/VersionPrefix>\)|\1$newVersionPrefix\2|g" "$file" > "$file.tmp"
-    mv "$file.tmp" "$file"
-done
+if [[ ! -f "$propsFile" ]]; then
+    echo "Directory.Build.props not found next to $0"
+    exit 1
+fi
 
-echo "VersionPrefix updated to $newVersionPrefix in all .csproj files."
+sed "s|\(<VersionPrefix>\)[^<]*\(<\/VersionPrefix>\)|\1$newVersionPrefix\2|g" "$propsFile" > "$propsFile.tmp"
+mv "$propsFile.tmp" "$propsFile"
+
+echo "VersionPrefix updated to $newVersionPrefix in Directory.Build.props."
