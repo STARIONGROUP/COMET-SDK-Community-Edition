@@ -29,8 +29,8 @@ bash versionBump.sh <new-version>
 
 ## Target Frameworks
 
-- **Library projects**: `net48;netstandard2.0` (multi-targeted)
-- **Test projects (`.Tests`)**: `net48` only
+- **Library projects**: `net48;netstandard2.0;net10.0` (multi-targeted), except `CDP4ServicesMessaging` and `CDP4Web`, which target `netstandard2.0;net10.0`
+- **Test projects (`.Tests`)**: `net48`, except `CDP4RequirementsVerification.Tests`, `CDP4ServicesMessaging.Tests` and `CDP4Web.Tests`, which target `net10.0`
 - **Test projects (`.NetCore.Tests`)**: `net10.0`
 
 Both test variants exist to verify behavior on .NET Framework and modern .NET.
