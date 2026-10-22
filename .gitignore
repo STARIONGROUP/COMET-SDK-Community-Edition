@@ -289,3 +289,4 @@ __pycache__/
 *.xsd.cs
 /*/*.orig
 /.claude/settings.local.json
+/.claude/agent-memory-local/
