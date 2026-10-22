@@ -6,7 +6,7 @@
         <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
         <PackageId>CDP4Dal-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] CDP4DalCommon to version 30.1.3
+            [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>
 

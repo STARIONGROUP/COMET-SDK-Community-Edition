@@ -216,11 +216,11 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void VerifyThatArgumentThrown()
+        public async Task VerifyThatArgumentThrown()
         {
             var assembler = new Assembler(this.uri, this.messageBus);
             
-            Assert.ThrowsAsync<ArgumentNullException>(async() =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async() =>
             {
                 await assembler.Synchronize(null);
             });
@@ -786,21 +786,21 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void Verify_that_Dispose_prevents_subsequent_Synchronize()
+        public async Task Verify_that_Dispose_prevents_subsequent_Synchronize()
         {
             var assembler = new Assembler(this.uri, this.messageBus);
             assembler.Dispose();
 
-            Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Synchronize(this.testInput));
+            await Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Synchronize(this.testInput));
         }
 
         [Test]
-        public void Verify_that_Dispose_prevents_subsequent_Clear()
+        public async Task Verify_that_Dispose_prevents_subsequent_Clear()
         {
             var assembler = new Assembler(this.uri, this.messageBus);
             assembler.Dispose();
 
-            Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Clear());
+            await Assert.ThrowsAsync<ObjectDisposedException>(async () => await assembler.Clear());
         }
 
         [Test]
@@ -813,7 +813,7 @@ namespace CDP4Dal.Tests
                 new Dto.DomainFileStore(Guid.NewGuid(), 1)
             };
 
-            Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(nonSiteDirInput));
+            await Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(nonSiteDirInput));
         }
 
         [Test]
@@ -830,7 +830,7 @@ namespace CDP4Dal.Tests
             await assembler.CloseIterationSetup(iterationSetup);
 
             // If the lock was released correctly, a subsequent Synchronize should succeed
-            Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(this.testInput));
+            await Assert.DoesNotThrowAsync(async () => await assembler.Synchronize(this.testInput));
         }
 
         [Test]

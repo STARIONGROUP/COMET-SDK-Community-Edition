@@ -593,11 +593,11 @@ namespace CDP4Dal.Tests
             await this.session.Refresh();
             this.mockedDal.Verify(x => x.Read<Thing>(It.IsAny<Thing>(), It.IsAny<CancellationToken>(), It.IsAny<IQueryAttributes>()), Times.Exactly(1));
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, null));
         }
 
         [Test]
-        public void Verify_that_when_active_person_is_null_Iteration_is_not_read()
+        public async Task Verify_that_when_active_person_is_null_Iteration_is_not_read()
         {
             var iterationSetup = new CDP4Common.SiteDirectoryData.IterationSetup(Guid.NewGuid(), null, null) { FrozenOn = DateTime.Now, IterationIid = Guid.NewGuid() };
             var activeDomain = new DomainOfExpertise(Guid.NewGuid(), null, null);
@@ -608,7 +608,7 @@ namespace CDP4Dal.Tests
             var modelToOpen = new CDP4Common.EngineeringModelData.EngineeringModel(model.Iid, null, null);
             iterationToOpen.Container = modelToOpen;
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, activeDomain));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(iterationToOpen, activeDomain));
         }
 
         [Test]
@@ -668,7 +668,7 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void VerifyThatCancelWriteWorks()
+        public async Task VerifyThatCancelWriteWorks()
         {
             var context = $"/SiteDirectory/{Guid.NewGuid()}";
             var johnDoe = new CDP4Common.SiteDirectoryData.Person(this.person.Iid, this.session.Assembler.Cache, this.uri) { ShortName = "John" };
@@ -676,7 +676,7 @@ namespace CDP4Dal.Tests
 
             this.session.BeforeWrite += (o, args) => { args.Cancelled = true; };
 
-            Assert.ThrowsAsync<OperationCanceledException>(async () => await this.session.Write(new OperationContainer(context)));
+            await Assert.ThrowsAsync<OperationCanceledException>(async () => await this.session.Write(new OperationContainer(context)));
 
             this.mockedDal.Verify(x => x.Write(It.IsAny<OperationContainer>(), It.IsAny<IEnumerable<string>>()), Times.Exactly(0));
         }
@@ -849,7 +849,7 @@ namespace CDP4Dal.Tests
         
         [Test]
         [Category("WebServicesDependent")]
-        public void VerifyThatOpenCallMightBeCancelled()
+        public async Task VerifyThatOpenCallMightBeCancelled()
         {
             var tasks = new List<Task>();
             var credentials = new Credentials("admin", "pass", new Uri("https://cdp4services-public.cdp4.org"));
@@ -885,23 +885,23 @@ namespace CDP4Dal.Tests
                 }));
             }
 
-            Assert.DoesNotThrowAsync(async () => { await Task.WhenAll(tasks.ToArray()); });
+            await Assert.DoesNotThrowAsync(async () => { await Task.WhenAll(tasks.ToArray()); });
         }
 
         [Test]
-        public void VerifyThatRefreshNotWorksWithoutActivePerson()
+        public async Task VerifyThatRefreshNotWorksWithoutActivePerson()
         {
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Refresh());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Refresh());
         }
 
         [Test]
-        public void VerifyThatReloadNotWorksWithoutActivePerson()
+        public async Task VerifyThatReloadNotWorksWithoutActivePerson()
         {
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Reload());
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Reload());
         }
 
         [Test]
-        public void VerifyThatReadFileNotWorksWithoutActivePerson()
+        public async Task VerifyThatReadFileNotWorksWithoutActivePerson()
         {
             var fileRevision = new CDP4Common.EngineeringModelData.FileRevision
             {
@@ -909,7 +909,7 @@ namespace CDP4Dal.Tests
                 Name = "File"
             };
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.ReadFile(fileRevision));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.ReadFile(fileRevision));
         }
 
         [Test]
@@ -935,7 +935,7 @@ namespace CDP4Dal.Tests
             this.session.GetType().GetProperty("ActivePerson")?.SetValue(this.session, null, null);
             await this.session.Assembler.Synchronize(new List<Thing> { rdlDto });
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(rdlPoco));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.session.Read(rdlPoco));
         }
 
         [Test]
@@ -963,13 +963,13 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
-        public void Verify_that_Session_implements_IDisposable_and_disposes_Assembler()
+        public async Task Verify_that_Session_implements_IDisposable_and_disposes_Assembler()
         {
             Assert.That(this.session, Is.InstanceOf<IDisposable>());
 
             this.session.Dispose();
 
-            Assert.ThrowsAsync<ObjectDisposedException>(async () =>
+            await Assert.ThrowsAsync<ObjectDisposedException>(async () =>
                 await this.session.Assembler.Synchronize(new List<Thing>()));
         }
 

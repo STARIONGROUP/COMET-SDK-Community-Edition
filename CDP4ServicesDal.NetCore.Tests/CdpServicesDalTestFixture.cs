@@ -554,7 +554,7 @@ namespace CDP4ServicesDal.Tests
             var createFileRevisionOperation = new Operation(null, fileRevision, OperationKind.Create);
             operationContainer.AddOperation(createFileRevisionOperation);
 
-            Assert.DoesNotThrowAsync(async () => await dal.Write(operationContainer, files));
+            await Assert.DoesNotThrowAsync(async () => await dal.Write(operationContainer, files));
         }
 
         [Test]

@@ -179,13 +179,13 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        public void Verify_that_when_uri_path_does_not_exist_exception_is_thrown()
+        public async Task Verify_that_when_uri_path_does_not_exist_exception_is_thrown()
         {
             var path = Path.Combine(TestContext.CurrentContext.TestDirectory, "files", "does_not_exist.zip");
             this.credentials = new Credentials("admin", "pass", new Uri(path));
             var jsonfiledal = new JsonFileDal();
 
-            Assert.ThrowsAsync<FileLoadException>(async () => await jsonfiledal.Open(this.credentials, this.cancelationTokenSource.Token));
+            await Assert.ThrowsAsync<FileLoadException>(async () => await jsonfiledal.Open(this.credentials, this.cancelationTokenSource.Token));
         }
 
         [Test]
@@ -403,9 +403,9 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        public void Verify_that_Open_with_null_credentials_throws_exception()
+        public async Task Verify_that_Open_with_null_credentials_throws_exception()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await this.dal.Open(null, this.cancelationTokenSource.Token));
         }
 
         [Test]
@@ -468,7 +468,7 @@ namespace CDP4JsonFileDal.Tests
         }
 
         [Test]
-        public void VerifyWritingWithoutMigrationFile()
+        public async Task VerifyWritingWithoutMigrationFile()
         {
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
             var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
@@ -476,11 +476,11 @@ namespace CDP4JsonFileDal.Tests
             this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
 
-            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+            await Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
         }
 
         [Test]
-        public void VerifyWritingMigrationFile()
+        public async Task VerifyWritingMigrationFile()
         {
             var zipCredentials = new Credentials("admin", "pass", new Uri(this.annexC3File));
             var zipSession = new Session(this.dal, zipCredentials, this.messageBus);
@@ -488,7 +488,7 @@ namespace CDP4JsonFileDal.Tests
             this.CreateBasicModel();
             var operationContainers = this.BuildOperationContainers();
 
-            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers, new string[] { this.migrationFile })));
+            await Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers, new string[] { this.migrationFile })));
         }
 
         [Test]
@@ -514,7 +514,7 @@ namespace CDP4JsonFileDal.Tests
 
             var operationContainers = this.BuildOperationContainers();
 
-            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+            await Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
 
             //Part 2 read newly created file
             var newDal = new JsonFileDal(new Version("1.0.0"));
@@ -574,7 +574,7 @@ namespace CDP4JsonFileDal.Tests
 
             var operationContainers = this.BuildOperationContainers();
 
-            Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
+            await Assert.DoesNotThrowAsync(async () => await Task.Run(() => this.dal.Write(operationContainers)));
 
             //Part 2 read newly created file
             var newDal = new JsonFileDal(new Version("1.3.0"));

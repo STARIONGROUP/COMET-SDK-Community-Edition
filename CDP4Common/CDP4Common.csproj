@@ -6,8 +6,8 @@
         <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
         <PackageId>CDP4Common-CE</PackageId>
         <PackageReleaseNotes>
-            [Improve] implementation of Parameter.ModelCode and ParameterOverride.ModelCode to make sure that a modelcode is always returned. This prevents broken CompoundParameterTypes from crashing downstream applications 
-            [Bump] Version to 30.1.3
+            [Update] NLog to version 6.2.2
+            [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>
 

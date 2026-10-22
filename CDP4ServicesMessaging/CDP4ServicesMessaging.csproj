@@ -6,8 +6,12 @@
         <Description>CDP4 Services Messaging is a Class Library that contains clients and messages class that can be used for inter services communication</Description>
         <PackageId>CDP4ServicesMessaging-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] CDP4Dal to version 30.1.3
-            [Update] CDP4JsonSerializer to version 30.1.3
+            [Update] Microsoft.Extensions.Configuration.Abstractions to version 10.0.13
+            [Update] Microsoft.Extensions.Configuration.Binder to version 10.0.13
+            [Update] Microsoft.Extensions.Hosting.Abstractions to version 10.0.13
+            [Update] Polly to version 8.8.0
+            [Update] RabbitMQ.Client to version 7.2.2
+            [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>
 

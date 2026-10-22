@@ -6,7 +6,7 @@
         <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
         <PackageId>CDP4Rules-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] CDP4Common to version 30.1.3
+            [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>
 
