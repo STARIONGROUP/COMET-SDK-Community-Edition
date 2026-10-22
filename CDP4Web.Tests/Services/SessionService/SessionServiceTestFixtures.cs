@@ -201,11 +201,11 @@ namespace CDP4Web.Tests.Services.SessionService
 
         [Test]
         [Category("WebServicesDependent")]
-        public void VerifyOpenSession()
+        public async Task VerifyOpenSession()
         {
             const string publicServerUrl = "https://cdp4services-public.cdp4.org";
 
-            Assert.Multiple(() =>
+            await Assert.MultipleAsync(async () =>
             {
                 Assert.That(() => this.sessionService.OpenSession("", "", ""), Throws.Exception);
                 Assert.That(() => this.sessionService.OpenSession("a", "", ""), Throws.Exception);
@@ -213,9 +213,9 @@ namespace CDP4Web.Tests.Services.SessionService
                 Assert.That(() => this.sessionService.OpenSession("admin", "pass", "something"), Throws.Exception);
                 Assert.That(() => this.sessionService.OpenSession("admin", "pass", "http://a.com"), Throws.Nothing);
                 Assert.That(this.sessionService.IsSessionOpen, Is.False);
-                Assert.That(async () => (await this.sessionService.OpenSession("admin", "pass", publicServerUrl)).IsSuccess, Is.True);
+                await Assert.ThatAsync(async () => (await this.sessionService.OpenSession("admin", "pass", publicServerUrl)).IsSuccess, Is.True);
                 Assert.That(this.sessionService.IsSessionOpen, Is.True);
-                Assert.That(async () => (await this.sessionService.OpenSession("admin", "pas", publicServerUrl)).IsSuccess, Is.False);
+                await Assert.ThatAsync(async () => (await this.sessionService.OpenSession("admin", "pas", publicServerUrl)).IsSuccess, Is.False);
                 Assert.That(this.sessionService.IsSessionOpen, Is.False);
                 Assert.That(() => this.sessionService.OpenSession(new Credentials("", "", this.uri)), Throws.Exception);
                 Assert.That(() => this.sessionService.OpenSession(new Credentials("a", "", this.uri)), Throws.Exception);
