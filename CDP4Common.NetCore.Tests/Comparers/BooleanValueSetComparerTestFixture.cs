@@ -100,5 +100,17 @@ namespace CDP4Common.Tests.Comparers
             Assert.That(result, Is.False);
             Assert.That(booleanList, Is.Empty);
         }
+
+        [Test]
+        public void VerifyThatStringComparisonIsUsedWhenConversionFails()
+        {
+            var left = new ValueArray<string>(new[] { "maybe" });
+            var right = new ValueArray<string>(new[] { "certain" });
+
+            var result = this.booleanValueSetComparer.Compare(left, right);
+
+            var expected = string.CompareOrdinal(left.ToString().ToLower(), right.ToString().ToLower());
+            Assert.That(result, Is.EqualTo(expected));
+        }
     }
 }
