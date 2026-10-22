@@ -288,6 +288,49 @@ namespace CDP4Dal.Tests
         }
 
         [Test]
+        public void Verify_that_disposing_last_subscription_removes_observable()
+        {
+            var elementUsage = new ElementUsage();
+            var initialCount = this.messageBus.ActiveObservableCount;
+
+            var observable = this.messageBus.Listen<ObjectChangedEvent>(elementUsage);
+            var firstSubscription = observable.Subscribe(x => this.OnEvent(x.ChangedThing));
+            var secondSubscription = observable.Subscribe(x => this.OnEvent(x.ChangedThing));
+
+            Assert.That(this.messageBus.ActiveObservableCount, Is.EqualTo(initialCount + 1));
+
+            firstSubscription.Dispose();
+
+            Assert.That(this.messageBus.ActiveObservableCount, Is.EqualTo(initialCount + 1));
+
+            secondSubscription.Dispose();
+
+            Assert.That(this.messageBus.ActiveObservableCount, Is.EqualTo(initialCount));
+        }
+
+        [Test]
+        public void Verify_that_resubscribing_after_dispose_receives_messages()
+        {
+            var elementUsage = new ElementUsage();
+            var newSubscriptionMessages = new List<Thing>();
+
+            var oldSubscription = this.messageBus.Listen<ObjectChangedEvent>(elementUsage).Subscribe(x => this.OnEvent(x.ChangedThing));
+            oldSubscription.Dispose();
+
+            using (this.messageBus.Listen<ObjectChangedEvent>(elementUsage).Subscribe(x => newSubscriptionMessages.Add(x.ChangedThing)))
+            {
+                this.messageBus.SendObjectChangeEvent(elementUsage, EventKind.Updated);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(newSubscriptionMessages, Has.Count.EqualTo(1));
+                    Assert.That(newSubscriptionMessages[0], Is.SameAs(elementUsage));
+                    Assert.That(this.cache, Is.Empty);
+                });
+            }
+        }
+
+        [Test]
         public void VerifyNullEventTypeTargetIsFalse()
         {
             var ett = new EventTypeTarget(typeof(SessionEvent));

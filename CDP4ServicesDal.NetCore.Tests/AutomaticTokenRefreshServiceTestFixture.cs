@@ -126,6 +126,56 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        public async Task Verify_that_StartAsync_retries_refresh_after_transient_failure()
+        {
+            var issuedAtTime = DateTimeOffset.UtcNow;
+            var accessExpirationTime = issuedAtTime.AddSeconds(3);
+
+            var claims = new List<Claim>()
+            {
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Iat, issuedAtTime.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new (JwtRegisteredClaimNames.Exp, accessExpirationTime.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            };
+
+            var jwtSecurityToken = new JwtSecurityToken("http://localhost:5000/", "*", claims);
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            this.credentials.ProvideUserToken(new AuthenticationToken(accessToken, "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+
+            this.session.SetupSequence(x => x.RequestAuthenticationTokenBasedOnRefreshToken())
+                .ThrowsAsync(new InvalidOperationException("transient failure"))
+                .Returns(Task.CompletedTask);
+
+            this.session.Setup(x => x.RefreshAuthenticationInformation()).Returns(Task.CompletedTask);
+
+            var authenticationRefreshedCount = 0;
+
+            this.authenticationTokensRefreshService.AuthenticationRefreshed += () =>
+            {
+                authenticationRefreshedCount++;
+                return Task.CompletedTask;
+            };
+
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, new AuthenticationSchemeResponse());
+
+            // The token is not replaced by the mocked session, so it expires during the refresh and the service then stops on its own
+            var startTask = this.authenticationTokensRefreshService.StartAsync();
+            var completed = await Task.WhenAny(startTask, Task.Delay(TimeSpan.FromSeconds(15)));
+
+            Assert.That(completed, Is.SameAs(startTask), "StartAsync did not stop after the token expired");
+            await startTask;
+
+            Assert.Multiple(() =>
+            {
+                this.session.Verify(x => x.RequestAuthenticationTokenBasedOnRefreshToken(), Times.Exactly(2));
+                this.session.Verify(x => x.RefreshAuthenticationInformation(), Times.Once);
+                Assert.That(authenticationRefreshedCount, Is.EqualTo(1));
+            });
+        }
+
+        [Test]
         public async Task VerifyRefreshAuthenticationToken()
         {
             await Assert.ThatAsync(() => this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync(), Throws.InvalidOperationException.With.Message.EqualTo("This service is not initialized."));
