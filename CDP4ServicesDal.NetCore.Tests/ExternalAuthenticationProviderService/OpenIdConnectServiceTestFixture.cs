@@ -46,14 +46,14 @@ namespace CDP4ServicesDal.NetCore.Tests.ExternalAuthenticationProviderService
         }
 
         [Test]
-        public void Verify_that_RequestAuthenticationToken_throws_when_response_is_null()
+        public async Task Verify_that_RequestAuthenticationToken_throws_when_response_is_null()
         {
-            Assert.ThrowsAsync<ArgumentNullException>(async () =>
+            await Assert.ThrowsAsync<ArgumentNullException>(async () =>
                 await this.service.RequestAuthenticationToken("code", null));
         }
 
         [Test]
-        public void Verify_that_RequestAuthenticationToken_throws_when_scheme_missing_ExternalJwtBearer()
+        public async Task Verify_that_RequestAuthenticationToken_throws_when_scheme_missing_ExternalJwtBearer()
         {
             var response = new AuthenticationSchemeResponse
             {
@@ -62,7 +62,7 @@ namespace CDP4ServicesDal.NetCore.Tests.ExternalAuthenticationProviderService
                 ClientId = "test-client"
             };
 
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await this.service.RequestAuthenticationToken("code", response));
         }
     }
