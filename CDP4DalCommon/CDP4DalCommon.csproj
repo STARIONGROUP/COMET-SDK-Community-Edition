@@ -5,7 +5,9 @@
       <Title>CDP4DalCommon Community Edition</Title>
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <PackageId>CDP4DalCommon-CE</PackageId>
-      <PackageReleaseNotes></PackageReleaseNotes>
+      <PackageReleaseNotes>
+          [Update] CDP4Common to version 30.1.4
+      </PackageReleaseNotes>
   </PropertyGroup>
 
     <ItemGroup>

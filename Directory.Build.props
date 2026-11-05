@@ -14,7 +14,7 @@
         Each library project still sets its own TargetFrameworks, Title, Description, PackageId and PackageReleaseNotes.
     -->
     <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
-        <VersionPrefix>30.1.3</VersionPrefix>
+        <VersionPrefix>30.1.4</VersionPrefix>
         <PackageProjectUrl>https://github.com/STARIONGROUP/COMET-SDK-Community-Edition</PackageProjectUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageTags>CDP COMET ECSS-E-TM-10-25 MBSE</PackageTags>

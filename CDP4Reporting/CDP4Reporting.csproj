@@ -6,6 +6,8 @@
         <Description>CDP4 Reporting</Description>
         <PackageId>CDP4Reporting-CE</PackageId>
         <PackageReleaseNotes>
+            [Update] CDP4Dal to version 30.1.4
+            [Update] CDP4JsonSerializer to version 30.1.4
             [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>

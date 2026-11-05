@@ -8,7 +8,8 @@
         <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack MBSE</PackageTags>
         <PackageReleaseNotes>
             [Update] MessagePack to version 3.1.12
-            [Update] System.IO.Pipelines to version 10.0.13
+            [Update] System.IO.Pipelines to version 10.0.14
+            [Update] CDP4Common to version 30.1.4
             [Implement] SQ improvements (#400)
         </PackageReleaseNotes>
     </PropertyGroup>
