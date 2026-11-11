@@ -176,6 +176,93 @@ namespace CDP4ServicesDal.Tests
         }
 
         [Test]
+        public async Task Verify_that_StartAsync_completes_when_disposed_from_AuthenticationRefreshed_handler()
+        {
+            this.credentials.ProvideUserToken(new AuthenticationToken(CreateAccessToken(3), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+
+            this.session.Setup(x => x.RequestAuthenticationTokenBasedOnRefreshToken()).Returns(Task.CompletedTask);
+            this.session.Setup(x => x.RefreshAuthenticationInformation()).Returns(Task.CompletedTask);
+
+            var authenticationRefreshedCount = 0;
+
+            this.authenticationTokensRefreshService.AuthenticationRefreshed += () =>
+            {
+                authenticationRefreshedCount++;
+                this.authenticationTokensRefreshService.Dispose();
+                return Task.CompletedTask;
+            };
+
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, new AuthenticationSchemeResponse());
+
+            var startTask = this.authenticationTokensRefreshService.StartAsync();
+            var completed = await Task.WhenAny(startTask, Task.Delay(TimeSpan.FromSeconds(15)));
+
+            Assert.That(completed, Is.SameAs(startTask), "StartAsync did not stop after the service was disposed");
+            Assert.That(async () => await startTask, Throws.Nothing);
+            Assert.That(authenticationRefreshedCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task Verify_that_StartAsync_completes_when_disposed_while_retry_policy_waits()
+        {
+            this.credentials.ProvideUserToken(new AuthenticationToken(CreateAccessToken(3), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+
+            this.session.Setup(x => x.RequestAuthenticationTokenBasedOnRefreshToken())
+                .Callback(() => this.authenticationTokensRefreshService.Dispose())
+                .ThrowsAsync(new InvalidOperationException("transient failure"));
+
+            this.session.Setup(x => x.RefreshAuthenticationInformation()).Returns(Task.CompletedTask);
+
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, new AuthenticationSchemeResponse());
+
+            var startTask = this.authenticationTokensRefreshService.StartAsync();
+            var completed = await Task.WhenAny(startTask, Task.Delay(TimeSpan.FromSeconds(15)));
+
+            Assert.That(completed, Is.SameAs(startTask), "StartAsync did not stop after the service was disposed");
+            Assert.That(async () => await startTask, Throws.Nothing);
+
+            Assert.Multiple(() =>
+            {
+                this.session.Verify(x => x.RequestAuthenticationTokenBasedOnRefreshToken(), Times.Once);
+                this.session.Verify(x => x.RefreshAuthenticationInformation(), Times.Never);
+            });
+        }
+
+        [Test]
+        public async Task Verify_that_StartAsync_completes_when_disposed_while_session_refresh_fails()
+        {
+            this.credentials.ProvideUserToken(new AuthenticationToken(CreateAccessToken(3), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+
+            this.session.Setup(x => x.RequestAuthenticationTokenBasedOnRefreshToken()).Returns(Task.CompletedTask);
+
+            this.session.Setup(x => x.RefreshAuthenticationInformation())
+                .Callback(() => this.authenticationTokensRefreshService.Dispose())
+                .ThrowsAsync(new InvalidOperationException("session is closing"));
+
+            var authenticationRefreshedCount = 0;
+
+            this.authenticationTokensRefreshService.AuthenticationRefreshed += () =>
+            {
+                authenticationRefreshedCount++;
+                return Task.CompletedTask;
+            };
+
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, new AuthenticationSchemeResponse());
+
+            var startTask = this.authenticationTokensRefreshService.StartAsync();
+            var completed = await Task.WhenAny(startTask, Task.Delay(TimeSpan.FromSeconds(15)));
+
+            Assert.That(completed, Is.SameAs(startTask), "StartAsync did not stop after the service was disposed");
+            Assert.That(async () => await startTask, Throws.Nothing);
+
+            Assert.Multiple(() =>
+            {
+                this.session.Verify(x => x.RefreshAuthenticationInformation(), Times.Once);
+                Assert.That(authenticationRefreshedCount, Is.EqualTo(0));
+            });
+        }
+
+        [Test]
         public async Task VerifyRefreshAuthenticationToken()
         {
             await Assert.ThatAsync(() => this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync(), Throws.InvalidOperationException.With.Message.EqualTo("This service is not initialized."));
@@ -200,7 +287,27 @@ namespace CDP4ServicesDal.Tests
                 .ReturnsAsync(openIdAuthenticatioDto);
             
             await this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync();
-            Assert.That(this.credentials.Token, Is.EqualTo(openIdAuthenticatioDto));            
+            Assert.That(this.credentials.Token, Is.EqualTo(openIdAuthenticatioDto));
+        }
+
+        /// <summary>
+        /// Creates a JWT access token that expires in the given number of seconds
+        /// </summary>
+        /// <param name="expiresInSeconds">The number of seconds before the token expires</param>
+        /// <returns>The encoded access token</returns>
+        private static string CreateAccessToken(int expiresInSeconds)
+        {
+            var issuedAtTime = DateTimeOffset.UtcNow;
+
+            var claims = new List<Claim>()
+            {
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Iat, issuedAtTime.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new (JwtRegisteredClaimNames.Exp, issuedAtTime.AddSeconds(expiresInSeconds).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            };
+
+            return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken("http://localhost:5000/", "*", claims));
         }
     }
 }
