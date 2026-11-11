@@ -144,9 +144,12 @@ namespace CDP4ServicesDal
                 return;
             }
 
-            this.cancellationTokenSource = new CancellationTokenSource();
+            // Dispose can run during any await below and sets the field to null, so the loop only uses these locals
+            var tokenSource = new CancellationTokenSource();
+            var cancellationToken = tokenSource.Token;
+            this.cancellationTokenSource = tokenSource;
 
-            while (!this.cancellationTokenSource.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 var expiresTimes = this.ExtractDelayBeforeExpireTimeFromToken();
 
@@ -164,24 +167,40 @@ namespace CDP4ServicesDal
 
                 try
                 {
-                    await Task.Delay(shouldRefreshIn * 1000, this.cancellationTokenSource.Token);
+                    await Task.Delay(shouldRefreshIn * 1000, cancellationToken);
+                    await this.retryPolicy.ExecuteAsync(_ => this.RefreshAuthenticationInformationAsync(), cancellationToken);
+
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    await this.relatedSession.RefreshAuthenticationInformation();
                 }
-                catch (TaskCanceledException)
+                catch (Exception) when (cancellationToken.IsCancellationRequested)
+                {
+                    // Once disposed, a failure of the call in progress is expected (for example the session is closing) and ends the loop
+                    break;
+                }
+
+                if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
 
-                await this.retryPolicy.ExecuteAsync(this.RefreshAuthenticationInformationAsync);
-                
-                await this.relatedSession.RefreshAuthenticationInformation();
+                var authenticationRefreshed = this.AuthenticationRefreshed;
 
-                if (this.AuthenticationRefreshed != null)
+                if (authenticationRefreshed != null)
                 {
-                    await this.AuthenticationRefreshed.Invoke();
+                    await authenticationRefreshed.Invoke();
                 }
             }
-            
-            this.Dispose();
+
+            // Only dispose when the service was not disposed, and possibly started again, in the meantime
+            if (ReferenceEquals(this.cancellationTokenSource, tokenSource))
+            {
+                this.Dispose();
+            }
         }
 
         /// <summary>
