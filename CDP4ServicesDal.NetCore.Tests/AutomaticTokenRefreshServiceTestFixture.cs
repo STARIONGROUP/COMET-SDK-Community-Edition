@@ -62,6 +62,44 @@ namespace CDP4ServicesDal.Tests
             this.authenticationTokensRefreshService = new AuthenticationTokenRefreshService(this.openIdConnectService.Object);
         }
 
+        [TestCase(0, 0)]
+        [TestCase(59, 47)]
+        [TestCase(60, 48)]
+        [TestCase(3600, 2880)]
+        [TestCase(int.MaxValue, int.MaxValue / 1000)]
+        public void Verify_that_ComputeRefreshDelayInSeconds_returns_four_fifths_capped_to_fit_in_milliseconds(int expiresInSeconds, int expectedDelayInSeconds)
+        {
+            var delayInSeconds = AuthenticationTokenRefreshService.ComputeRefreshDelayInSeconds(expiresInSeconds);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(delayInSeconds, Is.EqualTo(expectedDelayInSeconds));
+                Assert.That(() => checked(delayInSeconds * 1000), Throws.Nothing);
+            });
+        }
+
+        // 61 seconds leaves just over 60 seconds before expiry, whose seconds component is 0;
+        // 60 days would overflow the delay in milliseconds without the cap
+        [TestCase(61)]
+        [TestCase(60 * 24 * 3600)]
+        public async Task Verify_that_StartAsync_waits_for_a_token_that_is_valid_for_more_than_a_minute(int expiresInSeconds)
+        {
+            this.credentials.ProvideUserToken(new AuthenticationToken(CreateAccessToken(expiresInSeconds), "refresh"), AuthenticationSchemeKind.LocalJwtBearer);
+            this.authenticationTokensRefreshService.Initialize(this.session.Object, new AuthenticationSchemeResponse());
+
+            var startTask = this.authenticationTokensRefreshService.StartAsync();
+            await Task.Delay(500);
+
+            Assert.That(startTask.IsCompleted, Is.False, "StartAsync stopped instead of waiting to refresh the token");
+
+            this.authenticationTokensRefreshService.Dispose();
+            var completed = await Task.WhenAny(startTask, Task.Delay(TimeSpan.FromSeconds(5)));
+
+            Assert.That(completed, Is.SameAs(startTask), "StartAsync did not stop after the service was disposed");
+            Assert.That(async () => await startTask, Throws.Nothing);
+            this.session.Verify(x => x.RequestAuthenticationTokenBasedOnRefreshToken(), Times.Never);
+        }
+
         [Test]
         public async Task VerifyAutomaticRefreshServiceBehavior()
         {
@@ -200,7 +238,27 @@ namespace CDP4ServicesDal.Tests
                 .ReturnsAsync(openIdAuthenticatioDto);
             
             await this.authenticationTokensRefreshService.RefreshAuthenticationInformationAsync();
-            Assert.That(this.credentials.Token, Is.EqualTo(openIdAuthenticatioDto));            
+            Assert.That(this.credentials.Token, Is.EqualTo(openIdAuthenticatioDto));
+        }
+
+        /// <summary>
+        /// Creates a JWT access token that expires in the given number of seconds
+        /// </summary>
+        /// <param name="expiresInSeconds">The number of seconds before the token expires</param>
+        /// <returns>The encoded access token</returns>
+        private static string CreateAccessToken(int expiresInSeconds)
+        {
+            var issuedAtTime = DateTimeOffset.UtcNow;
+
+            var claims = new List<Claim>()
+            {
+                new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+                new (JwtRegisteredClaimNames.Iat, issuedAtTime.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                new (JwtRegisteredClaimNames.Exp, issuedAtTime.AddSeconds(expiresInSeconds).ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+            };
+
+            return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken("http://localhost:5000/", "*", claims));
         }
     }
 }

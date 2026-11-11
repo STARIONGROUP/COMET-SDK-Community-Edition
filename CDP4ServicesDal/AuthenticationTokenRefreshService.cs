@@ -160,7 +160,7 @@ namespace CDP4ServicesDal
                     break;
                 }
 
-                var shouldRefreshIn = (int)Math.Round(expiresTimes * 4 / 5f);
+                var shouldRefreshIn = ComputeRefreshDelayInSeconds(expiresTimes);
 
                 try
                 {
@@ -243,13 +243,25 @@ namespace CDP4ServicesDal
         }
 
         /// <summary>
+        /// Computes the delay before the token is refreshed: 4/5 of the time before it expires, capped so that the delay
+        /// in milliseconds fits in an <see cref="int" />
+        /// </summary>
+        /// <param name="expiresInSeconds">The number of seconds before the token expires</param>
+        /// <returns>The number of seconds to wait before refreshing the token</returns>
+        internal static int ComputeRefreshDelayInSeconds(int expiresInSeconds)
+        {
+            return (int)Math.Min(Math.Round(expiresInSeconds * 0.8), int.MaxValue / 1000);
+        }
+
+        /// <summary>
         /// Extract the expire time from the JWT token and calculates the delay before it expires
         /// </summary>
-        /// <returns>The delay before time expiration</returns>
+        /// <returns>The total number of seconds before the token expires, or 0 when it has expired</returns>
         private int ExtractDelayBeforeExpireTimeFromToken()
         {
             var token = new JwtSecurityTokenHandler().ReadJwtToken(this.relatedSession.Credentials.Token.AccessToken);
-            return (token.ValidTo - DateTime.UtcNow).Seconds;
+            var expiresInSeconds = (token.ValidTo - DateTime.UtcNow).TotalSeconds;
+            return (int)Math.Max(0, Math.Min(expiresInSeconds, int.MaxValue));
         }
     }
 }
