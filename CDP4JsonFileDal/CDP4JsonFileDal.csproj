@@ -6,9 +6,7 @@
         <Description>CDP4 Json File Dal Plugin</Description>
         <PackageId>CDP4JsonFileDal-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] CDP4JsonSerializer to version 30.1.4
-            [Update] CDP4Dal to version 30.1.4
-            [Implement] SQ improvements (#400)
+            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

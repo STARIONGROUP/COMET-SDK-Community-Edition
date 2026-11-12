@@ -6,8 +6,7 @@
         <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
         <PackageId>CDP4Common-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] NLog to version 6.2.2
-            [Implement] SQ improvements (#400)
+            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

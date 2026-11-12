@@ -6,8 +6,9 @@
         <Description>CDP4 Data Access Layer library, a consumer of an ECSS-E-TM-10-25 Annex C API</Description>
         <PackageId>CDP4Dal-CE</PackageId>
         <PackageReleaseNotes>
-            [Update] CDP4DalCommon to version 30.1.4
-            [Implement] SQ improvements (#400)
+            - [Update] dependencies
+            - [Fix] AuthenticationTokenRefreshService.StartAsync throwing when disposed during a refresh; fixes #411
+            - [Fix] AuthenticationTokenRefreshService using TimeSpan.Seconds instead of TotalSeconds for the refresh delay; fixes #412
         </PackageReleaseNotes>
     </PropertyGroup>
 
