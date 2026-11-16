@@ -44,8 +44,14 @@
         <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\Helper\StreamHelper.cs">
             <Link>Helper\StreamHelper.cs</Link>
         </Compile>
+        <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\Helper\ByteArrayBufferWriter.cs">
+            <Link>Helper\ByteArrayBufferWriter.cs</Link>
+        </Compile>
         <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\PostOperation\JsonSerializerPostOperationTestFixture.cs">
             <Link>PostOperation\JsonSerializerPostOperationTestFixture.cs</Link>
+        </Compile>
+        <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\SerializerProviderTestFixture.cs">
+            <Link>SerializerProviderTestFixture.cs</Link>
         </Compile>
     </ItemGroup>
 

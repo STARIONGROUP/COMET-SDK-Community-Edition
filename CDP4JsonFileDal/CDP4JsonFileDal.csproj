@@ -6,7 +6,6 @@
         <Description>CDP4 Json File Dal Plugin</Description>
         <PackageId>CDP4JsonFileDal-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

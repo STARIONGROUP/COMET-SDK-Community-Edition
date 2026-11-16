@@ -6,7 +6,6 @@
         <Description>CDP4 Class Library that provides Model Analysis and Rule Checking</Description>
         <PackageId>CDP4Rules-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

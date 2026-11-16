@@ -6,7 +6,6 @@
       <Description>CDP4 Common Class Library that contains common types for any CDP4 server and the CDP4Dal</Description>
       <PackageId>CDP4DalCommon-CE</PackageId>
       <PackageReleaseNotes>
-        - [Update] dependencies
       </PackageReleaseNotes>
   </PropertyGroup>
 

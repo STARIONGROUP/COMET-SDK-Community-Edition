@@ -6,7 +6,6 @@
         <Description>CDP4ServicesDal Dal Plugin</Description>
         <PackageId>CDP4ServicesDal-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

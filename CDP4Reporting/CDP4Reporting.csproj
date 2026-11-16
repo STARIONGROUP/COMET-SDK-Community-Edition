@@ -6,7 +6,6 @@
         <Description>CDP4 Reporting</Description>
         <PackageId>CDP4Reporting-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 
