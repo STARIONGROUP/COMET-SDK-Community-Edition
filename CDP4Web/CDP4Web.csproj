@@ -5,7 +5,6 @@
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <PackageId>CDP4Web-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 

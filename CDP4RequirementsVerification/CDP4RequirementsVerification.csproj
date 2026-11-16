@@ -6,7 +6,6 @@
         <Description>CDP4 Class Library that provides requirement verification</Description>
         <PackageId>CDP4RequirementsVerification-CE</PackageId>
         <PackageReleaseNotes>
-            - [Update] dependencies
         </PackageReleaseNotes>
     </PropertyGroup>
 
