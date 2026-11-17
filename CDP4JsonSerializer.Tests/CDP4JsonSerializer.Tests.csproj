@@ -47,6 +47,9 @@
         <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\Helper\ByteArrayBufferWriter.cs">
             <Link>Helper\ByteArrayBufferWriter.cs</Link>
         </Compile>
+        <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\Helper\PooledByteBufferWriterTestFixture.cs">
+            <Link>Helper\PooledByteBufferWriterTestFixture.cs</Link>
+        </Compile>
         <Compile Include="..\CDP4JsonSerializer.NetCore.Tests\PostOperation\JsonSerializerPostOperationTestFixture.cs">
             <Link>PostOperation\JsonSerializerPostOperationTestFixture.cs</Link>
         </Compile>
@@ -91,4 +94,4 @@
         </None>
     </ItemGroup>
 
-</Project>
+</Project>

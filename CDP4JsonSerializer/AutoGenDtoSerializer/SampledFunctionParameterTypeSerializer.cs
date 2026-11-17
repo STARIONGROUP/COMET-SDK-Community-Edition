@@ -181,7 +181,7 @@ namespace CDP4JsonSerializer
 
                     writer.WriteEndArray();
                     
-                    writer.WriteString("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod.ToJsonString());
+                    writer.WriteValueArray("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod);
                     writer.WritePropertyName("isDeprecated"u8);
                     writer.WriteBooleanValue(sampledFunctionParameterType.IsDeprecated);
                     writer.WritePropertyName("modifiedOn"u8);
@@ -286,7 +286,7 @@ namespace CDP4JsonSerializer
 
                     writer.WriteEndArray();
                     
-                    writer.WriteString("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod.ToJsonString());
+                    writer.WriteValueArray("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod);
                     writer.WritePropertyName("isDeprecated"u8);
                     writer.WriteBooleanValue(sampledFunctionParameterType.IsDeprecated);
                     writer.WritePropertyName("modifiedOn"u8);
@@ -417,7 +417,7 @@ namespace CDP4JsonSerializer
 
                 writer.WriteEndArray();
                 
-                writer.WriteString("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod.ToJsonString());
+                writer.WriteValueArray("interpolationPeriod"u8, sampledFunctionParameterType.InterpolationPeriod);
                 writer.WritePropertyName("isDeprecated"u8);
                 writer.WriteBooleanValue(sampledFunctionParameterType.IsDeprecated);
                 writer.WritePropertyName("modifiedOn"u8);
@@ -643,7 +643,7 @@ namespace CDP4JsonSerializer
                     }
                     break;
                 case "interpolationperiod":
-                    writer.WriteString("interpolationPeriod"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("interpolationPeriod"u8, (ValueArray<string>)value);
                     break;
                 case "isdeprecated":
                     writer.WritePropertyName("isDeprecated"u8);

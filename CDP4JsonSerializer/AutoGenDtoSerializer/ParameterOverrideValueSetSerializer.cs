@@ -96,15 +96,15 @@ namespace CDP4JsonSerializer
                     Logger.Log(LogLevel.Trace, "Serializing ParameterOverrideValueSet for Version 1.0.0");
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ClassKind.ToString());
-                    writer.WriteString("computed"u8, parameterOverrideValueSet.Computed.ToJsonString());
-                    writer.WriteString("formula"u8, parameterOverrideValueSet.Formula.ToJsonString());
+                    writer.WriteValueArray("computed"u8, parameterOverrideValueSet.Computed);
+                    writer.WriteValueArray("formula"u8, parameterOverrideValueSet.Formula);
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterOverrideValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterOverrideValueSet.Manual);
                     writer.WritePropertyName("parameterValueSet"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ParameterValueSet);
-                    writer.WriteString("published"u8, parameterOverrideValueSet.Published.ToJsonString());
-                    writer.WriteString("reference"u8, parameterOverrideValueSet.Reference.ToJsonString());
+                    writer.WriteValueArray("published"u8, parameterOverrideValueSet.Published);
+                    writer.WriteValueArray("reference"u8, parameterOverrideValueSet.Reference);
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(parameterOverrideValueSet.RevisionNumber);
                     writer.WritePropertyName("valueSwitch"u8);
@@ -114,7 +114,7 @@ namespace CDP4JsonSerializer
                     Logger.Log(LogLevel.Trace, "Serializing ParameterOverrideValueSet for Version 1.1.0");
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ClassKind.ToString());
-                    writer.WriteString("computed"u8, parameterOverrideValueSet.Computed.ToJsonString());
+                    writer.WriteValueArray("computed"u8, parameterOverrideValueSet.Computed);
                     writer.WriteStartArray("excludedDomain"u8);
 
                     foreach(var excludedDomainItem in parameterOverrideValueSet.ExcludedDomain.OrderBy(x => x, this.GuidComparer))
@@ -133,16 +133,16 @@ namespace CDP4JsonSerializer
 
                     writer.WriteEndArray();
                     
-                    writer.WriteString("formula"u8, parameterOverrideValueSet.Formula.ToJsonString());
+                    writer.WriteValueArray("formula"u8, parameterOverrideValueSet.Formula);
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterOverrideValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterOverrideValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("parameterValueSet"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ParameterValueSet);
-                    writer.WriteString("published"u8, parameterOverrideValueSet.Published.ToJsonString());
-                    writer.WriteString("reference"u8, parameterOverrideValueSet.Reference.ToJsonString());
+                    writer.WriteValueArray("published"u8, parameterOverrideValueSet.Published);
+                    writer.WriteValueArray("reference"u8, parameterOverrideValueSet.Reference);
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(parameterOverrideValueSet.RevisionNumber);
                     writer.WritePropertyName("valueSwitch"u8);
@@ -152,7 +152,7 @@ namespace CDP4JsonSerializer
                     Logger.Log(LogLevel.Trace, "Serializing ParameterOverrideValueSet for Version 1.2.0");
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ClassKind.ToString());
-                    writer.WriteString("computed"u8, parameterOverrideValueSet.Computed.ToJsonString());
+                    writer.WriteValueArray("computed"u8, parameterOverrideValueSet.Computed);
                     writer.WriteStartArray("excludedDomain"u8);
 
                     foreach(var excludedDomainItem in parameterOverrideValueSet.ExcludedDomain.OrderBy(x => x, this.GuidComparer))
@@ -171,16 +171,16 @@ namespace CDP4JsonSerializer
 
                     writer.WriteEndArray();
                     
-                    writer.WriteString("formula"u8, parameterOverrideValueSet.Formula.ToJsonString());
+                    writer.WriteValueArray("formula"u8, parameterOverrideValueSet.Formula);
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterOverrideValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterOverrideValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("parameterValueSet"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ParameterValueSet);
-                    writer.WriteString("published"u8, parameterOverrideValueSet.Published.ToJsonString());
-                    writer.WriteString("reference"u8, parameterOverrideValueSet.Reference.ToJsonString());
+                    writer.WriteValueArray("published"u8, parameterOverrideValueSet.Published);
+                    writer.WriteValueArray("reference"u8, parameterOverrideValueSet.Reference);
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(parameterOverrideValueSet.RevisionNumber);
                     writer.WritePropertyName("thingPreference"u8);
@@ -192,7 +192,7 @@ namespace CDP4JsonSerializer
                     Logger.Log(LogLevel.Trace, "Serializing ParameterOverrideValueSet for Version 1.3.0");
                     writer.WritePropertyName("classKind"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ClassKind.ToString());
-                    writer.WriteString("computed"u8, parameterOverrideValueSet.Computed.ToJsonString());
+                    writer.WriteValueArray("computed"u8, parameterOverrideValueSet.Computed);
                     writer.WriteStartArray("excludedDomain"u8);
 
                     foreach(var excludedDomainItem in parameterOverrideValueSet.ExcludedDomain.OrderBy(x => x, this.GuidComparer))
@@ -211,16 +211,16 @@ namespace CDP4JsonSerializer
 
                     writer.WriteEndArray();
                     
-                    writer.WriteString("formula"u8, parameterOverrideValueSet.Formula.ToJsonString());
+                    writer.WriteValueArray("formula"u8, parameterOverrideValueSet.Formula);
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterOverrideValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterOverrideValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("parameterValueSet"u8);
                     writer.WriteStringValue(parameterOverrideValueSet.ParameterValueSet);
-                    writer.WriteString("published"u8, parameterOverrideValueSet.Published.ToJsonString());
-                    writer.WriteString("reference"u8, parameterOverrideValueSet.Reference.ToJsonString());
+                    writer.WriteValueArray("published"u8, parameterOverrideValueSet.Published);
+                    writer.WriteValueArray("reference"u8, parameterOverrideValueSet.Reference);
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(parameterOverrideValueSet.RevisionNumber);
                     writer.WritePropertyName("thingPreference"u8);
@@ -252,7 +252,7 @@ namespace CDP4JsonSerializer
 
                 writer.WritePropertyName("classKind"u8);
                 writer.WriteStringValue(parameterOverrideValueSet.ClassKind.ToString());
-                writer.WriteString("computed"u8, parameterOverrideValueSet.Computed.ToJsonString());
+                writer.WriteValueArray("computed"u8, parameterOverrideValueSet.Computed);
 
                 writer.WriteStartArray("excludedDomain"u8);
 
@@ -273,16 +273,16 @@ namespace CDP4JsonSerializer
 
                 writer.WriteEndArray();
                 
-                writer.WriteString("formula"u8, parameterOverrideValueSet.Formula.ToJsonString());
+                writer.WriteValueArray("formula"u8, parameterOverrideValueSet.Formula);
                 writer.WritePropertyName("iid"u8);
                 writer.WriteStringValue(parameterOverrideValueSet.Iid);
-                writer.WriteString("manual"u8, parameterOverrideValueSet.Manual.ToJsonString());
+                writer.WriteValueArray("manual"u8, parameterOverrideValueSet.Manual);
                 writer.WritePropertyName("modifiedOn"u8);
                 writer.WriteStringValue(parameterOverrideValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                 writer.WritePropertyName("parameterValueSet"u8);
                 writer.WriteStringValue(parameterOverrideValueSet.ParameterValueSet);
-                writer.WriteString("published"u8, parameterOverrideValueSet.Published.ToJsonString());
-                writer.WriteString("reference"u8, parameterOverrideValueSet.Reference.ToJsonString());
+                writer.WriteValueArray("published"u8, parameterOverrideValueSet.Published);
+                writer.WriteValueArray("reference"u8, parameterOverrideValueSet.Reference);
                 writer.WritePropertyName("revisionNumber"u8);
                 writer.WriteNumberValue(parameterOverrideValueSet.RevisionNumber);
                 writer.WritePropertyName("thingPreference"u8);
@@ -338,7 +338,7 @@ namespace CDP4JsonSerializer
 
                     break;
                 case "computed":
-                    writer.WriteString("computed"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("computed"u8, (ValueArray<string>)value);
                     break;
                 case "excludeddomain":
                     if (value == null)
@@ -375,7 +375,7 @@ namespace CDP4JsonSerializer
                     }
                     break;
                 case "formula":
-                    writer.WriteString("formula"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("formula"u8, (ValueArray<string>)value);
                     break;
                 case "iid":
                     writer.WritePropertyName("iid"u8);
@@ -391,7 +391,7 @@ namespace CDP4JsonSerializer
 
                     break;
                 case "manual":
-                    writer.WriteString("manual"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("manual"u8, (ValueArray<string>)value);
                     break;
                 case "modifiedon":
                     writer.WritePropertyName("modifiedOn"u8);
@@ -420,10 +420,10 @@ namespace CDP4JsonSerializer
 
                     break;
                 case "published":
-                    writer.WriteString("published"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("published"u8, (ValueArray<string>)value);
                     break;
                 case "reference":
-                    writer.WriteString("reference"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("reference"u8, (ValueArray<string>)value);
                     break;
                 case "revisionnumber":
                     writer.WritePropertyName("revisionNumber"u8);
