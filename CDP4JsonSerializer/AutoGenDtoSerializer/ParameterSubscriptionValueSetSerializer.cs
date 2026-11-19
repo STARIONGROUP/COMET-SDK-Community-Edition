@@ -98,7 +98,7 @@ namespace CDP4JsonSerializer
                     writer.WriteStringValue(parameterSubscriptionValueSet.ClassKind.ToString());
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterSubscriptionValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterSubscriptionValueSet.Manual);
                     writer.WritePropertyName("revisionNumber"u8);
                     writer.WriteNumberValue(parameterSubscriptionValueSet.RevisionNumber);
                     writer.WritePropertyName("subscribedValueSet"u8);
@@ -130,7 +130,7 @@ namespace CDP4JsonSerializer
                     
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterSubscriptionValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterSubscriptionValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
@@ -164,7 +164,7 @@ namespace CDP4JsonSerializer
                     
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterSubscriptionValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterSubscriptionValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
@@ -200,7 +200,7 @@ namespace CDP4JsonSerializer
                     
                     writer.WritePropertyName("iid"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.Iid);
-                    writer.WriteString("manual"u8, parameterSubscriptionValueSet.Manual.ToJsonString());
+                    writer.WriteValueArray("manual"u8, parameterSubscriptionValueSet.Manual);
                     writer.WritePropertyName("modifiedOn"u8);
                     writer.WriteStringValue(parameterSubscriptionValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                     writer.WritePropertyName("revisionNumber"u8);
@@ -258,7 +258,7 @@ namespace CDP4JsonSerializer
                 
                 writer.WritePropertyName("iid"u8);
                 writer.WriteStringValue(parameterSubscriptionValueSet.Iid);
-                writer.WriteString("manual"u8, parameterSubscriptionValueSet.Manual.ToJsonString());
+                writer.WriteValueArray("manual"u8, parameterSubscriptionValueSet.Manual);
                 writer.WritePropertyName("modifiedOn"u8);
                 writer.WriteStringValue(parameterSubscriptionValueSet.ModifiedOn.ToString(SerializerHelper.DateTimeFormat));
                 writer.WritePropertyName("revisionNumber"u8);
@@ -365,7 +365,7 @@ namespace CDP4JsonSerializer
 
                     break;
                 case "manual":
-                    writer.WriteString("manual"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("manual"u8, (ValueArray<string>)value);
                     break;
                 case "modifiedon":
                     writer.WritePropertyName("modifiedOn"u8);

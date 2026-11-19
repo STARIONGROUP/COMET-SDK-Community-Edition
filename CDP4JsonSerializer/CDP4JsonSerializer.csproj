@@ -7,8 +7,8 @@
         <PackageId>CDP4JsonSerializer-CE</PackageId>
         <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON MBSE</PackageTags>
         <PackageReleaseNotes>
-            - [Add] SerializeThing and SerializeClasslessDto overloads that write UTF-8 JSON to a Utf8JsonWriter or IBufferWriter&lt;byte&gt; without a requested data model version; fixes #421
-            - [Update] ToJsonString no longer copies the UTF-8 buffer before decoding
+            - [REFACTOR] Json Serializer proper buffering instead of unnecessary writing to strings; fixes #421
+            - [Update] ValueArray values are written straight to UTF-8 without intermediate strings; fixes #422
         </PackageReleaseNotes>
     </PropertyGroup>
 
