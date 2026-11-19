@@ -107,6 +107,40 @@ namespace CDP4JsonSerializer.Tests.Helper
         }
 
         [Test]
+        public void VerifyThatAdvanceAcceptsTheFullCapacity()
+        {
+            using var writer = new PooledByteBufferWriter(16);
+            var capacity = writer.Capacity;
+
+            Assert.That(() => writer.Advance(capacity), Throws.Nothing);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(writer.WrittenCount, Is.EqualTo(capacity));
+                Assert.That(writer.Capacity, Is.EqualTo(capacity));
+                Assert.That(writer.WrittenSegment.Count, Is.EqualTo(capacity));
+                Assert.That(() => writer.Advance(1), Throws.TypeOf<ArgumentOutOfRangeException>());
+            });
+        }
+
+        [Test]
+        public void VerifyThatAdvanceAndWrittenSegmentAfterDisposeThrowObjectDisposedException()
+        {
+            var writer = new PooledByteBufferWriter(16);
+            writer.GetSpan(4);
+            writer.Advance(4);
+
+            writer.Dispose();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => writer.Advance(0), Throws.TypeOf<ObjectDisposedException>());
+                Assert.That(() => writer.Advance(1), Throws.TypeOf<ObjectDisposedException>());
+                Assert.That(() => writer.WrittenSegment, Throws.TypeOf<ObjectDisposedException>());
+            });
+        }
+
+        [Test]
         public void VerifyThatBufferGrowsAndKeepsWrittenBytes()
         {
             using var writer = new PooledByteBufferWriter(16);

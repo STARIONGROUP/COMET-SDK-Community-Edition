@@ -74,7 +74,7 @@ namespace CDP4JsonSerializer
         /// <summary>
         /// The size above which the thread-cached buffer is returned to the pool instead of being kept for the next <see cref="ValueArray{String}"/>
         /// </summary>
-        private const int MaxCachedValueArrayBufferSize = 1024 * 1024;
+        private const int MaxCachedValueArrayBufferSize = 64 * 1024;
 
         /// <summary>
         /// The <see cref="JsonWriterOptions"/> used to write the JSON array inside the value of a <see cref="ValueArray{String}"/> property.
@@ -97,6 +97,11 @@ namespace CDP4JsonSerializer
         /// The <see cref="Utf8JsonWriter"/> that writes the JSON array of a <see cref="ValueArray{String}"/> into <see cref="valueArrayBuffer"/>, cached per thread
         /// </summary>
         [ThreadStatic] private static Utf8JsonWriter valueArrayWriter;
+
+        /// <summary>
+        /// Gets the size of the buffer that is cached for the current thread, 0 when there is none
+        /// </summary>
+        internal static int CachedValueArrayBufferCapacity => valueArrayBuffer?.Capacity ?? 0;
 
         /// <summary>
         /// Creates the new instance of the <see cref="SerializerHelper"/> static class
@@ -142,12 +147,19 @@ namespace CDP4JsonSerializer
                 throw new ArgumentNullException(nameof(valueArray));
             }
 
-            var buffer = EncodeValueArray(valueArray);
-            var segment = buffer.WrittenSegment;
-            var json = Encoding.UTF8.GetString(segment.Array, segment.Offset, segment.Count);
-            ReleaseValueArrayBuffer(buffer);
+            var buffer = valueArrayBuffer ??= new PooledByteBufferWriter(InitialValueArrayBufferSize);
 
-            return json;
+            try
+            {
+                EncodeValueArray(buffer, valueArray);
+                var segment = buffer.WrittenSegment;
+
+                return Encoding.UTF8.GetString(segment.Array, segment.Offset, segment.Count);
+            }
+            finally
+            {
+                ReleaseValueArrayBuffer(buffer);
+            }
         }
 
         /// <summary>
@@ -171,19 +183,26 @@ namespace CDP4JsonSerializer
                 throw new ArgumentNullException(nameof(valueArray));
             }
 
-            var buffer = EncodeValueArray(valueArray);
-            writer.WriteString(utf8PropertyName, buffer.WrittenSpan);
-            ReleaseValueArrayBuffer(buffer);
+            var buffer = valueArrayBuffer ??= new PooledByteBufferWriter(InitialValueArrayBufferSize);
+
+            try
+            {
+                EncodeValueArray(buffer, valueArray);
+                writer.WriteString(utf8PropertyName, buffer.WrittenSpan);
+            }
+            finally
+            {
+                ReleaseValueArrayBuffer(buffer);
+            }
         }
 
         /// <summary>
         /// Writes the JSON array of the values of a <see cref="ValueArray{String}"/> as UTF-8 into the buffer that is cached for the current thread
         /// </summary>
+        /// <param name="buffer">The thread-cached <see cref="PooledByteBufferWriter"/> that receives the encoded array; release it with <see cref="ReleaseValueArrayBuffer"/>, also when this method throws</param>
         /// <param name="valueArray">The <see cref="ValueArray{String}"/> to encode</param>
-        /// <returns>The <see cref="PooledByteBufferWriter"/> that holds the encoded array; release it with <see cref="ReleaseValueArrayBuffer"/></returns>
-        private static PooledByteBufferWriter EncodeValueArray(ValueArray<string> valueArray)
+        private static void EncodeValueArray(PooledByteBufferWriter buffer, ValueArray<string> valueArray)
         {
-            var buffer = valueArrayBuffer ??= new PooledByteBufferWriter(InitialValueArrayBufferSize);
             buffer.Clear();
 
             var arrayWriter = valueArrayWriter ??= new Utf8JsonWriter(buffer, ValueArrayWriterOptions);
@@ -198,14 +217,12 @@ namespace CDP4JsonSerializer
 
             arrayWriter.WriteEndArray();
             arrayWriter.Flush();
-
-            return buffer;
         }
 
         /// <summary>
-        /// Makes the thread-cached buffer available for the next <see cref="ValueArray{String}"/>, and drops it when a very large array has grown it
+        /// Makes the thread-cached buffer available for the next <see cref="ValueArray{String}"/>, and drops it when a large array has grown it
         /// </summary>
-        /// <param name="buffer">The <see cref="PooledByteBufferWriter"/> returned by <see cref="EncodeValueArray"/></param>
+        /// <param name="buffer">The <see cref="PooledByteBufferWriter"/> that was passed to <see cref="EncodeValueArray"/></param>
         private static void ReleaseValueArrayBuffer(PooledByteBufferWriter buffer)
         {
             if (buffer.Capacity > MaxCachedValueArrayBufferSize)

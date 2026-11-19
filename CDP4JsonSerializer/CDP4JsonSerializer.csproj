@@ -17,7 +17,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Buffers" />
         <PackageReference Include="System.Memory" />
         <PackageReference Include="System.Text.Json" />
     </ItemGroup>

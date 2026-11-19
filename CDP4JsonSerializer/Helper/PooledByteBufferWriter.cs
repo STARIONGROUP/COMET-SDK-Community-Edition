@@ -71,7 +71,15 @@ namespace CDP4JsonSerializer.Helper
         /// <summary>
         /// Gets the written bytes as an <see cref="ArraySegment{T}"/>. The segment is only valid until the next write or <see cref="Clear"/>.
         /// </summary>
-        public ArraySegment<byte> WrittenSegment => new ArraySegment<byte>(this.buffer, 0, this.WrittenCount);
+        /// <exception cref="ObjectDisposedException">Thrown when the writer is disposed</exception>
+        public ArraySegment<byte> WrittenSegment
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return new ArraySegment<byte>(this.buffer, 0, this.WrittenCount);
+            }
+        }
 
         /// <summary>
         /// Forgets the written bytes so that the buffer can be written again from the start
@@ -82,8 +90,11 @@ namespace CDP4JsonSerializer.Helper
         }
 
         /// <inheritdoc />
+        /// <exception cref="ObjectDisposedException">Thrown when the writer is disposed</exception>
         public void Advance(int count)
         {
+            this.ThrowIfDisposed();
+
             if (count < 0 || this.WrittenCount + count > this.buffer.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(count));
@@ -129,10 +140,7 @@ namespace CDP4JsonSerializer.Helper
         /// <param name="sizeHint">The minimum number of bytes that must be available after the written bytes</param>
         private void EnsureCapacity(int sizeHint)
         {
-            if (this.buffer == null)
-            {
-                throw new ObjectDisposedException(nameof(PooledByteBufferWriter));
-            }
+            this.ThrowIfDisposed();
 
             if (sizeHint < 1)
             {
@@ -152,6 +160,17 @@ namespace CDP4JsonSerializer.Helper
             Buffer.BlockCopy(this.buffer, 0, newBuffer, 0, this.WrittenCount);
             ArrayPool<byte>.Shared.Return(this.buffer);
             this.buffer = newBuffer;
+        }
+
+        /// <summary>
+        /// Throws an <see cref="ObjectDisposedException"/> when the rented buffer has been returned to the pool
+        /// </summary>
+        private void ThrowIfDisposed()
+        {
+            if (this.buffer == null)
+            {
+                throw new ObjectDisposedException(nameof(PooledByteBufferWriter));
+            }
         }
     }
 }

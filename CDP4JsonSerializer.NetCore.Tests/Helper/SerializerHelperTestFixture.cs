@@ -322,6 +322,67 @@ namespace CDP4JsonSerializer.Tests.Helper
         }
 
         [Test]
+        public void VerifyThatOnlySmallBuffersAreKeptInTheThreadCache()
+        {
+            const int maxCachedSize = 64 * 1024;
+
+            var medium = new ValueArray<string>(new[] { new string('x', 100 * 1024) });
+            var small = new ValueArray<string>(new[] { "a" });
+
+            Assert.That(medium.ToJsonString().Length, Is.EqualTo(100 * 1024 + 4));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "a buffer above the cap must go back to the pool after ToJsonString");
+
+            Assert.That(small.ToJsonString(), Is.EqualTo("[\"a\"]"));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.GreaterThan(0).And.LessThanOrEqualTo(maxCachedSize), "a small buffer must stay cached");
+
+            WriteObject(default, writer => writer.WriteValueArray("v"u8, medium));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "a buffer above the cap must go back to the pool after WriteValueArray");
+
+            WriteObject(default, writer => writer.WriteValueArray("v"u8, small));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.GreaterThan(0).And.LessThanOrEqualTo(maxCachedSize), "a small buffer must stay cached");
+        }
+
+        [Test]
+        public void VerifyThatValueArrayWriterRecoversAfterInvalidInput()
+        {
+            var invalid = new ValueArray<string>(new[] { "a\uD800b", "\uDC00" });
+            var valid = new[] { "a" };
+
+            try
+            {
+                invalid.ToJsonString();
+            }
+            catch (Exception exception)
+            {
+                TestContext.WriteLine($"lone surrogates are rejected with {exception.GetType().Name}");
+            }
+
+            Assert.That(new ValueArray<string>(valid).ToJsonString(), Is.EqualTo("[\"a\"]"));
+
+            var expected = WriteObject(default, writer => writer.WriteString("v"u8, LegacyToJsonString(valid)));
+            Assert.That(WriteObject(default, writer => writer.WriteValueArray("v"u8, new ValueArray<string>(valid))), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void VerifyThatWriteValueArrayIsUsableAfterTheOuterWriterThrows()
+        {
+            var large = new ValueArray<string>(new[] { new string('x', 2 * 1024 * 1024) });
+            var valid = new[] { "a" };
+
+            using (var stream = new MemoryStream())
+            using (var writer = new Utf8JsonWriter(stream))
+            {
+                // a property cannot be written outside of an object
+                Assert.That(() => writer.WriteValueArray("v"u8, large), Throws.TypeOf<InvalidOperationException>());
+            }
+
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "the large buffer must go back to the pool when the outer writer throws");
+
+            var expected = WriteObject(default, writer => writer.WriteString("v"u8, LegacyToJsonString(valid)));
+            Assert.That(WriteObject(default, writer => writer.WriteValueArray("v"u8, new ValueArray<string>(valid))), Is.EqualTo(expected));
+        }
+
+        [Test]
         public void VerifyThatToValueArrayConvertsToTheRequestedType()
         {
             Assert.Multiple(() =>
@@ -466,6 +527,7 @@ namespace CDP4JsonSerializer.Tests.Helper
             yield return new[] { "ünïcödé", "😀 emoji", "日本語" };
             yield return new[] { "<tag>&'+", "quote\" backslash\\ slash/" };
             yield return new[] { "\u0000\u001f control", "line\r\nbreak", char.ConvertFromUtf32(0x2028) + char.ConvertFromUtf32(0x2029) };
+            yield return new[] { "a\uD800b", "\uDC00" };
             yield return TestStrings;
 
             foreach (var testString in TestStrings)
