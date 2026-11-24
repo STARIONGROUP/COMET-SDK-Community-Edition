@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SerializerHelper.cs" company="Starion Group S.A.">
-//    Copyright (c) 2015-2025 Starion Group S.A.
+//    Copyright (c) 2015-2026 Starion Group S.A.
 //
 //    Author: Sam Gerené, Merlin Bieze, Alex Vorobiev, Naron Phou, Alexander van Delft
 //
@@ -27,6 +27,8 @@ namespace CDP4JsonSerializer
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
     using System.Text.Json;
     using System.Text.RegularExpressions;
 
@@ -65,6 +67,43 @@ namespace CDP4JsonSerializer
         private static readonly Regex HstoreToValueArrayRegex;
 
         /// <summary>
+        /// The size of the buffer that is rented the first time a <see cref="ValueArray{String}"/> is written on a thread
+        /// </summary>
+        private const int InitialValueArrayBufferSize = 256;
+
+        /// <summary>
+        /// The size above which the thread-cached buffer is returned to the pool instead of being kept for the next <see cref="ValueArray{String}"/>
+        /// </summary>
+        private const int MaxCachedValueArrayBufferSize = 64 * 1024;
+
+        /// <summary>
+        /// The <see cref="JsonWriterOptions"/> used to write the JSON array inside the value of a <see cref="ValueArray{String}"/> property.
+        /// The encoder is the one of <see cref="JsonSerializerOptionsCreator.CreateNew"/>, so the escaping is the same as the one of
+        /// <see cref="JsonSerializer.Serialize{TValue}(TValue, JsonSerializerOptions)"/> that was used before.
+        /// </summary>
+        private static readonly JsonWriterOptions ValueArrayWriterOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Indented = false,
+            SkipValidation = true
+        };
+
+        /// <summary>
+        /// The buffer that receives the JSON array of a <see cref="ValueArray{String}"/>, cached per thread so that no allocation is needed per array
+        /// </summary>
+        [ThreadStatic] private static PooledByteBufferWriter valueArrayBuffer;
+
+        /// <summary>
+        /// The <see cref="Utf8JsonWriter"/> that writes the JSON array of a <see cref="ValueArray{String}"/> into <see cref="valueArrayBuffer"/>, cached per thread
+        /// </summary>
+        [ThreadStatic] private static Utf8JsonWriter valueArrayWriter;
+
+        /// <summary>
+        /// Gets the size of the buffer that is cached for the current thread, 0 when there is none
+        /// </summary>
+        internal static int CachedValueArrayBufferCapacity => valueArrayBuffer?.Capacity ?? 0;
+
+        /// <summary>
         /// Creates the new instance of the <see cref="SerializerHelper"/> static class
         /// </summary>
         static SerializerHelper()
@@ -96,10 +135,104 @@ namespace CDP4JsonSerializer
         /// </summary>
         /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
         /// <returns>The JSON string</returns>
+        /// <remarks>
+        /// When the value is written into a <see cref="Utf8JsonWriter"/>, use <see cref="WriteValueArray"/> instead: it produces the same
+        /// bytes without creating this intermediate <see cref="string"/>.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="valueArray"/> is null</exception>
         public static string ToJsonString(this ValueArray<string> valueArray)
         {
-            var items = ValueArrayToStringList(valueArray);
-            return $"[{string.Join(",", items)}]";
+            if (valueArray == null)
+            {
+                throw new ArgumentNullException(nameof(valueArray));
+            }
+
+            var buffer = valueArrayBuffer ??= new PooledByteBufferWriter(InitialValueArrayBufferSize);
+
+            try
+            {
+                EncodeValueArray(buffer, valueArray);
+                var segment = buffer.WrittenSegment;
+
+                return Encoding.UTF8.GetString(segment.Array, segment.Offset, segment.Count);
+            }
+            finally
+            {
+                ReleaseValueArrayBuffer(buffer);
+            }
+        }
+
+        /// <summary>
+        /// Writes a <see cref="ValueArray{String}"/> as a property into an <see cref="Utf8JsonWriter"/>, without building an intermediate <see cref="string"/>.
+        /// The value is a JSON string that contains the JSON array of the values, as prescribed by ECSS-E-TM-10-25 Annex C:
+        /// the output is byte-for-byte the same as <c>writer.WriteString(utf8PropertyName, valueArray.ToJsonString())</c>.
+        /// </summary>
+        /// <param name="writer">The <see cref="Utf8JsonWriter"/> to write to</param>
+        /// <param name="utf8PropertyName">The UTF-8 encoded name of the property</param>
+        /// <param name="valueArray">The <see cref="ValueArray{String}"/> to write</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="writer"/> or <paramref name="valueArray"/> is null</exception>
+        public static void WriteValueArray(this Utf8JsonWriter writer, ReadOnlySpan<byte> utf8PropertyName, ValueArray<string> valueArray)
+        {
+            if (writer == null)
+            {
+                throw new ArgumentNullException(nameof(writer));
+            }
+
+            if (valueArray == null)
+            {
+                throw new ArgumentNullException(nameof(valueArray));
+            }
+
+            var buffer = valueArrayBuffer ??= new PooledByteBufferWriter(InitialValueArrayBufferSize);
+
+            try
+            {
+                EncodeValueArray(buffer, valueArray);
+                writer.WriteString(utf8PropertyName, buffer.WrittenSpan);
+            }
+            finally
+            {
+                ReleaseValueArrayBuffer(buffer);
+            }
+        }
+
+        /// <summary>
+        /// Writes the JSON array of the values of a <see cref="ValueArray{String}"/> as UTF-8 into the buffer that is cached for the current thread
+        /// </summary>
+        /// <param name="buffer">The thread-cached <see cref="PooledByteBufferWriter"/> that receives the encoded array; release it with <see cref="ReleaseValueArrayBuffer"/>, also when this method throws</param>
+        /// <param name="valueArray">The <see cref="ValueArray{String}"/> to encode</param>
+        private static void EncodeValueArray(PooledByteBufferWriter buffer, ValueArray<string> valueArray)
+        {
+            buffer.Clear();
+
+            var arrayWriter = valueArrayWriter ??= new Utf8JsonWriter(buffer, ValueArrayWriterOptions);
+            arrayWriter.Reset(buffer);
+
+            arrayWriter.WriteStartArray();
+
+            foreach (var value in valueArray)
+            {
+                arrayWriter.WriteStringValue(value);
+            }
+
+            arrayWriter.WriteEndArray();
+            arrayWriter.Flush();
+        }
+
+        /// <summary>
+        /// Makes the thread-cached buffer available for the next <see cref="ValueArray{String}"/>, and drops it when a large array has grown it
+        /// </summary>
+        /// <param name="buffer">The <see cref="PooledByteBufferWriter"/> that was passed to <see cref="EncodeValueArray"/></param>
+        private static void ReleaseValueArrayBuffer(PooledByteBufferWriter buffer)
+        {
+            if (buffer.Capacity > MaxCachedValueArrayBufferSize)
+            {
+                valueArrayBuffer = null;
+                buffer.Dispose();
+                return;
+            }
+
+            buffer.Clear();
         }
 
         /// <summary>
@@ -232,27 +365,32 @@ namespace CDP4JsonSerializer
         /// </summary>
         /// <param name="valueArray">The <see cref="ValueArray{String}"/></param>
         /// <returns>The HStore string</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="valueArray"/> is null</exception>
         public static string ToHstoreString(ValueArray<string> valueArray)
         {
-            var items = ValueArrayToStringList(valueArray);
-            return $"{{{string.Join(";", items)}}}";
-        }
-
-        /// <summary>
-        /// Escape double quote and backslash
-        /// </summary>
-        /// <param name="valueArray"></param>
-        /// <returns>IEnumerable containing escaped strings</returns>
-        private static IEnumerable<string> ValueArrayToStringList(ValueArray<string> valueArray)
-        {
-            var items = valueArray.ToList();
-
-            for (var i = 0; i < items.Count; i++)
+            if (valueArray == null)
             {
-                items[i] = $"{JsonSerializer.Serialize(items[i], JsonSerializerOptions)}";
+                throw new ArgumentNullException(nameof(valueArray));
             }
 
-            return items;
+            var builder = new StringBuilder();
+            builder.Append('{');
+            var isFirst = true;
+
+            foreach (var value in valueArray)
+            {
+                if (!isFirst)
+                {
+                    builder.Append(';');
+                }
+
+                builder.Append(JsonSerializer.Serialize(value, JsonSerializerOptions));
+                isFirst = false;
+            }
+
+            builder.Append('}');
+
+            return builder.ToString();
         }
     }
 }

@@ -115,7 +115,7 @@ namespace CDP4JsonSerializer
                         writer.WriteNullValue();
                     }
 
-                    writer.WriteString("value"u8, relationalExpression.Value.ToJsonString());
+                    writer.WriteValueArray("value"u8, relationalExpression.Value);
                     break;
                 case "1.1.0":
                     Logger.Log(LogLevel.Trace, "Serializing RelationalExpression for Version 1.1.0");
@@ -160,7 +160,7 @@ namespace CDP4JsonSerializer
                         writer.WriteNullValue();
                     }
 
-                    writer.WriteString("value"u8, relationalExpression.Value.ToJsonString());
+                    writer.WriteValueArray("value"u8, relationalExpression.Value);
                     break;
                 case "1.2.0":
                     Logger.Log(LogLevel.Trace, "Serializing RelationalExpression for Version 1.2.0");
@@ -207,7 +207,7 @@ namespace CDP4JsonSerializer
 
                     writer.WritePropertyName("thingPreference"u8);
                     writer.WriteStringValue(relationalExpression.ThingPreference);
-                    writer.WriteString("value"u8, relationalExpression.Value.ToJsonString());
+                    writer.WriteValueArray("value"u8, relationalExpression.Value);
                     break;
                 case "1.3.0":
                     Logger.Log(LogLevel.Trace, "Serializing RelationalExpression for Version 1.3.0");
@@ -254,7 +254,7 @@ namespace CDP4JsonSerializer
 
                     writer.WritePropertyName("thingPreference"u8);
                     writer.WriteStringValue(relationalExpression.ThingPreference);
-                    writer.WriteString("value"u8, relationalExpression.Value.ToJsonString());
+                    writer.WriteValueArray("value"u8, relationalExpression.Value);
                     break;
                 default:
                     throw new NotSupportedException($"The provided version {requestedDataModelVersion.ToString(3)} is not supported");
@@ -323,7 +323,7 @@ namespace CDP4JsonSerializer
 
                 writer.WritePropertyName("thingPreference"u8);
                 writer.WriteStringValue(relationalExpression.ThingPreference);
-                writer.WriteString("value"u8, relationalExpression.Value.ToJsonString());
+                writer.WriteValueArray("value"u8, relationalExpression.Value);
 
             writer.WriteEndObject();
         }
@@ -498,7 +498,7 @@ namespace CDP4JsonSerializer
 
                     break;
                 case "value":
-                    writer.WriteString("value"u8, ((ValueArray<string>)value).ToJsonString());
+                    writer.WriteValueArray("value"u8, (ValueArray<string>)value);
                     break;
                 default:
                     throw new ArgumentException($"The requested property {propertyName} does not exist on the RelationalExpression");

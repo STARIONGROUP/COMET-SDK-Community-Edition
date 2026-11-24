@@ -28,12 +28,20 @@ namespace CDP4JsonSerializer.Tests.Helper
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
     using System.Text.Json;
     using System.Text.Json.Nodes;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using CDP4Common.EngineeringModelData;
     using CDP4Common.MetaInfo;
     using CDP4Common.Types;
+
+    using CDP4JsonSerializer.Helper;
+
+    using JetBrains.dotMemoryUnit;
 
     using NUnit.Framework;
 
@@ -125,7 +133,410 @@ namespace CDP4JsonSerializer.Tests.Helper
             Assert.That(resultjson, Is.EqualTo(json), $"Json creation failed for string \"{input}\".");
         }
 
-        private const string JsonString = @"{""widget"": {
+        [Test]
+        public void VerifyThatToJsonStringMatchesLegacyFormat([ValueSource(nameof(ValueArrayCases))] string[] items)
+        {
+            var valueArray = new ValueArray<string>(items);
+
+            Assert.That(valueArray.ToJsonString(), Is.EqualTo(LegacyToJsonString(items)));
+        }
+
+        [Test]
+        public void VerifyThatWriteValueArrayMatchesWriteStringOfLegacyFormat([ValueSource(nameof(ValueArrayCases))] string[] items)
+        {
+            var valueArray = new ValueArray<string>(items);
+            var legacyJson = LegacyToJsonString(items);
+
+            var writerOptions = new[]
+            {
+                new JsonWriterOptions(),
+                new JsonWriterOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping },
+                new JsonWriterOptions { Indented = true }
+            };
+
+            foreach (var options in writerOptions)
+            {
+                var expected = WriteObject(options, writer => writer.WriteString("manual"u8, legacyJson));
+                var actual = WriteObject(options, writer => writer.WriteValueArray("manual"u8, valueArray));
+
+                Assert.That(actual, Is.EqualTo(expected), $"WriteValueArray differs from the legacy output for encoder {options.Encoder?.GetType().Name ?? "default"}, indented {options.Indented}");
+            }
+        }
+
+        [Test]
+        public void VerifyThatToHstoreStringMatchesLegacyFormat([ValueSource(nameof(ValueArrayCases))] string[] items)
+        {
+            var legacyOptions = JsonSerializerOptionsCreator.CreateNew();
+            var expected = $"{{{string.Join(";", items.Select(x => JsonSerializer.Serialize(x, legacyOptions)))}}}";
+
+            Assert.That(SerializerHelper.ToHstoreString(new ValueArray<string>(items)), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void VerifyThatWriteValueArrayIsThreadSafe()
+        {
+            var cases = ValueArrayCases().ToList();
+            var failures = 0;
+
+            Parallel.For(0, 32, new ParallelOptions { MaxDegreeOfParallelism = 8 }, worker =>
+            {
+                for (var i = 0; i < 200; i++)
+                {
+                    var items = cases[(worker + i) % cases.Count];
+                    var valueArray = new ValueArray<string>(items);
+                    var legacyJson = LegacyToJsonString(items);
+
+                    if (valueArray.ToJsonString() != legacyJson)
+                    {
+                        Interlocked.Increment(ref failures);
+                    }
+
+                    var expected = WriteObject(default, writer => writer.WriteString("value"u8, legacyJson));
+                    var actual = WriteObject(default, writer => writer.WriteValueArray("value"u8, valueArray));
+
+                    if (!actual.SequenceEqual(expected))
+                    {
+                        Interlocked.Increment(ref failures);
+                    }
+                }
+            });
+
+            Assert.That(failures, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void VerifyThatWriteValueArrayThrowsOnNullArguments()
+        {
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(() => ((Utf8JsonWriter)null).WriteValueArray("manual"u8, new ValueArray<string>()), Throws.ArgumentNullException);
+                Assert.That(() => writer.WriteValueArray("manual"u8, null), Throws.ArgumentNullException);
+                Assert.That(() => ((ValueArray<string>)null).ToJsonString(), Throws.ArgumentNullException);
+                Assert.That(() => SerializerHelper.ToHstoreString(null), Throws.ArgumentNullException);
+            });
+        }
+
+        [Test]
+        public void VerifyThatParameterValueSetValueArraysAreWrittenInLegacyFormat()
+        {
+            var manual = new[] { "1", "a\"b", "ünïcödé" };
+            var computed = new[] { "-", "<tag>&'+", "back\\slash" };
+            var reference = new[] { "1.5", "line\r\nbreak", "\t" };
+            var published = new[] { "", "😀", "日本語" };
+            var formula = new[] { "=2*(2+2)", "", "x" };
+
+            var valueSet = new CDP4Common.DTO.ParameterValueSet(Guid.NewGuid(), 1)
+            {
+                Manual = new ValueArray<string>(manual),
+                Computed = new ValueArray<string>(computed),
+                Reference = new ValueArray<string>(reference),
+                Published = new ValueArray<string>(published),
+                Formula = new ValueArray<string>(formula),
+                ValueSwitch = ParameterSwitchKind.MANUAL
+            };
+
+            using (var document = JsonDocument.Parse(valueSet.ToJsonString()))
+            {
+                AssertValueArrays(document.RootElement, manual, computed, reference, published, formula);
+            }
+
+            var serializer = new Cdp4JsonSerializer(new MetaDataProvider(), new Version(1, 0, 0));
+
+            using var stream = new MemoryStream();
+            serializer.SerializeToStream(new[] { valueSet }, stream);
+
+            var json = Encoding.UTF8.GetString(stream.ToArray());
+            Assert.That(json, Does.Contain("\"manual\":" + JsonSerializer.Serialize(LegacyToJsonString(manual), JsonSerializerOptionsCreator.CreateNew())));
+
+            using (var document = JsonDocument.Parse(json))
+            {
+                AssertValueArrays(document.RootElement[0], manual, computed, reference, published, formula);
+            }
+        }
+
+        [Test]
+        [DotMemoryUnit(CollectAllocations = true, FailIfRunWithoutSupport = false)]
+        public void VerifyThatValueArraysDoNotAllocateIntermediateStrings()
+        {
+            const int count = 1000;
+            var values = Enumerable.Range(0, 20).Select(i => $"value {i}").ToArray();
+
+            var valueSets = Enumerable.Range(0, count)
+                .Select(i => new CDP4Common.DTO.ParameterValueSet(Guid.NewGuid(), i)
+                {
+                    Manual = new ValueArray<string>(values),
+                    Computed = new ValueArray<string>(values),
+                    Reference = new ValueArray<string>(values),
+                    Published = new ValueArray<string>(values),
+                    Formula = new ValueArray<string>(values)
+                })
+                .ToList();
+
+            using var stream = new MemoryStream(8192);
+            using var writer = new Utf8JsonWriter(stream);
+
+            // warm up: creates the thread-cached buffer and writer
+            valueSets[0].SerializeThing(writer);
+            writer.Flush();
+
+            var checkPoint = dotMemory.Check();
+
+            foreach (var valueSet in valueSets)
+            {
+                stream.SetLength(0);
+                writer.Reset(stream);
+                valueSet.SerializeThing(writer);
+                writer.Flush();
+            }
+
+            dotMemory.Check(memory =>
+            {
+                var traffic = memory.GetTrafficFrom(checkPoint);
+
+                TestContext.WriteLine($"{count} value sets: {traffic.AllocatedMemory.SizeInBytes} bytes, {traffic.Where(x => x.Type.Is<string>()).AllocatedMemory.ObjectsCount} strings allocated");
+
+                Assert.That(traffic.Where(x => x.Type.Is<List<string>>()).AllocatedMemory.ObjectsCount, Is.EqualTo(0), "value arrays must not be copied into lists");
+                Assert.That(traffic.Where(x => x.Type.Is<string>()).AllocatedMemory.ObjectsCount, Is.LessThan(4 * count), "only the enum and date ToString calls may allocate strings");
+            });
+
+            Assert.That(stream.Length, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void VerifyThatVeryLargeValueArraysAreNotKeptInTheThreadCache()
+        {
+            var large = new ValueArray<string>(new[] { new string('x', 2 * 1024 * 1024) });
+            var small = new ValueArray<string>(new[] { "a" });
+
+            Assert.That(large.ToJsonString().Length, Is.EqualTo(2 * 1024 * 1024 + 4));
+            Assert.That(small.ToJsonString(), Is.EqualTo("[\"a\"]"));
+
+            var largeBytes = WriteObject(default, writer => writer.WriteValueArray("v"u8, large));
+            Assert.That(largeBytes.Length, Is.GreaterThan(2 * 1024 * 1024));
+
+            var expected = WriteObject(default, writer => writer.WriteString("v"u8, "[\"a\"]"));
+            Assert.That(WriteObject(default, writer => writer.WriteValueArray("v"u8, small)), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void VerifyThatOnlySmallBuffersAreKeptInTheThreadCache()
+        {
+            const int maxCachedSize = 64 * 1024;
+
+            var medium = new ValueArray<string>(new[] { new string('x', 100 * 1024) });
+            var small = new ValueArray<string>(new[] { "a" });
+
+            Assert.That(medium.ToJsonString().Length, Is.EqualTo(100 * 1024 + 4));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "a buffer above the cap must go back to the pool after ToJsonString");
+
+            Assert.That(small.ToJsonString(), Is.EqualTo("[\"a\"]"));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.GreaterThan(0).And.LessThanOrEqualTo(maxCachedSize), "a small buffer must stay cached");
+
+            WriteObject(default, writer => writer.WriteValueArray("v"u8, medium));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "a buffer above the cap must go back to the pool after WriteValueArray");
+
+            WriteObject(default, writer => writer.WriteValueArray("v"u8, small));
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.GreaterThan(0).And.LessThanOrEqualTo(maxCachedSize), "a small buffer must stay cached");
+        }
+
+        [Test]
+        public void VerifyThatValueArrayWriterRecoversAfterInvalidInput()
+        {
+            var invalid = new ValueArray<string>(new[] { "a\uD800b", "\uDC00" });
+            var valid = new[] { "a" };
+
+            try
+            {
+                invalid.ToJsonString();
+            }
+            catch (Exception exception)
+            {
+                TestContext.WriteLine($"lone surrogates are rejected with {exception.GetType().Name}");
+            }
+
+            Assert.That(new ValueArray<string>(valid).ToJsonString(), Is.EqualTo("[\"a\"]"));
+
+            var expected = WriteObject(default, writer => writer.WriteString("v"u8, LegacyToJsonString(valid)));
+            Assert.That(WriteObject(default, writer => writer.WriteValueArray("v"u8, new ValueArray<string>(valid))), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void VerifyThatWriteValueArrayIsUsableAfterTheOuterWriterThrows()
+        {
+            var large = new ValueArray<string>(new[] { new string('x', 2 * 1024 * 1024) });
+            var valid = new[] { "a" };
+
+            using (var stream = new MemoryStream())
+            using (var writer = new Utf8JsonWriter(stream))
+            {
+                // a property cannot be written outside of an object
+                Assert.That(() => writer.WriteValueArray("v"u8, large), Throws.TypeOf<InvalidOperationException>());
+            }
+
+            Assert.That(SerializerHelper.CachedValueArrayBufferCapacity, Is.EqualTo(0), "the large buffer must go back to the pool when the outer writer throws");
+
+            var expected = WriteObject(default, writer => writer.WriteString("v"u8, LegacyToJsonString(valid)));
+            Assert.That(WriteObject(default, writer => writer.WriteValueArray("v"u8, new ValueArray<string>(valid))), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void VerifyThatToValueArrayConvertsToTheRequestedType()
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SerializerHelper.ToValueArray<int>("[\"1\",\"2\",\"3\"]"), Is.EqualTo(new ValueArray<int>(new[] { 1, 2, 3 })));
+                Assert.That(SerializerHelper.ToValueArray<long>("[\"9000000000\"]"), Is.EqualTo(new ValueArray<long>(new[] { 9000000000L })));
+                Assert.That(SerializerHelper.ToValueArray<bool>("[\"true\",\"false\"]"), Is.EqualTo(new ValueArray<bool>(new[] { true, false })));
+                Assert.That(SerializerHelper.ToValueArray<string>("[]"), Is.Empty);
+                Assert.That(SerializerHelper.ToValueArray<string>("not an array"), Is.Empty);
+                Assert.That(SerializerHelper.ToValueArray<string>("[\"a\", \"b\"]"), Is.EqualTo(new ValueArray<string>(new[] { "a", "b" })));
+            });
+        }
+
+        [Test]
+        public void VerifyThatHstoreStringRoundTrips()
+        {
+            var valueArray = new ValueArray<string>(new[] { "a\"b", "c;d", "ünïcödé", "", "back\\slash", "line\nbreak" });
+
+            var hstore = SerializerHelper.ToHstoreString(valueArray);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(hstore, Does.StartWith("{").And.EndsWith("}"));
+                Assert.That(SerializerHelper.ToHstoreString(new ValueArray<string>()), Is.EqualTo("{}"));
+                Assert.That(SerializerHelper.ToHstoreString(new ValueArray<string>(new[] { "x" })), Is.EqualTo("{\"x\"}"));
+                Assert.That(SerializerHelper.FromHstoreToValueArray<string>(hstore), Is.EqualTo(valueArray));
+                Assert.That(SerializerHelper.FromHstoreToValueArray<int>("{\"1\";\"2\"}"), Is.EqualTo(new ValueArray<int>(new[] { 1, 2 })));
+                Assert.That(SerializerHelper.FromHstoreToValueArray<string>("{}"), Is.Empty);
+            });
+        }
+
+        [Test]
+        public void VerifyThatWriteOrderedItemSupportsAllValueTypes()
+        {
+            var guid = Guid.NewGuid();
+
+            var cases = new (object Value, string ExpectedJson)[]
+            {
+                ("text", "\"text\""),
+                (guid, $"\"{guid}\""),
+                (true, "true"),
+                (42, "42"),
+                (42L, "42"),
+                (1.5d, "1.5"),
+                (2.5f, "2.5")
+            };
+
+            Assert.Multiple(() =>
+            {
+                foreach (var (value, expectedJson) in cases)
+                {
+                    var json = WriteOrderedItemToString(new OrderedItem { K = 7, V = value });
+                    Assert.That(json, Is.EqualTo($"{{\"k\":7,\"v\":{expectedJson}}}"), $"unexpected JSON for a value of type {value.GetType().Name}");
+                }
+
+                Assert.That(WriteOrderedItemToString(new OrderedItem { K = 1, M = 2, V = "x" }), Is.EqualTo("{\"k\":1,\"m\":2,\"v\":\"x\"}"));
+                Assert.That(() => WriteOrderedItemToString(new OrderedItem { K = 1, V = new DateTime(2020, 1, 1) }), Throws.TypeOf<NotSupportedException>());
+            });
+        }
+
+        [Test]
+        public void VerifyThatToOrderedItemCollectionReadsAllShapes()
+        {
+            const string json = "[{\"k\":1,\"v\":\"a\"},{\"k\":\"2\",\"m\":5,\"v\":3},{\"k\":4,\"m\":null,\"v\":true}]";
+
+            using var document = JsonDocument.Parse(json);
+            var items = document.RootElement.ToOrderedItemCollection().ToList();
+
+            Assert.That(items, Has.Count.EqualTo(3));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(items[0].K, Is.EqualTo(1));
+                Assert.That(items[0].M, Is.Null);
+                Assert.That(items[0].V, Is.EqualTo("a"));
+
+                Assert.That(items[1].K, Is.EqualTo(2), "a key written as a string must be parsed");
+                Assert.That(items[1].M, Is.EqualTo(5));
+                Assert.That(items[1].V, Is.EqualTo(3));
+
+                Assert.That(items[2].K, Is.EqualTo(4));
+                Assert.That(items[2].M, Is.Null, "a null m must be ignored");
+                Assert.That(items[2].V, Is.Null, "a value that is neither a string nor a number is not supported");
+            });
+
+            using var emptyDocument = JsonDocument.Parse("[]");
+            Assert.That(emptyDocument.RootElement.ToOrderedItemCollection(), Is.Empty);
+        }
+
+        private static string WriteOrderedItemToString(OrderedItem orderedItem)
+        {
+            using var stream = new MemoryStream();
+
+            using (var writer = new Utf8JsonWriter(stream))
+            {
+                writer.WriteOrderedItem(orderedItem);
+            }
+
+            return Encoding.UTF8.GetString(stream.ToArray());
+        }
+
+        private static void AssertValueArrays(JsonElement element, string[] manual, string[] computed, string[] reference, string[] published, string[] formula)
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(element.GetProperty("manual").GetString(), Is.EqualTo(LegacyToJsonString(manual)));
+                Assert.That(element.GetProperty("computed").GetString(), Is.EqualTo(LegacyToJsonString(computed)));
+                Assert.That(element.GetProperty("reference").GetString(), Is.EqualTo(LegacyToJsonString(reference)));
+                Assert.That(element.GetProperty("published").GetString(), Is.EqualTo(LegacyToJsonString(published)));
+                Assert.That(element.GetProperty("formula").GetString(), Is.EqualTo(LegacyToJsonString(formula)));
+            });
+        }
+
+        /// <summary>
+        /// The implementation of <see cref="SerializerHelper.ToJsonString"/> before issue #422, used as the oracle for the wire format
+        /// </summary>
+        private static string LegacyToJsonString(IEnumerable<string> items)
+        {
+            var options = JsonSerializerOptionsCreator.CreateNew();
+            return $"[{string.Join(",", items.Select(x => JsonSerializer.Serialize(x, options)))}]";
+        }
+
+        private static byte[] WriteObject(JsonWriterOptions options, Action<Utf8JsonWriter> write)
+        {
+            using var stream = new MemoryStream();
+
+            using (var writer = new Utf8JsonWriter(stream, options))
+            {
+                writer.WriteStartObject();
+                write(writer);
+                writer.WriteEndObject();
+            }
+
+            return stream.ToArray();
+        }
+
+        private static IEnumerable<string[]> ValueArrayCases()
+        {
+            yield return Array.Empty<string>();
+            yield return new[] { "" };
+            yield return new[] { "a", null, "b" };
+            yield return new[] { "ünïcödé", "😀 emoji", "日本語" };
+            yield return new[] { "<tag>&'+", "quote\" backslash\\ slash/" };
+            yield return new[] { "\u0000\u001f control", "line\r\nbreak", char.ConvertFromUtf32(0x2028) + char.ConvertFromUtf32(0x2029) };
+            yield return new[] { "a\uD800b", "\uDC00" };
+            yield return TestStrings;
+
+            foreach (var testString in TestStrings)
+            {
+                yield return new[] { testString };
+            }
+        }
+
+        private const string JsonString =@"{""widget"": {
                 ""debug"": ""on"",
                 ""window"": {
                     ""title"": ""Sample Konfabulator Widget"",
