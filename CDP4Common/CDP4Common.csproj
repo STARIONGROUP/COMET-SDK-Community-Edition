@@ -6,6 +6,7 @@
         <Description>CDP4 Common Class Library that contains DTOs, POCOs</Description>
         <PackageId>CDP4Common-CE</PackageId>
         <PackageReleaseNotes>
+            - [Bump] Version to 30.3.0
         </PackageReleaseNotes>
     </PropertyGroup>
 

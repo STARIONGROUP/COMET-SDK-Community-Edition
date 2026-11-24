@@ -5,6 +5,7 @@
         <Description>CDP4Web Dedicated Sdk for CDPServicesDal</Description>
         <PackageId>CDP4Web-CE</PackageId>
         <PackageReleaseNotes>
+            - [Update] CDP4ServicesDal to version 30.3.0
         </PackageReleaseNotes>
     </PropertyGroup>
 

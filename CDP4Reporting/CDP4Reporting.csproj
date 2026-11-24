@@ -6,6 +6,8 @@
         <Description>CDP4 Reporting</Description>
         <PackageId>CDP4Reporting-CE</PackageId>
         <PackageReleaseNotes>
+            - [Update] CDP4Dal to version 30.3.0
+            - [Update] CDP4JsonSerializer to version 30.3.0
         </PackageReleaseNotes>
     </PropertyGroup>
 

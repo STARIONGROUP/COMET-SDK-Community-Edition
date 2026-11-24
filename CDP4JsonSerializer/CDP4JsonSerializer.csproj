@@ -7,8 +7,11 @@
         <PackageId>CDP4JsonSerializer-CE</PackageId>
         <PackageTags>CDP COMET ECSS-E-TM-10-25 JSON MBSE</PackageTags>
         <PackageReleaseNotes>
+            - [Update] CDP4DalCommon to version 30.3.0
+            - [Add] System.Memory dependency
             - [REFACTOR] Json Serializer proper buffering instead of unnecessary writing to strings; fixes #421
             - [Update] ValueArray values are written straight to UTF-8 without intermediate strings; fixes #422
+            - [Change] SerializeThing, SerializeClasslessDto and ToJsonString throw ArgumentNullException when an argument is null
         </PackageReleaseNotes>
     </PropertyGroup>
 

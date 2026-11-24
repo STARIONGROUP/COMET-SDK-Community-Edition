@@ -6,6 +6,9 @@
         <Description>CDP4ServicesDal Dal Plugin</Description>
         <PackageId>CDP4ServicesDal-CE</PackageId>
         <PackageReleaseNotes>
+            - [Update] CDP4JsonSerializer to version 30.3.0
+            - [Update] CDP4Dal to version 30.3.0
+            - [Update] CDP4MessagePackSerializer to version 30.3.0
         </PackageReleaseNotes>
     </PropertyGroup>
 

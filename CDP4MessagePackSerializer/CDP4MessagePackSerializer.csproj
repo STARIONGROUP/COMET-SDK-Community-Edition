@@ -7,6 +7,7 @@
         <PackageId>CDP4MessagePackSerializer-CE</PackageId>
         <PackageTags>CDP COMET ECSS-E-TM-10-25 MessagePack MBSE</PackageTags>
         <PackageReleaseNotes>
+            - [Update] CDP4Common to version 30.3.0
         </PackageReleaseNotes>
     </PropertyGroup>
 
